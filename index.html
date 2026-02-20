@@ -2,10 +2,20 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>GAUDVIBE</title>
 </head>
 <body>
     <script src="script.js"></script>
+    <script>
+        // Add error handling for shader.js
+        const shaderScript = document.createElement('script');
+        shaderScript.src = 'shader.js';
+        shaderScript.onerror = function() {
+            console.error('Failed to load shader.js');
+            document.querySelector('.loading')?.remove();
+            document.body.innerHTML += '<div style="color:red;position:fixed;bottom:10px;left:10px;z-index:10000;">Error: shader.js not found</div>';
+        };
+        document.body.appendChild(shaderScript);
+    </script>
 </body>
 </html>
