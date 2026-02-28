@@ -28,7 +28,7 @@ class GAUDVIBEButtons {
             }
             
             main {
-                max-width: 600px;
+                max-width: 800px;  /* Augmenté de 600px à 800px */
                 margin: auto;
                 position: relative;
                 z-index: 1000;
@@ -63,7 +63,7 @@ class GAUDVIBEButtons {
                 vertical-align: top;
                 background-color: #280828;
                 color: #e7e6b3;
-                padding: 20px 25px;
+                padding: 30px 35px;  /* Augmenté de 20px 25px à 30px 35px */
                 border-radius: 1px;
                 font-family: 'Courier New', Courier, monospace;
                 box-shadow:
@@ -72,6 +72,8 @@ class GAUDVIBEButtons {
                     0 0 0 12px #f7e8a8,
                     0 0 0 15px #3d3c55;
                 margin: 20px 0;
+                width: 100%;
+                box-sizing: border-box;
             }
             
             .box.full {
@@ -84,8 +86,8 @@ class GAUDVIBEButtons {
             .box .left-text {
                 color: #e7e6b3;
                 text-shadow: 2px 2px 0 #3d3c55;
-                font-size: 1.2rem;
-                margin-right: 20px;
+                font-size: 1.3rem;  /* Légèrement plus grand */
+                margin-right: 30px;  /* Plus d'espace */
                 white-space: nowrap;
                 font-family: 'Courier New', Courier, monospace;
                 font-weight: bold;
@@ -95,34 +97,36 @@ class GAUDVIBEButtons {
             .button-grid {
                 display: grid;
                 grid-template-columns: repeat(2, 1fr);
-                gap: 15px;
+                gap: 20px;  /* Augmenté de 15px à 20px */
                 justify-items: center;
                 align-items: center;
+                min-width: 250px;  /* Largeur minimum pour la grille */
             }
             
             /* Style des boutons dans la box */
             .box button {
                 position: relative;
                 cursor: pointer;
-                background: #280828;  /* Même couleur que le fond du container */
+                background: #280828;
                 border: 0;
                 color: #e7e6b3;
-                font-size: 1.2rem;
+                font-size: 1.3rem;  /* Plus grand */
                 font-family: 'Courier New', Courier, monospace;
                 font-weight: bold;
-                padding: 8px 15px;
-                min-width: 90px;
+                padding: 10px 20px;  /* Plus de padding */
+                min-width: 110px;  /* Plus large */
                 text-align: center;
                 transition: all 0.3s ease;
                 border-radius: 1px;
                 text-shadow: 2px 2px 0 #3d3c55;
+                letter-spacing: 1px;  /* Un peu d'espace entre les lettres */
             }
             
-            /* Au hover, le bouton disparaît (même couleur que le fond) */
+            /* Au hover, seulement le fond change, le texte reste visible */
             .box button:hover {
-                background: #280828;
-                color: #280828;
-                text-shadow: none;
+                background: #383050;  /* Gris foncé au lieu de transparent */
+                color: #e7e6b3;  /* Texte reste visible */
+                text-shadow: 2px 2px 0 #3d3c55;  /* Ombre conservée */
                 transform: translateY(-2px);
             }
             
@@ -130,14 +134,14 @@ class GAUDVIBEButtons {
             .box button:hover::before {
                 content: '';
                 position: absolute;
-                left: -0.8em;  /* Plus grande */
+                left: -0.8em;
                 top: 50%;
                 transform: translateY(-50%);
                 width: 0;
                 height: 0;
-                border-top: 0.6rem solid transparent;  /* Plus grande */
-                border-bottom: 0.6rem solid transparent;  /* Plus grande */
-                border-left: 0.6rem solid #e7e6b3;  /* Plus grande */
+                border-top: 0.6rem solid transparent;
+                border-bottom: 0.6rem solid transparent;
+                border-left: 0.6rem solid #e7e6b3;
                 filter: drop-shadow(2px 2px 0 #3d3c55);
                 z-index: 10;
             }
@@ -157,8 +161,12 @@ class GAUDVIBEButtons {
                     font-size: 1rem;
                 }
                 
+                main {
+                    max-width: 95%;
+                }
+                
                 .box {
-                    padding: 15px 20px;
+                    padding: 20px 25px;
                     box-shadow:
                         0 0 0 4px #383050,
                         0 0 0 8px #68d0b8,
@@ -167,21 +175,21 @@ class GAUDVIBEButtons {
                 }
                 
                 .button-grid {
-                    gap: 10px;
+                    gap: 15px;
+                    min-width: 200px;
                 }
                 
                 .box button {
-                    font-size: 1rem;
-                    padding: 6px 10px;
-                    min-width: 70px;
+                    font-size: 1.1rem;
+                    padding: 8px 15px;
+                    min-width: 90px;
                 }
                 
                 .box .left-text {
-                    font-size: 1rem;
-                    text-shadow: 1px 1px 0 #3d3c55;
+                    font-size: 1.1rem;
+                    margin-right: 20px;
                 }
                 
-                /* Flèche responsive */
                 .box button:hover::before {
                     left: -0.6em;
                     border-top: 0.5rem solid transparent;
@@ -215,13 +223,14 @@ class GAUDVIBEButtons {
                 .button-grid {
                     grid-template-columns: 1fr;
                     gap: 10px;
+                    min-width: auto;
                 }
                 
                 .box button {
                     width: 100%;
+                    min-width: auto;
                 }
                 
-                /* Flèche pour mobile */
                 .box button:hover::before {
                     left: -0.4em;
                     border-top: 0.4rem solid transparent;
