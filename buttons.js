@@ -1,4 +1,4 @@
-// buttons.js - Version corrigée (texte visible au hover)
+// buttons.js - Version transparente au hover
 class GAUDVIBEButtons {
     constructor() {
         this.links = [
@@ -94,7 +94,7 @@ class GAUDVIBEButtons {
             .box button {
                 position: relative;
                 cursor: pointer;
-                background-color: #383050;
+                background-color: #280828;
                 border: none;
                 color: #e7e6b3;
                 font-family: 'Courier New', monospace;
@@ -109,15 +109,15 @@ class GAUDVIBEButtons {
                 width: 100%;
             }
             
-            /* Hover: bouton reste visible avec fond plus clair */
+            /* Hover: bouton transparent */
             .box button:hover {
-                background-color: #383050;  /* Gris plus clair */
-                color: #e7e6b3;             /* Texte reste visible */
-                text-shadow: 2px 2px 0 #3d3c55;
+                background-color: transparent;
+                color: transparent;
+                text-shadow: none;
                 transform: translateY(-2px);
             }
             
-            /* Flèche au hover */
+            /* Flèche au hover (reste visible) */
             .box button:hover::before {
                 content: '';
                 position: absolute;
