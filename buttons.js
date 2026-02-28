@@ -1,4 +1,4 @@
-// buttons.js - Version avec texte visible et fond transparent au hover
+// buttons.js - Version avec support mobile pour les flèches
 class GAUDVIBEButtons {
     constructor() {
         this.links = [
@@ -57,7 +57,7 @@ class GAUDVIBEButtons {
                     0 0 0 15px #3d3c55;
             }
             
-            /* Container texte */
+            /* Container texte - aligné à gauche */
             .text-container { 
                 width: 100%; 
             }
@@ -69,6 +69,7 @@ class GAUDVIBEButtons {
                 text-shadow: 2px 2px 0 #3d3c55; 
                 font-family: 'Courier New', monospace;
                 color: #e7e6b3;
+                padding-left: 10px;
             }
             
             /* Container boutons */
@@ -107,18 +108,21 @@ class GAUDVIBEButtons {
                 transition: all 0.3s ease;
                 border-radius: 1px;
                 width: 100%;
+                -webkit-tap-highlight-color: transparent; /* Supprime le highlight sur mobile */
             }
             
-            /* Hover: fond transparent mais texte visible */
-            .box button:hover {
-                background-color: transparent;  /* Fond transparent */
-                color: #e7e6b3;                 /* Texte reste visible */
-                text-shadow: 2px 2px 0 #3d3c55; /* Ombre reste visible */
+            /* Hover et Active (pour mobile) */
+            .box button:hover,
+            .box button:active {
+                background-color: transparent;
+                color: #e7e6b3;
+                text-shadow: 2px 2px 0 #3d3c55;
                 transform: translateY(-2px);
             }
             
-            /* Flèche au hover */
-            .box button:hover::before {
+            /* Flèche au hover et au clic (pour mobile) */
+            .box button:hover::before,
+            .box button:active::before {
                 content: '';
                 position: absolute;
                 left: -0.8em;
@@ -141,25 +145,102 @@ class GAUDVIBEButtons {
                 }
             }
             
-            /* Responsive */
+            /* Responsive - Version mobile */
             @media (max-width: 768px) {
-                body { padding: 1em; font-size: 1rem; }
-                .box { padding: 20px 25px; }
-                .buttons-container .box { padding: 25px 30px; }
-                .button-grid { gap: 20px; min-width: 250px; }
-                .box button { font-size: 1.2rem; padding: 10px 20px; min-width: 100px; }
-                .text-container .main-text { font-size: 1.2rem; }
-                .box button:hover::before { left: -0.6em; border-width: 0.5rem; }
+                body { 
+                    padding: 1em; 
+                    font-size: 1rem; 
+                    align-items: flex-start; /* Aligner en haut sur mobile */
+                    padding-top: 2em;
+                }
+                
+                main { 
+                    gap: 20px; 
+                }
+                
+                .box { 
+                    padding: 20px 25px; 
+                    box-shadow: 
+                        0 0 0 4px #383050,
+                        0 0 0 8px #68d0b8,
+                        0 0 0 10px #f7e8a8,
+                        0 0 0 12px #3d3c55;
+                }
+                
+                .buttons-container .box { 
+                    padding: 25px 20px; 
+                }
+                
+                .button-grid { 
+                    gap: 15px; 
+                    min-width: auto; 
+                }
+                
+                .box button { 
+                    font-size: 1.2rem; 
+                    padding: 10px 15px; 
+                    min-width: auto; 
+                }
+                
+                .text-container .main-text { 
+                    font-size: 1.2rem; 
+                    padding-left: 5px;
+                }
+                
+                /* Ajustement flèche pour mobile */
+                .box button:hover::before,
+                .box button:active::before { 
+                    left: -0.6em; 
+                    border-top: 0.5rem solid transparent;
+                    border-bottom: 0.5rem solid transparent;
+                    border-left: 0.5rem solid #e7e6b3;
+                }
             }
             
             @media (max-width: 600px) {
                 .button-grid { 
                     grid-template-columns: 1fr; 
-                    gap: 15px; 
-                    min-width: auto; 
-                    width: 100%; 
+                    gap: 12px; 
                 }
-                .box button { width: 100%; }
+                
+                .box button { 
+                    width: 100%; 
+                    padding: 12px 20px;
+                }
+                
+                /* Flèche pour très petits écrans */
+                .box button:hover::before,
+                .box button:active::before { 
+                    left: -0.5em; 
+                    border-top: 0.4rem solid transparent;
+                    border-bottom: 0.4rem solid transparent;
+                    border-left: 0.4rem solid #e7e6b3;
+                }
+            }
+            
+            /* Pour les écrans tactiles, on garde l'effet après le clic */
+            @media (hover: none) and (pointer: coarse) {
+                .box button:active {
+                    background-color: transparent;
+                    color: #e7e6b3;
+                    text-shadow: 2px 2px 0 #3d3c55;
+                    transform: translateY(-2px);
+                }
+                
+                .box button:active::before {
+                    content: '';
+                    position: absolute;
+                    left: -0.6em;
+                    top: 50%;
+                    transform: translateY(-50%);
+                    width: 0;
+                    height: 0;
+                    border-top: 0.5rem solid transparent;
+                    border-bottom: 0.5rem solid transparent;
+                    border-left: 0.5rem solid #e7e6b3;
+                    filter: drop-shadow(2px 2px 0 #3d3c55);
+                    z-index: 10;
+                }
             }
         `;
         
@@ -201,6 +282,19 @@ class GAUDVIBEButtons {
         this.links.forEach(link => {
             const button = document.createElement('button');
             button.textContent = link.text;
+            
+            // Ajouter un gestionnaire tactile pour s'assurer que l'effet fonctionne
+            button.addEventListener('touchstart', (e) => {
+                // Forcer l'effet visuel au toucher
+                button.classList.add('touch-active');
+            });
+            
+            button.addEventListener('touchend', (e) => {
+                // Enlever l'effet après le toucher
+                button.classList.remove('touch-active');
+                this.rippleEffect(e, button);
+                setTimeout(() => window.open(link.url, '_blank'), 300);
+            });
             
             button.addEventListener('click', (e) => {
                 e.preventDefault();
