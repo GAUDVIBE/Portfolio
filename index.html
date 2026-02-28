@@ -3,6 +3,35 @@
 <head>
     <meta charset="UTF-8">
     <title>GAUDVIBE</title>
+        <style>
+        body {
+            margin: 0;
+            overflow: hidden;
+            background-color: #000;
+        }
+        canvas {
+            display: block;
+            width: 100vw;
+            height: 100vh;
+        }
+        .loading {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            color: white;
+            font-family: Arial, sans-serif;
+            z-index: 1000;
+        }
+        
+        /* Animation for ripple effect */
+        @keyframes ripple {
+            to {
+                transform: scale(4);
+                opacity: 0;
+            }
+        }
+    </style>
 </head>
 <body>
     <script src="shader.js"></script>
@@ -19,3 +48,4 @@
     </script>
 </body>
 </html>
+
