@@ -21,7 +21,7 @@ class GAUDVIBEButtons {
             /* Style général */
             body {
                 font-size: 1.2rem;
-                font-family: Gill Sans, sans-serif;
+                font-family: 'Courier New', Courier, monospace;
                 margin: 0;
                 padding: 2em;
                 background-color: transparent;
@@ -40,11 +40,6 @@ class GAUDVIBEButtons {
             
             .grid.between {
                 justify-content: space-between;
-                align-items: center;
-            }
-            
-            .grid.center {
-                justify-content: center;
                 align-items: center;
             }
             
@@ -70,6 +65,7 @@ class GAUDVIBEButtons {
                 color: #e7e6b3;
                 padding: 20px 25px;
                 border-radius: 1px;
+                font-family: 'Courier New', Courier, monospace;
                 box-shadow:
                     0 0 0 5px #383050,
                     0 0 0 10px #68d0b8,
@@ -87,10 +83,12 @@ class GAUDVIBEButtons {
             /* Conteneur du texte à gauche */
             .box .left-text {
                 color: #e7e6b3;
-                text-shadow: 1px 1px 0 #3d3c55;
-                font-size: 1.1rem;
+                text-shadow: 2px 2px 0 #3d3c55;
+                font-size: 1.2rem;
                 margin-right: 20px;
                 white-space: nowrap;
+                font-family: 'Courier New', Courier, monospace;
+                font-weight: bold;
             }
             
             /* Grille carrée pour les boutons */
@@ -106,36 +104,42 @@ class GAUDVIBEButtons {
             .box button {
                 position: relative;
                 cursor: pointer;
-                background: transparent;
+                background: #280828;  /* Même couleur que le fond du container */
                 border: 0;
                 color: #e7e6b3;
                 font-size: 1.2rem;
-                font-family: sans-serif;
+                font-family: 'Courier New', Courier, monospace;
+                font-weight: bold;
                 padding: 8px 15px;
                 min-width: 90px;
                 text-align: center;
                 transition: all 0.3s ease;
                 border-radius: 1px;
+                text-shadow: 2px 2px 0 #3d3c55;
             }
             
+            /* Au hover, le bouton disparaît (même couleur que le fond) */
             .box button:hover {
+                background: #280828;
+                color: #280828;
+                text-shadow: none;
                 transform: translateY(-2px);
-                background: rgba(255, 255, 255, 0.05);
             }
             
-            /* Flèche au hover (style Earthbound) */
+            /* Flèche plus grosse au hover */
             .box button:hover::before {
                 content: '';
                 position: absolute;
-                left: -0.3em;
+                left: -0.8em;  /* Plus grande */
                 top: 50%;
                 transform: translateY(-50%);
                 width: 0;
                 height: 0;
-                border-top: 0.3rem solid transparent;
-                border-bottom: 0.3rem solid transparent;
-                border-left: 0.3rem solid #e7e6b3;
-                filter: drop-shadow(1px 1px 0 #3d3c55);
+                border-top: 0.6rem solid transparent;  /* Plus grande */
+                border-bottom: 0.6rem solid transparent;  /* Plus grande */
+                border-left: 0.6rem solid #e7e6b3;  /* Plus grande */
+                filter: drop-shadow(2px 2px 0 #3d3c55);
+                z-index: 10;
             }
             
             /* Animation ripple */
@@ -174,6 +178,15 @@ class GAUDVIBEButtons {
                 
                 .box .left-text {
                     font-size: 1rem;
+                    text-shadow: 1px 1px 0 #3d3c55;
+                }
+                
+                /* Flèche responsive */
+                .box button:hover::before {
+                    left: -0.6em;
+                    border-top: 0.5rem solid transparent;
+                    border-bottom: 0.5rem solid transparent;
+                    border-left: 0.5rem solid #e7e6b3;
                 }
             }
             
@@ -206,6 +219,14 @@ class GAUDVIBEButtons {
                 
                 .box button {
                     width: 100%;
+                }
+                
+                /* Flèche pour mobile */
+                .box button:hover::before {
+                    left: -0.4em;
+                    border-top: 0.4rem solid transparent;
+                    border-bottom: 0.4rem solid transparent;
+                    border-left: 0.4rem solid #e7e6b3;
                 }
             }
         `;
