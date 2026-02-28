@@ -1,4 +1,4 @@
-// buttons.js - Version avec support mobile pour les flèches
+// buttons.js - Version avec flèche animée (haut/bas)
 class GAUDVIBEButtons {
     constructor() {
         this.links = [
@@ -108,7 +108,7 @@ class GAUDVIBEButtons {
                 transition: all 0.3s ease;
                 border-radius: 1px;
                 width: 100%;
-                -webkit-tap-highlight-color: transparent; /* Supprime le highlight sur mobile */
+                -webkit-tap-highlight-color: transparent;
             }
             
             /* Hover et Active (pour mobile) */
@@ -120,7 +120,7 @@ class GAUDVIBEButtons {
                 transform: translateY(-2px);
             }
             
-            /* Flèche au hover et au clic (pour mobile) */
+            /* Flèche au hover et au clic (pour mobile) - avec animation */
             .box button:hover::before,
             .box button:active::before {
                 content: '';
@@ -135,6 +135,20 @@ class GAUDVIBEButtons {
                 border-left: 0.6rem solid #e7e6b3;
                 filter: drop-shadow(2px 2px 0 #3d3c55);
                 z-index: 10;
+                animation: floatArrow 0.8s infinite ease-in-out;  /* Animation ajoutée */
+            }
+            
+            /* Animation de la flèche (haut et bas) */
+            @keyframes floatArrow {
+                0% {
+                    transform: translateY(-50%);
+                }
+                50% {
+                    transform: translateY(calc(-50% - 5px));  /* Monte de 5px */
+                }
+                100% {
+                    transform: translateY(-50%);
+                }
             }
             
             /* Animation ripple */
@@ -150,7 +164,7 @@ class GAUDVIBEButtons {
                 body { 
                     padding: 1em; 
                     font-size: 1rem; 
-                    align-items: flex-start; /* Aligner en haut sur mobile */
+                    align-items: flex-start;
                     padding-top: 2em;
                 }
                 
@@ -187,13 +201,19 @@ class GAUDVIBEButtons {
                     padding-left: 5px;
                 }
                 
-                /* Ajustement flèche pour mobile */
+                /* Ajustement flèche pour mobile avec animation */
                 .box button:hover::before,
                 .box button:active::before { 
                     left: -0.6em; 
                     border-top: 0.5rem solid transparent;
                     border-bottom: 0.5rem solid transparent;
                     border-left: 0.5rem solid #e7e6b3;
+                }
+                
+                @keyframes floatArrow {
+                    0% { transform: translateY(-50%); }
+                    50% { transform: translateY(calc(-50% - 3px)); }  /* 3px sur mobile */
+                    100% { transform: translateY(-50%); }
                 }
             }
             
@@ -208,7 +228,7 @@ class GAUDVIBEButtons {
                     padding: 12px 20px;
                 }
                 
-                /* Flèche pour très petits écrans */
+                /* Flèche pour très petits écrans avec animation */
                 .box button:hover::before,
                 .box button:active::before { 
                     left: -0.5em; 
@@ -218,7 +238,7 @@ class GAUDVIBEButtons {
                 }
             }
             
-            /* Pour les écrans tactiles, on garde l'effet après le clic */
+            /* Pour les écrans tactiles */
             @media (hover: none) and (pointer: coarse) {
                 .box button:active {
                     background-color: transparent;
@@ -240,6 +260,7 @@ class GAUDVIBEButtons {
                     border-left: 0.5rem solid #e7e6b3;
                     filter: drop-shadow(2px 2px 0 #3d3c55);
                     z-index: 10;
+                    animation: floatArrow 0.8s infinite ease-in-out;
                 }
             }
         `;
@@ -283,14 +304,12 @@ class GAUDVIBEButtons {
             const button = document.createElement('button');
             button.textContent = link.text;
             
-            // Ajouter un gestionnaire tactile pour s'assurer que l'effet fonctionne
+            // Gestionnaires tactiles
             button.addEventListener('touchstart', (e) => {
-                // Forcer l'effet visuel au toucher
                 button.classList.add('touch-active');
             });
             
             button.addEventListener('touchend', (e) => {
-                // Enlever l'effet après le toucher
                 button.classList.remove('touch-active');
                 this.rippleEffect(e, button);
                 setTimeout(() => window.open(link.url, '_blank'), 300);
