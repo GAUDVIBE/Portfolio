@@ -34,44 +34,50 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // Generate random parameters for each page load
     const randomParams = {
-    shapeType: Math.floor(Math.random() * 6), // 0-5 for different shapes
-    colorSeed: Math.random() * 100,
-    speed: 0.5 + Math.random() * 1.5,
-    density: 2 + Math.random() * 3,
-    pattern: Math.floor(Math.random() * 3),
-    lineWidth: 0.01 + Math.random() * 0.03,
-    distortionAmount: 0.1 + Math.random() * 0.3,
-    distortionSpeed: 0.5 + Math.random() * 2.0,
-    distortionScale: 3 + Math.random() * 5,
-    // Ajout de paramètres de couleur aléatoire
-    hue1: Math.random(),
-    hue2: Math.random(),
-    hue3: Math.random()
+        shapeType: Math.floor(Math.random() * 6),
+        colorSeed: Math.random() * 100,
+        speed: 0.2 + Math.random() * 1.0,
+        density: 1 + Math.random() * 4,
+        pattern: Math.floor(Math.random() * 3),
+        lineWidth: 0.01 + Math.random() * 0.03,
+        distortionAmount: 0.05 + Math.random() * 0.2,
+        distortionSpeed: 0.3 + Math.random() * 1.0,
+        distortionScale: 2 + Math.random() * 4
     };
-    
-    // Get the primary color from CSS or use default
-    let primaryColor = '#3b82f6'; // Default blue
-    try {
-        const computedColor = getComputedStyle(document.documentElement)
-            .getPropertyValue('--primary-color').trim();
-        if (computedColor) {
-            primaryColor = computedColor;
+
+    // Generate random base color (not just blue)
+    const randomColor = () => {
+        const hue = Math.random() * 360;
+        const saturation = 0.7 + Math.random() * 0.3;
+        const lightness = 0.5 + Math.random() * 0.3;
+        return hslToRgb(hue, saturation, lightness);
+    };
+
+    // Convert HSL to RGB
+    function hslToRgb(h, s, l) {
+        h /= 360;
+        let r, g, b;
+        if (s === 0) {
+            r = g = b = l;
+        } else {
+            const hue2rgb = (p, q, t) => {
+                if (t < 0) t += 1;
+                if (t > 1) t -= 1;
+                if (t < 1/6) return p + (q - p) * 6 * t;
+                if (t < 1/2) return q;
+                if (t < 2/3) return p + (q - p) * (2/3 - t) * 6;
+                return p;
+            };
+            const q = l < 0.5 ? l * (1 + s) : l + s - l * s;
+            const p = 2 * l - q;
+            r = hue2rgb(p, q, h + 1/3);
+            g = hue2rgb(p, q, h);
+            b = hue2rgb(p, q, h - 1/3);
         }
-    } catch (e) {
-        console.log('Using default primary color');
-    }
-    
-    // Convert hex color to RGB
-    const hexToRgb = (hex) => {
-        // Remove # if present
-        hex = hex.replace('#', '');
-        const r = parseInt(hex.substring(0, 2), 16) / 255;
-        const g = parseInt(hex.substring(2, 4), 16) / 255;
-        const b = parseInt(hex.substring(4, 6), 16) / 255;
         return {r, g, b};
-    };
-    
-    const primaryRgb = hexToRgb(primaryColor);
+    }
+
+    const primaryRgb = randomColor();
 
     // Vertex shader
     const vertexShaderSource = `
@@ -133,7 +139,6 @@ document.addEventListener('DOMContentLoaded', function() {
         
         // Distortion function
         vec2 distort(vec2 uv, float time, float amount, float speed, float scale) {
-            // Multi-frequency distortion
             float offset1 = amount * sin(scale * uv.y + speed * time);
             float offset2 = amount * 0.5 * sin(scale * 2.0 * uv.x + speed * 1.3 * time);
             float offset3 = amount * 0.3 * cos(scale * 0.7 * (uv.x + uv.y) + speed * 0.7 * time);
@@ -147,7 +152,7 @@ document.addEventListener('DOMContentLoaded', function() {
             vec2 uv = (gl_FragCoord.xy/iResolution - 0.5) * 2.0;
             uv.x *= iResolution.x / iResolution.y;
             
-            // Apply distortion effect before other transformations
+            // Apply distortion effect
             uv = distort(
                 uv,
                 iTime,
@@ -180,36 +185,17 @@ document.addEventListener('DOMContentLoaded', function() {
                 d = sdHorizontalLine(uv, width);
             }
             
-            // Generate color based on position and time
+            // Generate color based on position and time with random base color
             vec3 col;
-            if (${randomParams.pattern} == 0) {
-                // Radial color pattern using primary color
-                float r = length(uv) + iTime * 0.3 * uRandomParams.z;
-                vec3 a = vec3(${primaryRgb.r}, ${primaryRgb.g}, ${primaryRgb.b});
-                vec3 b = vec3(0.3, 0.3, 0.3);
-                vec3 c = vec3(1.0, 1.0, 1.0);
-                vec3 d = vec3(uRandomParams.y, uRandomParams.y + 0.33, uRandomParams.y + 0.67);
-                col = palette(r, a, b, c, d);
-            } else if (${randomParams.pattern} == 1) {
-                // Horizontal stripes
-                float p = uv.x * 5.0 + iTime * 0.5 * uRandomParams.z;
-                vec3 a = vec3(${primaryRgb.r}, ${primaryRgb.g}, ${primaryRgb.b});
-                vec3 b = vec3(0.2, 0.2, 0.2);
-                vec3 c = vec3(1.0, 1.0, 1.0);
-                vec3 d = vec3(0.0, 0.10, 0.20) + uRandomParams.y;
-                col = palette(p, a, b, c, d);
-            } else {
-                // Diagonal waves
-                float p = (uv.x + uv.y) * 3.0 + iTime * 0.4 * uRandomParams.z;
-                vec3 a = vec3(${primaryRgb.r}, ${primaryRgb.g}, ${primaryRgb.b});
-                vec3 b = vec3(0.3, 0.3, 0.3);
-                vec3 c = vec3(1.0, 1.0, 0.5);
-                vec3 d = vec3(0.8, 0.9, 0.3) + uRandomParams.y;
-                col = palette(p, a, b, c, d);
-            }
+            float r = length(uv) + iTime * 0.2;
+            vec3 a = vec3(${primaryRgb.r}, ${primaryRgb.g}, ${primaryRgb.b});
+            vec3 b = vec3(0.5, 0.5, 0.5);
+            vec3 c = vec3(1.0, 1.0, 1.0);
+            vec3 d = vec3(0.0, 0.33, 0.67) + uRandomParams.y;
+            col = palette(r, a, b, c, d);
             
             // Draw shape with anti-aliasing
-            col = mix(col, vec3(0.0), smoothstep(width, width+0.01, abs(d)));
+            col = mix(col, vec3(0.0), smoothstep(width, width+0.02, abs(d)));
             
             gl_FragColor = vec4(col, 1.0);
         }
@@ -282,17 +268,12 @@ document.addEventListener('DOMContentLoaded', function() {
 
     let lastTime = 0;
     function animate(currentTime) {
-        currentTime *= 0.001; // Convert to seconds
-        const deltaTime = currentTime - lastTime;
-        lastTime = currentTime;
-        
+        currentTime *= 0.001;
         if (timeLocation) {
             gl.uniform1f(timeLocation, currentTime);
         }
         
         gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4);
-        
-        // Use requestAnimationFrame directly instead of setTimeout
         requestAnimationFrame(animate);
     }
     
@@ -301,7 +282,6 @@ document.addEventListener('DOMContentLoaded', function() {
         gl.uniform2f(resolutionLocation, canvas.width, canvas.height);
     });
     
-    // Remove loading indicator when everything is ready
     if (loadingElement) {
         loadingElement.style.opacity = '0';
         setTimeout(() => {
