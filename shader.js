@@ -34,17 +34,21 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // Generate random parameters for each page load
     const randomParams = {
-        shapeType: Math.floor(Math.random() * 6), // 0-5 for different shapes
-        colorSeed: Math.random() * 100,
-        speed: 0.5 + Math.random() * 1.5,
-        density: 2 + Math.random() * 3,
-        pattern: Math.floor(Math.random() * 3),
-        lineWidth: 0.01 + Math.random() * 0.03,
-        distortionAmount: 0.1 + Math.random() * 0.3,
-        distortionSpeed: 0.5 + Math.random() * 2.0,
-        distortionScale: 3 + Math.random() * 5
+    shapeType: Math.floor(Math.random() * 6), // 0-5 for different shapes
+    colorSeed: Math.random() * 100,
+    speed: 0.5 + Math.random() * 1.5,
+    density: 2 + Math.random() * 3,
+    pattern: Math.floor(Math.random() * 3),
+    lineWidth: 0.01 + Math.random() * 0.03,
+    distortionAmount: 0.1 + Math.random() * 0.3,
+    distortionSpeed: 0.5 + Math.random() * 2.0,
+    distortionScale: 3 + Math.random() * 5,
+    // Ajout de paramètres de couleur aléatoire
+    hue1: Math.random(),
+    hue2: Math.random(),
+    hue3: Math.random()
     };
-
+    
     // Get the primary color from CSS or use default
     let primaryColor = '#3b82f6'; // Default blue
     try {
