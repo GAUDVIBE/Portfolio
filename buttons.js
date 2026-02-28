@@ -64,9 +64,10 @@ class GAUDVIBEButtons {
                     0 0 0 15px #3d3c55; /* black */
             }
             
+            /* Supprimer tout style :hover qui pourrait interférer */
             .gaudvibe-button:hover {
                 transform: translateY(-0.2em);
-                /* La couleur sera appliquée dynamiquement par JavaScript */
+                /* Pas de box-shadow ici pour laisser JS faire le travail */
             }
             
             /* Style de l'icône */
@@ -167,16 +168,15 @@ class GAUDVIBEButtons {
             btn.rel = button.url.startsWith('http') ? 'noopener noreferrer' : '';
             btn.innerHTML = `<span class="icon">${button.icon}</span><span class="text">${button.text}</span>`;
             
-            // Stocker la couleur par défaut (noire)
-            btn.dataset.defaultColor = '#000000';
-            
             // Au hover, appliquer une couleur aléatoire du shader
             btn.addEventListener('mouseenter', (e) => {
+                e.preventDefault();
                 this.applyRandomShaderColor(btn);
             });
             
             // Au mouseleave, revenir à la couleur noire par défaut
             btn.addEventListener('mouseleave', (e) => {
+                e.preventDefault();
                 this.resetToDefaultColor(btn);
             });
             
@@ -194,33 +194,53 @@ class GAUDVIBEButtons {
     
     applyRandomShaderColor(button) {
         const canvas = document.getElementById('shaderCanvas');
-        if (!canvas) return;
+        if (!canvas) {
+            console.log('Canvas non trouvé');
+            return;
+        }
         
         const gl = canvas.getContext('webgl');
-        if (!gl) return;
+        if (!gl) {
+            console.log('WebGL non disponible');
+            return;
+        }
         
-        // Prendre une position aléatoire dans le canvas
-        const x = Math.floor(Math.random() * canvas.width);
-        const y = Math.floor(Math.random() * canvas.height);
-        
-        const pixels = new Uint8Array(4);
-        gl.readPixels(x, y, 1, 1, gl.RGBA, gl.UNSIGNED_BYTE, pixels);
-        
-        const r = pixels[0];
-        const g = pixels[1];
-        const b = pixels[2];
-        
-        // Appliquer la nouvelle couleur avec une transition
-        const newBoxShadow = `0 0 0 5px #383050, 0 0 0 10px rgb(${r}, ${g}, ${b}), 0 0 0 12px #f7e8a8, 0 0 0 15px #3d3c55`;
-        
-        button.style.transition = 'box-shadow 0.3s ease';
-        button.style.boxShadow = newBoxShadow;
+        try {
+            // S'assurer que le canvas a une taille valide
+            if (canvas.width === 0 || canvas.height === 0) {
+                console.log('Canvas pas encore dimensionné');
+                return;
+            }
+            
+            // Prendre une position aléatoire dans le canvas
+            const x = Math.floor(Math.random() * canvas.width);
+            const y = Math.floor(Math.random() * canvas.height);
+            
+            const pixels = new Uint8Array(4);
+            gl.readPixels(x, y, 1, 1, gl.RGBA, gl.UNSIGNED_BYTE, pixels);
+            
+            const r = pixels[0];
+            const g = pixels[1];
+            const b = pixels[2];
+            
+            console.log(`Couleur appliquée: rgb(${r}, ${g}, ${b})`);
+            
+            // Appliquer la nouvelle couleur
+            const newBoxShadow = `0 0 0 5px #383050, 0 0 0 10px rgb(${r}, ${g}, ${b}), 0 0 0 12px #f7e8a8, 0 0 0 15px #3d3c55`;
+            
+            // Forcer le style avec !important pour éviter les conflits CSS
+            button.style.setProperty('box-shadow', newBoxShadow, 'important');
+            button.style.transition = 'box-shadow 0.3s ease';
+            
+        } catch (error) {
+            console.error('Erreur lors de l\'application de la couleur:', error);
+        }
     }
     
     resetToDefaultColor(button) {
-        // Revenir à la couleur noire par défaut
+        // Revenir à la couleur noire par défaut avec !important
         const defaultBoxShadow = `0 0 0 5px #383050, 0 0 0 10px #000000, 0 0 0 12px #f7e8a8, 0 0 0 15px #3d3c55`;
-        button.style.boxShadow = defaultBoxShadow;
+        button.style.setProperty('box-shadow', defaultBoxShadow, 'important');
     }
     
     createRipple(event, button) {
@@ -253,7 +273,11 @@ class GAUDVIBEButtons {
 
 // Initialisation immédiate
 if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', () => new GAUDVIBEButtons());
+    document.addEventListener('DOMContentLoaded', () => {
+        console.log('DOM chargé, initialisation des boutons...');
+        new GAUDVIBEButtons();
+    });
 } else {
+    console.log('Initialisation immédiate des boutons...');
     new GAUDVIBEButtons();
 }
