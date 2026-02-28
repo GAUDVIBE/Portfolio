@@ -34,42 +34,45 @@ class GAUDVIBEButtons {
     init() {
         this.createStyles();
         this.createButtons();
-        this.startColorSampling();
     }
     
     createStyles() {
         const styles = `
             .gaudvibe-buttons-container {
                 position: fixed;
-                bottom: 30px;
-                right: 30px;
+                top: 50%;
+                left: 50%;
+                transform: translate(-50%, -50%);
                 display: flex;
-                gap: 15px;
+                gap: 20px;
                 z-index: 1000;
                 flex-wrap: wrap;
-                justify-content: flex-end;
+                justify-content: center;
+                align-items: center;
                 max-width: 90vw;
+                padding: 20px;
             }
             
             .gaudvibe-button {
                 position: relative;
-                padding: 12px 24px;
-                border: none;
+                padding: 15px 30px;
+                border: 2px solid rgba(255, 255, 255, 0.8);
                 border-radius: 50px;
                 font-family: 'Arial', sans-serif;
-                font-size: 16px;
+                font-size: 18px;
                 font-weight: bold;
                 cursor: pointer;
                 overflow: hidden;
-                transition: transform 0.3s ease, box-shadow 0.3s ease;
+                transition: all 0.4s ease;
                 text-decoration: none;
                 color: white;
                 display: flex;
                 align-items: center;
-                gap: 8px;
-                box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+                gap: 10px;
+                background: rgba(0, 0, 0, 0.8);
                 backdrop-filter: blur(5px);
-                border: 1px solid rgba(255,255,255,0.2);
+                box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+                letter-spacing: 1px;
             }
             
             .gaudvibe-button::before {
@@ -80,51 +83,57 @@ class GAUDVIBEButtons {
                 right: 0;
                 bottom: 0;
                 background: inherit;
-                filter: blur(10px);
-                opacity: 0.7;
+                opacity: 0;
+                transition: opacity 0.4s ease;
                 z-index: -1;
             }
             
             .gaudvibe-button:hover {
-                transform: translateY(-3px);
-                box-shadow: 0 8px 25px rgba(0,0,0,0.4);
-            }
-            
-            .gaudvibe-button:active {
-                transform: translateY(-1px);
+                transform: translateY(-5px) scale(1.05);
+                box-shadow: 0 8px 25px rgba(0,0,0,0.5);
+                border-color: transparent;
+                color: #000;
             }
             
             .gaudvibe-button .icon {
-                font-size: 20px;
-                filter: drop-shadow(0 2px 2px rgba(0,0,0,0.3));
+                font-size: 22px;
+                transition: transform 0.3s ease;
+            }
+            
+            .gaudvibe-button:hover .icon {
+                transform: scale(1.1);
             }
             
             .gaudvibe-button .text {
-                text-shadow: 0 2px 4px rgba(0,0,0,0.3);
+                text-shadow: none;
+                transition: text-shadow 0.3s ease;
             }
             
             /* Mobile responsive */
             @media (max-width: 768px) {
                 .gaudvibe-buttons-container {
-                    bottom: 20px;
-                    right: 20px;
-                    gap: 10px;
+                    gap: 15px;
                 }
                 
                 .gaudvibe-button {
-                    padding: 10px 18px;
-                    font-size: 14px;
+                    padding: 12px 24px;
+                    font-size: 16px;
                 }
                 
                 .gaudvibe-button .icon {
-                    font-size: 18px;
+                    font-size: 20px;
                 }
             }
             
             @media (max-width: 480px) {
                 .gaudvibe-buttons-container {
                     flex-direction: column;
-                    align-items: flex-end;
+                    width: 80%;
+                }
+                
+                .gaudvibe-button {
+                    width: 100%;
+                    justify-content: center;
                 }
             }
         `;
@@ -135,12 +144,10 @@ class GAUDVIBEButtons {
     }
     
     createButtons() {
-        // Create container
         const container = document.createElement('div');
         container.className = 'gaudvibe-buttons-container';
         container.id = 'gaudvibe-buttons';
         
-        // Create each button
         this.buttons.forEach(button => {
             const btn = document.createElement('a');
             btn.href = button.url;
@@ -153,6 +160,18 @@ class GAUDVIBEButtons {
                 <span class="text">${button.text}</span>
             `;
             
+            // Add hover effect to sample shader color
+            btn.addEventListener('mouseenter', (e) => {
+                this.sampleShaderColorForButton(btn);
+            });
+            
+            // Reset to black on mouse leave
+            btn.addEventListener('mouseleave', (e) => {
+                btn.style.background = 'rgba(0, 0, 0, 0.8)';
+                btn.style.color = 'white';
+                btn.style.borderColor = 'rgba(255, 255, 255, 0.8)';
+            });
+            
             // Add click effect
             btn.addEventListener('click', (e) => {
                 this.createRipple(e, btn);
@@ -162,6 +181,36 @@ class GAUDVIBEButtons {
         });
         
         document.body.appendChild(container);
+    }
+    
+    sampleShaderColorForButton(button) {
+        const canvas = document.getElementById('shaderCanvas');
+        if (!canvas) return;
+        
+        const gl = canvas.getContext('webgl');
+        if (!gl) return;
+        
+        // Sample a random position from the shader
+        const x = Math.floor(Math.random() * canvas.width);
+        const y = Math.floor(Math.random() * canvas.height);
+        
+        const pixels = new Uint8Array(4);
+        gl.readPixels(x, y, 1, 1, gl.RGBA, gl.UNSIGNED_BYTE, pixels);
+        
+        const r = pixels[0];
+        const g = pixels[1];
+        const b = pixels[2];
+        
+        // Apply the sampled color to the button
+        button.style.background = `rgba(${r}, ${g}, ${b}, 0.95)`;
+        button.style.color = this.getContrastColor(r, g, b);
+        button.style.borderColor = `rgba(${r}, ${g}, ${b}, 0.5)`;
+    }
+    
+    getContrastColor(r, g, b) {
+        // Calculate luminance to determine text color (black or white)
+        const luminance = (0.299 * r + 0.587 * g + 0.114 * b) / 255;
+        return luminance > 0.5 ? '#000000' : '#ffffff';
     }
     
     createRipple(event, button) {
@@ -176,7 +225,7 @@ class GAUDVIBEButtons {
         ripple.style.top = y + 'px';
         ripple.style.position = 'absolute';
         ripple.style.borderRadius = '50%';
-        ripple.style.backgroundColor = 'rgba(255, 255, 255, 0.3)';
+        ripple.style.backgroundColor = 'rgba(255, 255, 255, 0.5)';
         ripple.style.transform = 'scale(0)';
         ripple.style.animation = 'ripple 0.6s ease-out';
         ripple.style.pointerEvents = 'none';
@@ -189,94 +238,12 @@ class GAUDVIBEButtons {
             ripple.remove();
         }, 600);
     }
-    
-    startColorSampling() {
-        // Get the canvas from shader
-        const canvas = document.getElementById('shaderCanvas');
-        if (!canvas) return;
-        
-        // Sample colors periodically
-        const sampleColors = () => {
-            const gl = canvas.getContext('webgl');
-            if (!gl) return;
-            
-            const buttons = document.querySelectorAll('.gaudvibe-button');
-            const width = canvas.width;
-            const height = canvas.height;
-            
-            // Sample 4 different positions for variety
-            const positions = [
-                {x: width * 0.3, y: height * 0.3},
-                {x: width * 0.7, y: height * 0.3},
-                {x: width * 0.3, y: height * 0.7},
-                {x: width * 0.7, y: height * 0.7}
-            ];
-            
-            // Read pixels from WebGL canvas
-            const pixels = new Uint8Array(4);
-            
-            positions.forEach((pos, index) => {
-                if (index < buttons.length) {
-                    gl.readPixels(pos.x, pos.y, 1, 1, gl.RGBA, gl.UNSIGNED_BYTE, pixels);
-                    
-                    const r = pixels[0];
-                    const g = pixels[1];
-                    const b = pixels[2];
-                    
-                    // Create gradient background
-                    const button = buttons[index];
-                    if (button) {
-                        // Create a gradient based on the sampled color
-                        const color1 = `rgb(${r}, ${g}, ${b})`;
-                        const color2 = `rgb(${Math.min(r + 30, 255)}, ${Math.min(g + 30, 255)}, ${Math.min(b + 30, 255)})`;
-                        
-                        button.style.background = `linear-gradient(135deg, ${color1}, ${color2})`;
-                        
-                        // Add subtle animation based on color brightness
-                        const brightness = (r * 299 + g * 587 + b * 114) / 1000;
-                        if (brightness < 128) {
-                            button.style.textShadow = '0 2px 4px rgba(255,255,255,0.5)';
-                        } else {
-                            button.style.textShadow = '0 2px 4px rgba(0,0,0,0.3)';
-                        }
-                    }
-                }
-            });
-            
-            requestAnimationFrame(sampleColors);
-        };
-        
-        // Start sampling when WebGL is ready
-        setTimeout(() => {
-            sampleColors();
-        }, 1000);
-    }
-    
-    // Alternative method using CSS variables from shader (if available)
-    useShaderColors() {
-        // This method creates a hidden div to sample shader colors via CSS
-        const sampler = document.createElement('div');
-        sampler.style.width = '1px';
-        sampler.style.height = '1px';
-        sampler.style.position = 'fixed';
-        sampler.style.left = '-9999px';
-        sampler.style.background = 'linear-gradient(135deg, var(--primary-color), var(--secondary-color))';
-        document.body.appendChild(sampler);
-        
-        const buttons = document.querySelectorAll('.gaudvibe-button');
-        buttons.forEach((button, index) => {
-            const hue = (index * 90) % 360;
-            button.style.background = `linear-gradient(135deg, 
-                hsl(${hue}, 80%, 60%), 
-                hsl(${hue + 30}, 80%, 50%))`;
-        });
-    }
 }
 
 // Initialize buttons when DOM is loaded
 document.addEventListener('DOMContentLoaded', () => {
-    // Wait a bit for shader to initialize
+    // Wait for shader to initialize
     setTimeout(() => {
         new GAUDVIBEButtons();
-    }, 500);
+    }, 1000);
 });
