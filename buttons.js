@@ -123,7 +123,7 @@ class GAUDVIBEButtons {
             
             /* Au hover, fond plus clair */
             .box button:hover {
-                background: #383050;
+                background: #280828;
                 color: #e7e6b3;
                 text-shadow: 2px 2px 0 #3d3c55;
                 transform: translateY(-2px);
