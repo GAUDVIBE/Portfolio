@@ -8,16 +8,12 @@ class GAUDVIBEButtons {
             { text: 'Instagram', icon: '📷', url: 'https://www.instagram.com/antoine_gdy/', type: 'instagram' }
         ];
         
-        this.shaderColors = [];
-        this.lastUpdate = 0;
-        this.updateInterval = 2000; // Mise à jour toutes les 2 secondes (2000ms)
         this.init();
     }
     
     init() {
         this.createStyles();
         this.createButtons();
-        this.startColorSampling();
     }
     
     createStyles() {
@@ -48,7 +44,7 @@ class GAUDVIBEButtons {
                 padding: 12px 25px;
                 border-radius: 1px;
                 transform: translateY(0);
-                transition: transform linear 150ms, box-shadow 0.5s ease; /* Transition plus douce */
+                transition: transform linear 150ms, box-shadow 0.3s ease;
                 text-decoration: none;
                 font-family: sans-serif;
                 font-size: 1.2rem;
@@ -169,8 +165,20 @@ class GAUDVIBEButtons {
             btn.rel = button.url.startsWith('http') ? 'noopener noreferrer' : '';
             btn.innerHTML = `<span class="icon">${button.icon}</span><span class="text">${button.text}</span>`;
             
-            // Stocker l'index pour les couleurs
-            btn.dataset.index = index;
+            // Ajouter l'événement mouseenter pour changer la couleur au survol
+            btn.addEventListener('mouseenter', (e) => {
+                this.updateButtonColor(btn);
+            });
+            
+            // Optionnel : remettre la couleur par défaut quand on quitte le survol
+            btn.addEventListener('mouseleave', (e) => {
+                btn.style.boxShadow = `
+                    0 0 0 5px #383050,
+                    0 0 0 10px #68d0b8,
+                    0 0 0 12px #f7e8a8,
+                    0 0 0 15px #3d3c55
+                `;
+            });
             
             btn.addEventListener('click', (e) => {
                 e.preventDefault();
@@ -184,52 +192,31 @@ class GAUDVIBEButtons {
         document.body.appendChild(container);
     }
     
-    startColorSampling() {
+    updateButtonColor(button) {
         const canvas = document.getElementById('shaderCanvas');
         if (!canvas) return;
         
-        // Fonction pour mettre à jour les couleurs
-        const updateColors = () => {
-            const gl = canvas.getContext('webgl');
-            if (!gl) return;
-            
-            const buttons = document.querySelectorAll('.gaudvibe-button');
-            if (buttons.length === 0) return;
-            
-            const width = canvas.width;
-            const height = canvas.height;
-            
-            // Positions différentes pour chaque bouton
-            const positions = [
-                {x: width * 0.2, y: height * 0.2},
-                {x: width * 0.8, y: height * 0.2},
-                {x: width * 0.2, y: height * 0.8},
-                {x: width * 0.8, y: height * 0.8}
-            ];
-            
-            const pixels = new Uint8Array(4);
-            
-            buttons.forEach((button, index) => {
-                const pos = positions[index % positions.length];
-                gl.readPixels(pos.x, pos.y, 1, 1, gl.RGBA, gl.UNSIGNED_BYTE, pixels);
-                
-                const r = pixels[0];
-                const g = pixels[1];
-                const b = pixels[2];
-                
-                // Mettre à jour le box-shadow avec la couleur du shader
-                const newBoxShadow = `0 0 0 5px #383050, 0 0 0 10px rgb(${r}, ${g}, ${b}), 0 0 0 12px #f7e8a8, 0 0 0 15px #3d3c55`;
-                button.style.boxShadow = newBoxShadow;
-            });
-            
-            console.log('Couleurs mises à jour'); // Pour déboguer
-        };
+        const gl = canvas.getContext('webgl');
+        if (!gl) return;
         
-        // Première mise à jour après 1 seconde
-        setTimeout(updateColors, 1000);
+        // Échantillonner une position aléatoire du canvas
+        const x = Math.floor(Math.random() * canvas.width);
+        const y = Math.floor(Math.random() * canvas.height);
         
-        // Mettre à jour toutes les 2 secondes
-        setInterval(updateColors, 2000);
+        const pixels = new Uint8Array(4);
+        gl.readPixels(x, y, 1, 1, gl.RGBA, gl.UNSIGNED_BYTE, pixels);
+        
+        const r = pixels[0];
+        const g = pixels[1];
+        const b = pixels[2];
+        
+        // Appliquer la couleur au box-shadow
+        button.style.boxShadow = `
+            0 0 0 5px #383050,
+            0 0 0 10px rgb(${r}, ${g}, ${b}),
+            0 0 0 12px #f7e8a8,
+            0 0 0 15px #3d3c55
+        `;
     }
     
     createRipple(event, button) {
