@@ -33,7 +33,7 @@ class GAUDVIBEButtons {
                 padding: 20px;
             }
             
-            /* EARTHBOUND STYLE BUTTONS */
+            /* EARTHBOUND STYLE BUTTONS - Version noire par défaut */
             .gaudvibe-button {
                 position: relative;
                 min-width: 5em;
@@ -56,15 +56,17 @@ class GAUDVIBEButtons {
                 gap: 10px;
                 letter-spacing: 1px;
                 backdrop-filter: blur(2px);
+                /* Version noire par défaut - la couleur du milieu est grise */
                 box-shadow:
                     0 0 0 5px #383050,  /* dark grey */
-                    0 0 0 10px #68d0b8, /* minty blue (couleur par défaut) */
+                    0 0 0 10px #4a4a4a, /* grey par défaut (au lieu de couleur) */
                     0 0 0 12px #f7e8a8, /* white */
                     0 0 0 15px #3d3c55; /* black */
             }
             
             .gaudvibe-button:hover {
                 transform: translateY(-0.2em);
+                /* La couleur sera appliquée dynamiquement par JavaScript */
             }
             
             /* Style de l'icône */
@@ -118,7 +120,7 @@ class GAUDVIBEButtons {
                     font-size: 1rem;
                     box-shadow:
                         0 0 0 4px #383050,
-                        0 0 0 8px #68d0b8,
+                        0 0 0 8px #4a4a4a,
                         0 0 0 10px #f7e8a8,
                         0 0 0 12px #3d3c55;
                 }
@@ -165,19 +167,17 @@ class GAUDVIBEButtons {
             btn.rel = button.url.startsWith('http') ? 'noopener noreferrer' : '';
             btn.innerHTML = `<span class="icon">${button.icon}</span><span class="text">${button.text}</span>`;
             
-            // Ajouter l'événement mouseenter pour changer la couleur au survol
+            // Stocker la couleur par défaut
+            btn.dataset.defaultColor = '#4a4a4a';
+            
+            // Au hover, appliquer une couleur aléatoire du shader
             btn.addEventListener('mouseenter', (e) => {
-                this.updateButtonColor(btn);
+                this.applyRandomShaderColor(btn);
             });
             
-            // Optionnel : remettre la couleur par défaut quand on quitte le survol
+            // Au mouseleave, revenir à la couleur par défaut
             btn.addEventListener('mouseleave', (e) => {
-                btn.style.boxShadow = `
-                    0 0 0 5px #383050,
-                    0 0 0 10px #68d0b8,
-                    0 0 0 12px #f7e8a8,
-                    0 0 0 15px #3d3c55
-                `;
+                this.resetToDefaultColor(btn);
             });
             
             btn.addEventListener('click', (e) => {
@@ -192,14 +192,14 @@ class GAUDVIBEButtons {
         document.body.appendChild(container);
     }
     
-    updateButtonColor(button) {
+    applyRandomShaderColor(button) {
         const canvas = document.getElementById('shaderCanvas');
         if (!canvas) return;
         
         const gl = canvas.getContext('webgl');
         if (!gl) return;
         
-        // Échantillonner une position aléatoire du canvas
+        // Prendre une position aléatoire dans le canvas
         const x = Math.floor(Math.random() * canvas.width);
         const y = Math.floor(Math.random() * canvas.height);
         
@@ -210,13 +210,22 @@ class GAUDVIBEButtons {
         const g = pixels[1];
         const b = pixels[2];
         
-        // Appliquer la couleur au box-shadow
-        button.style.boxShadow = `
-            0 0 0 5px #383050,
-            0 0 0 10px rgb(${r}, ${g}, ${b}),
-            0 0 0 12px #f7e8a8,
-            0 0 0 15px #3d3c55
-        `;
+        // Sauvegarder la couleur actuelle pour pouvoir y revenir
+        const currentBoxShadow = button.style.boxShadow;
+        const newBoxShadow = `0 0 0 5px #383050, 0 0 0 10px rgb(${r}, ${g}, ${b}), 0 0 0 12px #f7e8a8, 0 0 0 15px #3d3c55`;
+        
+        // Appliquer la nouvelle couleur avec une transition
+        button.style.transition = 'box-shadow 0.3s ease';
+        button.style.boxShadow = newBoxShadow;
+        
+        // Stocker la couleur pour pouvoir la réappliquer si nécessaire
+        button.dataset.hoverColor = `rgb(${r}, ${g}, ${b})`;
+    }
+    
+    resetToDefaultColor(button) {
+        // Revenir à la couleur par défaut (grise)
+        const defaultBoxShadow = `0 0 0 5px #383050, 0 0 0 10px #4a4a4a, 0 0 0 12px #f7e8a8, 0 0 0 15px #3d3c55`;
+        button.style.boxShadow = defaultBoxShadow;
     }
     
     createRipple(event, button) {
