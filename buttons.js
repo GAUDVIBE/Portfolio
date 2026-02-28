@@ -13,7 +13,7 @@ class GAUDVIBEButtons {
     
     init() {
         this.createStyles();
-        this.createContainer();
+        this.createContainers();
     }
     
     createStyles() {
@@ -28,31 +28,13 @@ class GAUDVIBEButtons {
             }
             
             main {
-                max-width: 800px;  /* Augmenté de 600px à 800px */
+                max-width: 600px;
                 margin: auto;
                 position: relative;
                 z-index: 1000;
-            }
-            
-            .grid {
                 display: flex;
-            }
-            
-            .grid.between {
-                justify-content: space-between;
-                align-items: center;
-            }
-            
-            .column:first-child {
-                margin-right: 0.5em;
-            }
-            
-            .right {
-                text-align: right;
-            }
-            
-            p {
-                margin-bottom: 0;
+                flex-direction: column;
+                gap: 30px;  /* Espace entre les deux containers */
             }
             
             /* EARTHBOUND STYLE BOX */
@@ -63,7 +45,7 @@ class GAUDVIBEButtons {
                 vertical-align: top;
                 background-color: #280828;
                 color: #e7e6b3;
-                padding: 30px 35px;  /* Augmenté de 20px 25px à 30px 35px */
+                padding: 25px 30px;
                 border-radius: 1px;
                 font-family: 'Courier New', Courier, monospace;
                 box-shadow:
@@ -71,7 +53,6 @@ class GAUDVIBEButtons {
                     0 0 0 10px #68d0b8,
                     0 0 0 12px #f7e8a8,
                     0 0 0 15px #3d3c55;
-                margin: 20px 0;
                 width: 100%;
                 box-sizing: border-box;
             }
@@ -82,55 +63,73 @@ class GAUDVIBEButtons {
                 box-sizing: border-box;
             }
             
-            /* Conteneur du texte à gauche */
-            .box .left-text {
+            /* Container pour le texte */
+            .text-container {
+                text-align: center;
+            }
+            
+            .text-container .box {
+                background-color: #280828;
+            }
+            
+            .text-container .main-text {
                 color: #e7e6b3;
                 text-shadow: 2px 2px 0 #3d3c55;
-                font-size: 1.3rem;  /* Légèrement plus grand */
-                margin-right: 30px;  /* Plus d'espace */
-                white-space: nowrap;
+                font-size: 1.4rem;  /* Plus grand */
                 font-family: 'Courier New', Courier, monospace;
                 font-weight: bold;
+                letter-spacing: 1px;
+                margin: 0;
+            }
+            
+            /* Container pour les boutons */
+            .buttons-container {
+                display: flex;
+                justify-content: center;
+            }
+            
+            .buttons-container .box {
+                padding: 30px 35px;
             }
             
             /* Grille carrée pour les boutons */
             .button-grid {
                 display: grid;
                 grid-template-columns: repeat(2, 1fr);
-                gap: 20px;  /* Augmenté de 15px à 20px */
+                gap: 25px;  /* Plus d'espace entre les boutons */
                 justify-items: center;
                 align-items: center;
-                min-width: 250px;  /* Largeur minimum pour la grille */
+                min-width: 300px;
             }
             
-            /* Style des boutons dans la box */
+            /* Style des boutons */
             .box button {
                 position: relative;
                 cursor: pointer;
                 background: #280828;
                 border: 0;
                 color: #e7e6b3;
-                font-size: 1.3rem;  /* Plus grand */
+                font-size: 1.4rem;  /* Plus grand */
                 font-family: 'Courier New', Courier, monospace;
                 font-weight: bold;
-                padding: 10px 20px;  /* Plus de padding */
-                min-width: 110px;  /* Plus large */
+                padding: 12px 25px;  /* Plus de padding */
+                min-width: 120px;  /* Plus large */
                 text-align: center;
                 transition: all 0.3s ease;
                 border-radius: 1px;
                 text-shadow: 2px 2px 0 #3d3c55;
-                letter-spacing: 1px;  /* Un peu d'espace entre les lettres */
+                letter-spacing: 1px;
             }
             
-            /* Au hover, seulement le fond change, le texte reste visible */
+            /* Au hover, fond plus clair */
             .box button:hover {
-                background: #383050;  /* Gris foncé au lieu de transparent */
-                color: #e7e6b3;  /* Texte reste visible */
-                text-shadow: 2px 2px 0 #3d3c55;  /* Ombre conservée */
+                background: #383050;
+                color: #e7e6b3;
+                text-shadow: 2px 2px 0 #3d3c55;
                 transform: translateY(-2px);
             }
             
-            /* Flèche plus grosse au hover */
+            /* Flèche au hover */
             .box button:hover::before {
                 content: '';
                 position: absolute;
@@ -163,6 +162,7 @@ class GAUDVIBEButtons {
                 
                 main {
                     max-width: 95%;
+                    gap: 20px;
                 }
                 
                 .box {
@@ -174,20 +174,23 @@ class GAUDVIBEButtons {
                         0 0 0 12px #3d3c55;
                 }
                 
+                .buttons-container .box {
+                    padding: 25px 30px;
+                }
+                
                 .button-grid {
-                    gap: 15px;
-                    min-width: 200px;
+                    gap: 20px;
+                    min-width: 250px;
                 }
                 
                 .box button {
-                    font-size: 1.1rem;
-                    padding: 8px 15px;
-                    min-width: 90px;
+                    font-size: 1.2rem;
+                    padding: 10px 20px;
+                    min-width: 100px;
                 }
                 
-                .box .left-text {
-                    font-size: 1.1rem;
-                    margin-right: 20px;
+                .text-container .main-text {
+                    font-size: 1.2rem;
                 }
                 
                 .box button:hover::before {
@@ -199,36 +202,31 @@ class GAUDVIBEButtons {
             }
             
             @media (max-width: 600px) {
-                .grid.between {
-                    flex-direction: column;
-                    gap: 20px;
-                }
-                
-                .box .left-text {
-                    margin-right: 0;
-                    white-space: normal;
-                    text-align: center;
-                }
-                
                 .button-grid {
-                    width: 100%;
-                }
-            }
-            
-            @media (max-width: 480px) {
-                .box {
-                    padding: 15px;
-                }
-                
-                .button-grid {
-                    grid-template-columns: 1fr;
-                    gap: 10px;
+                    grid-template-columns: 1fr;  /* Passe en colonne sur mobile */
+                    gap: 15px;
                     min-width: auto;
+                    width: 100%;
                 }
                 
                 .box button {
                     width: 100%;
                     min-width: auto;
+                }
+            }
+            
+            @media (max-width: 480px) {
+                .box {
+                    padding: 15px 20px;
+                }
+                
+                .buttons-container .box {
+                    padding: 20px 25px;
+                }
+                
+                .box button {
+                    font-size: 1.1rem;
+                    padding: 8px 15px;
                 }
                 
                 .box button:hover::before {
@@ -245,27 +243,32 @@ class GAUDVIBEButtons {
         document.head.appendChild(styleSheet);
     }
     
-    createContainer() {
+    createContainers() {
         // Créer le main
         const main = document.createElement('main');
         
-        // Créer la box Earthbound
-        const section = document.createElement('section');
-        section.className = 'box full';
+        // === PREMIER CONTAINER : Le texte ===
+        const textContainer = document.createElement('div');
+        textContainer.className = 'text-container';
         
-        // Créer le conteneur flex
-        const div = document.createElement('div');
-        div.className = 'grid between';
+        const textBox = document.createElement('section');
+        textBox.className = 'box full';
         
-        // Partie gauche : le texte
-        const leftAside = document.createElement('aside');
-        leftAside.className = 'left-text';
-        leftAside.textContent = 'Que voulez-vous sélectionner ?';
+        const textElement = document.createElement('div');
+        textElement.className = 'main-text';
+        textElement.textContent = 'Que voulez-vous sélectionner ?';
         
-        // Partie droite : la grille carrée de boutons
-        const rightAside = document.createElement('aside');
+        textBox.appendChild(textElement);
+        textContainer.appendChild(textBox);
         
-        // Créer la grille
+        // === DEUXIÈME CONTAINER : Les boutons ===
+        const buttonsContainer = document.createElement('div');
+        buttonsContainer.className = 'buttons-container';
+        
+        const buttonsBox = document.createElement('section');
+        buttonsBox.className = 'box full';
+        
+        // Créer la grille de boutons
         const buttonGrid = document.createElement('div');
         buttonGrid.className = 'button-grid';
         
@@ -298,13 +301,12 @@ class GAUDVIBEButtons {
             buttonGrid.appendChild(button);
         });
         
-        rightAside.appendChild(buttonGrid);
+        buttonsBox.appendChild(buttonGrid);
+        buttonsContainer.appendChild(buttonsBox);
         
         // Assembler le tout
-        div.appendChild(leftAside);
-        div.appendChild(rightAside);
-        section.appendChild(div);
-        main.appendChild(section);
+        main.appendChild(textContainer);
+        main.appendChild(buttonsContainer);
         
         // Ajouter au body
         document.body.appendChild(main);
