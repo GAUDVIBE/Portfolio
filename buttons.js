@@ -181,7 +181,7 @@ class GAUDVIBEButtons {
         
         const textDiv = document.createElement('div');
         textDiv.className = 'main-text';
-        textDiv.textContent = 'Que voulez-vous sélectionner ?';
+        textDiv.textContent = '• Que voulez-vous faire ?';
         
         textBox.appendChild(textDiv);
         textContainer.appendChild(textBox);
