@@ -9,6 +9,8 @@ class GAUDVIBEButtons {
         ];
         
         this.shaderColors = [];
+        this.lastUpdate = 0;
+        this.updateInterval = 2000; // Mise à jour toutes les 2 secondes (2000ms)
         this.init();
     }
     
@@ -46,7 +48,7 @@ class GAUDVIBEButtons {
                 padding: 12px 25px;
                 border-radius: 1px;
                 transform: translateY(0);
-                transition: transform linear 150ms, box-shadow 0.3s ease;
+                transition: transform linear 150ms, box-shadow 0.5s ease; /* Transition plus douce */
                 text-decoration: none;
                 font-family: sans-serif;
                 font-size: 1.2rem;
@@ -60,6 +62,7 @@ class GAUDVIBEButtons {
                 backdrop-filter: blur(2px);
                 box-shadow:
                     0 0 0 5px #383050,  /* dark grey */
+                    0 0 0 10px #68d0b8, /* minty blue (couleur par défaut) */
                     0 0 0 12px #f7e8a8, /* white */
                     0 0 0 15px #3d3c55; /* black */
             }
@@ -119,6 +122,7 @@ class GAUDVIBEButtons {
                     font-size: 1rem;
                     box-shadow:
                         0 0 0 4px #383050,
+                        0 0 0 8px #68d0b8,
                         0 0 0 10px #f7e8a8,
                         0 0 0 12px #3d3c55;
                 }
@@ -184,7 +188,8 @@ class GAUDVIBEButtons {
         const canvas = document.getElementById('shaderCanvas');
         if (!canvas) return;
         
-        const sampleColors = () => {
+        // Fonction pour mettre à jour les couleurs
+        const updateColors = () => {
             const gl = canvas.getContext('webgl');
             if (!gl) return;
             
@@ -213,20 +218,18 @@ class GAUDVIBEButtons {
                 const b = pixels[2];
                 
                 // Mettre à jour le box-shadow avec la couleur du shader
-                const currentBoxShadow = button.style.boxShadow;
                 const newBoxShadow = `0 0 0 5px #383050, 0 0 0 10px rgb(${r}, ${g}, ${b}), 0 0 0 12px #f7e8a8, 0 0 0 15px #3d3c55`;
-                
-                if (currentBoxShadow !== newBoxShadow) {
-                    button.style.boxShadow = newBoxShadow;
-                }
+                button.style.boxShadow = newBoxShadow;
             });
             
-            requestAnimationFrame(sampleColors);
+            console.log('Couleurs mises à jour'); // Pour déboguer
         };
         
-        // Attendre que le canvas soit prêt
-        setTimeout(sampleColors, 1000);
-        requestAnimationFrame(sampleColors);
+        // Première mise à jour après 1 seconde
+        setTimeout(updateColors, 1000);
+        
+        // Mettre à jour toutes les 2 secondes
+        setInterval(updateColors, 2000);
     }
     
     createRipple(event, button) {
