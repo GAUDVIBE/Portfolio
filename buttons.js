@@ -65,10 +65,11 @@ class GAUDVIBEButtons {
             .text-container .main-text { 
                 font-size: 1.4rem; 
                 font-weight: bold; 
-                text-align: center;
+                text-align: left;
                 text-shadow: 2px 2px 0 #3d3c55; 
                 font-family: 'Courier New', monospace;
                 color: #e7e6b3;
+                padding-left: 10px;
             }
             
             /* Container boutons */
