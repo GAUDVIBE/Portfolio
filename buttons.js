@@ -8,12 +8,14 @@ class GAUDVIBEButtons {
             { text: 'Instagram', url: 'https://www.instagram.com/antoine_gdy/', type: 'instagram' }
         ];
         
+        this.selectedIndex = 0; // Premier bouton sélectionné par défaut
         this.init();
     }
     
     init() {
         this.createStyles();
         this.createButtons();
+        this.addKeyboardNavigation();
     }
     
     createStyles() {
@@ -24,17 +26,13 @@ class GAUDVIBEButtons {
                 left: 50%;
                 transform: translate(-50%, -50%);
                 display: flex;
-                gap: 20px;
+                gap: 30px;
                 z-index: 1000;
                 flex-wrap: wrap;
                 justify-content: center;
                 align-items: center;
                 max-width: 90vw;
                 padding: 20px;
-                background: rgba(40, 8, 40, 0.3);
-                border-radius: 60px;
-                backdrop-filter: blur(5px);
-                border: 2px solid rgba(231, 230, 179, 0.2);
             }
             
             .gaudvibe-button {
@@ -64,12 +62,22 @@ class GAUDVIBEButtons {
                     0 0 0 15px #3d3c55;
             }
             
-            /* Bleu-gris au hover */
-            .gaudvibe-button:hover {
+            /* Style pour le bouton sélectionné */
+            .gaudvibe-button.selected {
                 transform: translateY(-0.2em);
                 box-shadow:
                     0 0 0 5px #383050,
                     0 0 0 10px #4a6b8a,
+                    0 0 0 12px #f7e8a8,
+                    0 0 0 15px #3d3c55;
+            }
+            
+            /* Style au survol (non sélectionné) */
+            .gaudvibe-button:not(.selected):hover {
+                transform: translateY(-0.1em);
+                box-shadow:
+                    0 0 0 5px #383050,
+                    0 0 0 10px #2c3e50,
                     0 0 0 12px #f7e8a8,
                     0 0 0 15px #3d3c55;
             }
@@ -80,20 +88,20 @@ class GAUDVIBEButtons {
                 display: inline-block;
             }
             
-            /* Flèche pour TOUS les boutons au hover */
-            .gaudvibe-button:hover::before {
-                content: '' !important;
-                position: absolute !important;
-                left: -0.8em !important;
-                top: 50% !important;
-                transform: translateY(-50%) !important;
-                width: 0 !important;
-                height: 0 !important;
-                border-top: 0.5rem solid transparent !important;
-                border-bottom: 0.5rem solid transparent !important;
-                border-left: 0.5rem solid #e7e6b3 !important;
-                filter: drop-shadow(2px 2px 0 #3d3c55) !important;
-                z-index: 1001 !important;
+            /* Flèche pour le bouton sélectionné */
+            .gaudvibe-button.selected::before {
+                content: '';
+                position: absolute;
+                left: -0.8em;
+                top: 50%;
+                transform: translateY(-50%);
+                width: 0;
+                height: 0;
+                border-top: 0.5rem solid transparent;
+                border-bottom: 0.5rem solid transparent;
+                border-left: 0.5rem solid #e7e6b3;
+                filter: drop-shadow(2px 2px 0 #3d3c55);
+                z-index: 1001;
             }
             
             @keyframes ripple {
@@ -102,39 +110,30 @@ class GAUDVIBEButtons {
             
             @media (max-width: 768px) {
                 .gaudvibe-buttons-container {
-                    gap: 15px;
-                    padding: 15px;
-                    border-radius: 50px;
+                    gap: 20px;
                 }
                 .gaudvibe-button {
                     padding: 10px 20px;
                     font-size: 1rem;
-                    box-shadow: 0 0 0 4px #383050, 0 0 0 8px #000000, 0 0 0 10px #f7e8a8, 0 0 0 12px #3d3c55;
                 }
-                .gaudvibe-button:hover {
-                    box-shadow: 0 0 0 4px #383050, 0 0 0 8px #4a6b8a, 0 0 0 10px #f7e8a8, 0 0 0 12px #3d3c55;
-                }
-                .gaudvibe-button:hover::before {
-                    left: -0.6em !important;
-                    border-top: 0.4rem solid transparent !important;
-                    border-bottom: 0.4rem solid transparent !important;
-                    border-left: 0.4rem solid #e7e6b3 !important;
+                .gaudvibe-button.selected::before {
+                    left: -0.6em;
+                    border-top: 0.4rem solid transparent;
+                    border-bottom: 0.4rem solid transparent;
+                    border-left: 0.4rem solid #e7e6b3;
                 }
             }
             
             @media (max-width: 480px) {
                 .gaudvibe-buttons-container {
                     flex-direction: column;
-                    width: 90%;
-                    border-radius: 40px;
-                    gap: 10px;
+                    width: 80%;
                 }
                 .gaudvibe-button {
                     width: 100%;
-                    justify-content: center;
                 }
-                .gaudvibe-button:hover::before {
-                    left: -0.5em !important;
+                .gaudvibe-button.selected::before {
+                    left: -0.5em;
                 }
             }
         `;
@@ -156,18 +155,35 @@ class GAUDVIBEButtons {
             btn.rel = button.url.startsWith('http') ? 'noopener noreferrer' : '';
             btn.innerHTML = `<span class="text">${button.text}</span>`;
             
-            // Pour le CV, on ajoute download pour forcer le téléchargement
+            // Marquer le premier bouton comme sélectionné
+            if (index === this.selectedIndex) {
+                btn.classList.add('selected');
+            }
+            
+            // Pour le CV, on ajoute download
             if (button.type === 'document') {
                 btn.setAttribute('download', 'CV.pdf');
             }
             
-            // Ripple effect au clic
+            // Clic pour sélectionner le bouton
             btn.addEventListener('click', (e) => {
                 e.preventDefault();
+                
+                // Retirer la classe selected de tous les boutons
+                document.querySelectorAll('.gaudvibe-button').forEach(b => {
+                    b.classList.remove('selected');
+                });
+                
+                // Ajouter la classe selected au bouton cliqué
+                btn.classList.add('selected');
+                this.selectedIndex = index;
+                
+                // Effet ripple
                 this.createRipple(e, btn);
+                
+                // Ouvrir le lien après un petit délai
                 setTimeout(() => {
                     if (button.type === 'document') {
-                        // Pour le CV, on utilise window.open pour le téléchargement
                         window.open(btn.href, '_blank');
                     } else {
                         window.open(btn.href, btn.target);
@@ -179,6 +195,50 @@ class GAUDVIBEButtons {
         });
         
         document.body.appendChild(container);
+    }
+    
+    addKeyboardNavigation() {
+        document.addEventListener('keydown', (e) => {
+            // Flèches gauche et droite pour naviguer
+            if (e.key === 'ArrowLeft') {
+                e.preventDefault();
+                this.selectedIndex = (this.selectedIndex - 1 + this.buttons.length) % this.buttons.length;
+                this.updateSelectedButton();
+            } else if (e.key === 'ArrowRight') {
+                e.preventDefault();
+                this.selectedIndex = (this.selectedIndex + 1) % this.buttons.length;
+                this.updateSelectedButton();
+            } else if (e.key === 'Enter') {
+                e.preventDefault();
+                this.openSelectedButton();
+            }
+        });
+    }
+    
+    updateSelectedButton() {
+        const buttons = document.querySelectorAll('.gaudvibe-button');
+        buttons.forEach((btn, index) => {
+            if (index === this.selectedIndex) {
+                btn.classList.add('selected');
+            } else {
+                btn.classList.remove('selected');
+            }
+        });
+    }
+    
+    openSelectedButton() {
+        const buttons = document.querySelectorAll('.gaudvibe-button');
+        const selectedButton = buttons[this.selectedIndex];
+        
+        if (selectedButton) {
+            const button = this.buttons[this.selectedIndex];
+            
+            if (button.type === 'document') {
+                window.open(selectedButton.href, '_blank');
+            } else {
+                window.open(selectedButton.href, selectedButton.target);
+            }
+        }
     }
     
     createRipple(event, button) {
