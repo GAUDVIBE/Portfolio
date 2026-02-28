@@ -24,13 +24,17 @@ class GAUDVIBEButtons {
                 left: 50%;
                 transform: translate(-50%, -50%);
                 display: flex;
-                gap: 30px;
+                gap: 20px;
                 z-index: 1000;
                 flex-wrap: wrap;
                 justify-content: center;
                 align-items: center;
                 max-width: 90vw;
                 padding: 20px;
+                background: rgba(40, 8, 40, 0.3);
+                border-radius: 60px;
+                backdrop-filter: blur(5px);
+                border: 2px solid rgba(231, 230, 179, 0.2);
             }
             
             .gaudvibe-button {
@@ -98,7 +102,9 @@ class GAUDVIBEButtons {
             
             @media (max-width: 768px) {
                 .gaudvibe-buttons-container {
-                    gap: 20px;
+                    gap: 15px;
+                    padding: 15px;
+                    border-radius: 50px;
                 }
                 .gaudvibe-button {
                     padding: 10px 20px;
@@ -119,7 +125,9 @@ class GAUDVIBEButtons {
             @media (max-width: 480px) {
                 .gaudvibe-buttons-container {
                     flex-direction: column;
-                    width: 80%;
+                    width: 90%;
+                    border-radius: 40px;
+                    gap: 10px;
                 }
                 .gaudvibe-button {
                     width: 100%;
