@@ -1,13 +1,34 @@
 document.addEventListener('DOMContentLoaded', function() {
-    // Remove loading indicator when WebGL is ready
-    const loadingElement = document.querySelector('.loading');
+    // Create canvas if it doesn't exist
+    let canvas = document.getElementById('shaderCanvas');
+    if (!canvas) {
+        canvas = document.createElement('canvas');
+        canvas.id = 'shaderCanvas';
+        canvas.style.position = 'fixed';
+        canvas.style.top = '0';
+        canvas.style.left = '0';
+        canvas.style.width = '100%';
+        canvas.style.height = '100%';
+        canvas.style.zIndex = '-1';
+        document.body.appendChild(canvas);
+    }
     
-    const canvas = document.getElementById('shaderCanvas');
+    // Create or get loading indicator
+    let loadingElement = document.querySelector('.loading');
+    if (!loadingElement) {
+        loadingElement = document.createElement('div');
+        loadingElement.className = 'loading';
+        loadingElement.style.cssText = 'position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);color:white;font-family:Arial,sans-serif;z-index:1000;';
+        loadingElement.textContent = 'Loading...';
+        document.body.appendChild(loadingElement);
+    }
+    
     const gl = canvas.getContext('webgl');
     
     if (!gl) {
         console.warn('WebGL not supported - using fallback background');
         loadingElement.remove();
+        document.body.style.backgroundColor = '#1a1a1a';
         return;
     }
 
@@ -24,15 +45,25 @@ document.addEventListener('DOMContentLoaded', function() {
         distortionScale: 3 + Math.random() * 5
     };
 
-    // Get the primary color from CSS
-    const primaryColor = getComputedStyle(document.documentElement)
-        .getPropertyValue('--primary-color').trim();
+    // Get the primary color from CSS or use default
+    let primaryColor = '#3b82f6'; // Default blue
+    try {
+        const computedColor = getComputedStyle(document.documentElement)
+            .getPropertyValue('--primary-color').trim();
+        if (computedColor) {
+            primaryColor = computedColor;
+        }
+    } catch (e) {
+        console.log('Using default primary color');
+    }
     
     // Convert hex color to RGB
     const hexToRgb = (hex) => {
-        const r = parseInt(hex.substring(1, 3), 16) / 255;
-        const g = parseInt(hex.substring(3, 5), 16) / 255;
-        const b = parseInt(hex.substring(5, 7), 16) / 255;
+        // Remove # if present
+        hex = hex.replace('#', '');
+        const r = parseInt(hex.substring(0, 2), 16) / 255;
+        const g = parseInt(hex.substring(2, 4), 16) / 255;
+        const b = parseInt(hex.substring(4, 6), 16) / 255;
         return {r, g, b};
     };
     
@@ -203,6 +234,7 @@ document.addEventListener('DOMContentLoaded', function() {
     
     if (!vertexShader || !fragmentShader) {
         loadingElement.remove();
+        document.body.style.backgroundColor = '#1a1a1a';
         return;
     }
 
@@ -214,6 +246,7 @@ document.addEventListener('DOMContentLoaded', function() {
     if (!gl.getProgramParameter(program, gl.LINK_STATUS)) {
         console.error('Program error:', gl.getProgramInfoLog(program));
         loadingElement.remove();
+        document.body.style.backgroundColor = '#1a1a1a';
         return;
     }
     
@@ -255,10 +288,8 @@ document.addEventListener('DOMContentLoaded', function() {
         
         gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4);
         
-        const fps = document.hidden ? 15 : 60;
-        setTimeout(() => {
-            requestAnimationFrame(animate);
-        }, 1000 / fps);
+        // Use requestAnimationFrame directly instead of setTimeout
+        requestAnimationFrame(animate);
     }
     
     window.addEventListener('resize', function() {
@@ -267,10 +298,12 @@ document.addEventListener('DOMContentLoaded', function() {
     });
     
     // Remove loading indicator when everything is ready
-    loadingElement.style.opacity = '0';
-    setTimeout(() => {
-        loadingElement.remove();
-    }, 500);
+    if (loadingElement) {
+        loadingElement.style.opacity = '0';
+        setTimeout(() => {
+            loadingElement.remove();
+        }, 500);
+    }
     
     requestAnimationFrame(animate);
 });
