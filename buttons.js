@@ -65,7 +65,7 @@ class GAUDVIBEButtons {
                 transform: translateY(-0.2em);
                 box-shadow:
                     0 0 0 5px #383050,
-                    0 0 0 10px #4a6b8a,  /* Bleu-gris */
+                    0 0 0 10px #4a6b8a,
                     0 0 0 12px #f7e8a8,
                     0 0 0 15px #3d3c55;
             }
@@ -76,18 +76,20 @@ class GAUDVIBEButtons {
                 display: inline-block;
             }
             
+            /* Flèche pour TOUS les boutons au hover */
             .gaudvibe-button:hover::before {
-                content: '';
-                position: absolute;
-                left: -0.8em;
-                top: 50%;
-                transform: translateY(-50%);
-                width: 0;
-                height: 0;
-                border-top: 0.5rem solid transparent;
-                border-bottom: 0.5rem solid transparent;
-                border-left: 0.5rem solid #e7e6b3;
-                filter: drop-shadow(2px 2px 0 #3d3c55);
+                content: '' !important;
+                position: absolute !important;
+                left: -0.8em !important;
+                top: 50% !important;
+                transform: translateY(-50%) !important;
+                width: 0 !important;
+                height: 0 !important;
+                border-top: 0.5rem solid transparent !important;
+                border-bottom: 0.5rem solid transparent !important;
+                border-left: 0.5rem solid #e7e6b3 !important;
+                filter: drop-shadow(2px 2px 0 #3d3c55) !important;
+                z-index: 1001 !important;
             }
             
             @keyframes ripple {
@@ -106,6 +108,12 @@ class GAUDVIBEButtons {
                 .gaudvibe-button:hover {
                     box-shadow: 0 0 0 4px #383050, 0 0 0 8px #4a6b8a, 0 0 0 10px #f7e8a8, 0 0 0 12px #3d3c55;
                 }
+                .gaudvibe-button:hover::before {
+                    left: -0.6em !important;
+                    border-top: 0.4rem solid transparent !important;
+                    border-bottom: 0.4rem solid transparent !important;
+                    border-left: 0.4rem solid #e7e6b3 !important;
+                }
             }
             
             @media (max-width: 480px) {
@@ -116,6 +124,9 @@ class GAUDVIBEButtons {
                 .gaudvibe-button {
                     width: 100%;
                     justify-content: center;
+                }
+                .gaudvibe-button:hover::before {
+                    left: -0.5em !important;
                 }
             }
         `;
@@ -137,11 +148,23 @@ class GAUDVIBEButtons {
             btn.rel = button.url.startsWith('http') ? 'noopener noreferrer' : '';
             btn.innerHTML = `<span class="text">${button.text}</span>`;
             
+            // Pour le CV, on ajoute download pour forcer le téléchargement
+            if (button.type === 'document') {
+                btn.setAttribute('download', 'CV.pdf');
+            }
+            
             // Ripple effect au clic
             btn.addEventListener('click', (e) => {
                 e.preventDefault();
                 this.createRipple(e, btn);
-                setTimeout(() => window.open(btn.href, btn.target), 300);
+                setTimeout(() => {
+                    if (button.type === 'document') {
+                        // Pour le CV, on utilise window.open pour le téléchargement
+                        window.open(btn.href, '_blank');
+                    } else {
+                        window.open(btn.href, btn.target);
+                    }
+                }, 300);
             });
             
             container.appendChild(btn);
