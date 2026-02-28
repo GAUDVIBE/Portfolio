@@ -45,12 +45,13 @@ class GAUDVIBEButtons {
                 transform: translate(-50%, -50%);
                 display: flex;
                 gap: 20px;
-                z-index: 1000;
+                z-index: 1000; /* Boutons au-dessus du canvas */
                 flex-wrap: wrap;
                 justify-content: center;
                 align-items: center;
                 max-width: 90vw;
                 padding: 20px;
+                pointer-events: none; /* Permet de cliquer à travers le conteneur */
             }
             
             .gaudvibe-button {
@@ -73,26 +74,13 @@ class GAUDVIBEButtons {
                 backdrop-filter: blur(5px);
                 box-shadow: 0 4px 15px rgba(0,0,0,0.3);
                 letter-spacing: 1px;
-            }
-            
-            .gaudvibe-button::before {
-                content: '';
-                position: absolute;
-                top: 0;
-                left: 0;
-                right: 0;
-                bottom: 0;
-                background: inherit;
-                opacity: 0;
-                transition: opacity 0.4s ease;
-                z-index: -1;
+                pointer-events: auto; /* Les boutons restent cliquables */
             }
             
             .gaudvibe-button:hover {
                 transform: translateY(-5px) scale(1.05);
                 box-shadow: 0 8px 25px rgba(0,0,0,0.5);
                 border-color: transparent;
-                color: #000;
             }
             
             .gaudvibe-button .icon {
@@ -104,12 +92,23 @@ class GAUDVIBEButtons {
                 transform: scale(1.1);
             }
             
-            .gaudvibe-button .text {
-                text-shadow: none;
-                transition: text-shadow 0.3s ease;
+            /* Couleurs spécifiques par type (au cas où le shader n'est pas disponible) */
+            .gaudvibe-button.document:hover {
+                background: rgba(59, 130, 246, 0.95) !important; /* Bleu */
             }
             
-            /* Mobile responsive */
+            .gaudvibe-button.github:hover {
+                background: rgba(36, 41, 46, 0.95) !important; /* Gris GitHub */
+            }
+            
+            .gaudvibe-button.youtube:hover {
+                background: rgba(255, 0, 0, 0.95) !important; /* Rouge YouTube */
+            }
+            
+            .gaudvibe-button.instagram:hover {
+                background: linear-gradient(45deg, #f09433, #d62976, #962fbf) !important; /* Dégradé Instagram */
+            }
+            
             @media (max-width: 768px) {
                 .gaudvibe-buttons-container {
                     gap: 15px;
@@ -141,6 +140,18 @@ class GAUDVIBEButtons {
         const styleSheet = document.createElement('style');
         styleSheet.textContent = styles;
         document.head.appendChild(styleSheet);
+        
+        // Ajouter l'animation ripple
+        const rippleStyle = document.createElement('style');
+        rippleStyle.textContent = `
+            @keyframes ripple {
+                to {
+                    transform: scale(4);
+                    opacity: 0;
+                }
+            }
+        `;
+        document.head.appendChild(rippleStyle);
     }
     
     createButtons() {
@@ -160,57 +171,27 @@ class GAUDVIBEButtons {
                 <span class="text">${button.text}</span>
             `;
             
-            // Add hover effect to sample shader color
-            btn.addEventListener('mouseenter', (e) => {
-                this.sampleShaderColorForButton(btn);
-            });
-            
-            // Reset to black on mouse leave
-            btn.addEventListener('mouseleave', (e) => {
-                btn.style.background = 'rgba(0, 0, 0, 0.8)';
-                btn.style.color = 'white';
-                btn.style.borderColor = 'rgba(255, 255, 255, 0.8)';
-            });
-            
-            // Add click effect
+            // Ajouter l'effet de ripple au clic
             btn.addEventListener('click', (e) => {
+                e.preventDefault(); // Empêcher la navigation immédiate
                 this.createRipple(e, btn);
+                
+                // Naviguer après l'animation
+                setTimeout(() => {
+                    window.open(btn.href, btn.target);
+                }, 300);
             });
             
             container.appendChild(btn);
         });
         
         document.body.appendChild(container);
-    }
-    
-    sampleShaderColorForButton(button) {
+        
+        // S'assurer que le canvas est en arrière-plan
         const canvas = document.getElementById('shaderCanvas');
-        if (!canvas) return;
-        
-        const gl = canvas.getContext('webgl');
-        if (!gl) return;
-        
-        // Sample a random position from the shader
-        const x = Math.floor(Math.random() * canvas.width);
-        const y = Math.floor(Math.random() * canvas.height);
-        
-        const pixels = new Uint8Array(4);
-        gl.readPixels(x, y, 1, 1, gl.RGBA, gl.UNSIGNED_BYTE, pixels);
-        
-        const r = pixels[0];
-        const g = pixels[1];
-        const b = pixels[2];
-        
-        // Apply the sampled color to the button
-        button.style.background = `rgba(${r}, ${g}, ${b}, 0.95)`;
-        button.style.color = this.getContrastColor(r, g, b);
-        button.style.borderColor = `rgba(${r}, ${g}, ${b}, 0.5)`;
-    }
-    
-    getContrastColor(r, g, b) {
-        // Calculate luminance to determine text color (black or white)
-        const luminance = (0.299 * r + 0.587 * g + 0.114 * b) / 255;
-        return luminance > 0.5 ? '#000000' : '#ffffff';
+        if (canvas) {
+            canvas.style.zIndex = '1';
+        }
     }
     
     createRipple(event, button) {
@@ -240,10 +221,15 @@ class GAUDVIBEButtons {
     }
 }
 
-// Initialize buttons when DOM is loaded
-document.addEventListener('DOMContentLoaded', () => {
-    // Wait for shader to initialize
+// Initialiser les boutons quand le DOM est chargé
+if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', () => {
+        setTimeout(() => {
+            new GAUDVIBEButtons();
+        }, 1000);
+    });
+} else {
     setTimeout(() => {
         new GAUDVIBEButtons();
     }, 1000);
-});
+}
