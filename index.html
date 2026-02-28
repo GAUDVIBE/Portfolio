@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <title>GAUDVIBE</title>
-        <style>
+    <style>
         body {
             margin: 0;
             overflow: hidden;
@@ -22,9 +22,10 @@
             color: white;
             font-family: Arial, sans-serif;
             z-index: 1000;
+            font-size: 20px;
+            text-shadow: 0 0 10px rgba(0,0,0,0.5);
         }
         
-        /* Animation for ripple effect */
         @keyframes ripple {
             to {
                 transform: scale(4);
@@ -34,20 +35,11 @@
     </style>
 </head>
 <body>
+    <div class="loading">GAUDVIBE</div>
+    <canvas id="shaderCanvas"></canvas>
+    
     <script src="shader.js"></script>
     <script src="buttons.js"></script>
-    <script>
-        // Add error handling for shader.js
-        const shaderScript = document.createElement('script');
-        shaderScript.src = 'shader.js';
-        shaderScript.onerror = function() {
-            console.error('Failed to load shader.js');
-            document.querySelector('.loading')?.remove();
-            document.body.innerHTML += '<div style="color:red;position:fixed;bottom:10px;left:10px;z-index:10000;">Error: shader.js not found</div>';
-        };
-        document.body.appendChild(shaderScript);
-    </script>
 </body>
 </html>
-
 
