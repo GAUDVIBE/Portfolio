@@ -9,8 +9,11 @@ document.addEventListener('DOMContentLoaded', function() {
         canvas.style.left = '0';
         canvas.style.width = '100%';
         canvas.style.height = '100%';
-        canvas.style.zIndex = '-1';
+        canvas.style.zIndex = '1'; // Changé de -1 à 1 pour être visible
         document.body.appendChild(canvas);
+    } else {
+        // Si le canvas existe déjà, assurez-vous qu'il a le bon z-index
+        canvas.style.zIndex = '1';
     }
     
     // Create or get loading indicator
