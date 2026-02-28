@@ -2,10 +2,10 @@
 class GAUDVIBEButtons {
     constructor() {
         this.buttons = [
-            { text: 'CV', icon: '📄', url: '/CV.pdf', type: 'document' },
+            { text: 'CV', url: '/CV.pdf', type: 'document' },
             { text: 'GitHub', url: 'https://github.com/GAUDVIBE', type: 'github' },
             { text: 'YouTube', url: 'https://youtube.com/@antoineGAUDRY', type: 'youtube' },
-            { text: 'Instagram', icon: '📷', url: 'https://www.instagram.com/antoine_gdy/', type: 'instagram' }
+            { text: 'Instagram', url: 'https://www.instagram.com/antoine_gdy/', type: 'instagram' }
         ];
         
         this.init();
@@ -50,10 +50,7 @@ class GAUDVIBEButtons {
                 font-weight: normal;
                 cursor: pointer;
                 border: 0;
-                display: flex;
-                align-items: center;
-                gap: 10px;
-                letter-spacing: 1px;
+                text-align: center;
                 backdrop-filter: blur(2px);
                 /* Noir par défaut */
                 box-shadow:
@@ -73,19 +70,10 @@ class GAUDVIBEButtons {
                     0 0 0 15px #3d3c55;
             }
             
-            .gaudvibe-button .icon {
-                font-size: 1.4rem;
-                filter: drop-shadow(2px 2px 2px rgba(0,0,0,0.3));
-                transition: transform 0.2s ease;
-            }
-            
-            .gaudvibe-button:hover .icon {
-                transform: scale(1.1);
-            }
-            
             .gaudvibe-button .text {
                 text-shadow: 2px 2px 0 #3d3c55;
                 font-weight: bold;
+                display: inline-block;
             }
             
             .gaudvibe-button:hover::before {
@@ -147,7 +135,7 @@ class GAUDVIBEButtons {
             btn.className = `gaudvibe-button ${button.type}`;
             btn.target = button.url.startsWith('http') ? '_blank' : '_self';
             btn.rel = button.url.startsWith('http') ? 'noopener noreferrer' : '';
-            btn.innerHTML = `<span class="icon">${button.icon}</span><span class="text">${button.text}</span>`;
+            btn.innerHTML = `<span class="text">${button.text}</span>`;
             
             // Ripple effect au clic
             btn.addEventListener('click', (e) => {
