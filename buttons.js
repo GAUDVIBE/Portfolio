@@ -94,7 +94,7 @@ class GAUDVIBEButtons {
             .box button {
                 position: relative;
                 cursor: pointer;
-                background-color: #280828;
+                background-color: #383050;
                 border: none;
                 color: #e7e6b3;
                 font-family: 'Courier New', monospace;
