@@ -3,7 +3,7 @@ class GAUDVIBEButtons {
     constructor() {
         this.buttons = [
             { text: 'CV', icon: '📄', url: '/CV.pdf', type: 'document' },
-            { text: 'GitHub', icon: '🐙', url: 'https://github.com/GAUDVIBE', type: 'github' },
+            { text: 'GitHub', icon: <img src="http://www.videogamesprites.net/Earthbound/NPCs/Nonhuman/Animals/Cat%20-%20Walk%20(Front).gif" alt="GitHub" style="width: 24px; height: 24px; vertical-align: middle;">',, url: 'https://github.com/GAUDVIBE', type: 'github' },
             { text: 'YouTube', icon: '🎥', url: 'https://youtube.com/@antoineGAUDRY', type: 'youtube' },
             { text: 'Instagram', icon: '📷', url: 'https://www.instagram.com/antoine_gdy/', type: 'instagram' }
         ];
