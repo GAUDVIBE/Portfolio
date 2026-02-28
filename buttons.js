@@ -1,4 +1,4 @@
-// buttons.js - Version corrigée
+// buttons.js - Version corrigée (texte visible au hover)
 class GAUDVIBEButtons {
     constructor() {
         this.links = [
@@ -109,11 +109,11 @@ class GAUDVIBEButtons {
                 width: 100%;
             }
             
-            /* Hover: bouton invisible mais flèche visible */
+            /* Hover: bouton reste visible avec fond plus clair */
             .box button:hover {
-                background-color: #280828;
-                color: #280828;
-                text-shadow: none;
+                background-color: #383050;  /* Gris plus clair */
+                color: #e7e6b3;             /* Texte reste visible */
+                text-shadow: 2px 2px 0 #3d3c55;
                 transform: translateY(-2px);
             }
             
