@@ -21,7 +21,7 @@ class GAUDVIBEButtons {
             /* Style général */
             body {
                 font-size: 1.2rem;
-                font-family: sans-serif;
+                font-family: Gill Sans, sans-serif;
                 margin: 0;
                 padding: 2em;
                 background-color: transparent;
