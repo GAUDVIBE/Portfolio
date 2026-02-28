@@ -8,12 +8,14 @@ class GAUDVIBEButtons {
             { text: 'Instagram', icon: '📷', url: 'https://www.instagram.com/antoine_gdy/', type: 'instagram' }
         ];
         
+        this.shaderColors = [];
         this.init();
     }
     
     init() {
         this.createStyles();
         this.createButtons();
+        this.startColorSampling();
     }
     
     createStyles() {
@@ -44,12 +46,7 @@ class GAUDVIBEButtons {
                 padding: 12px 25px;
                 border-radius: 1px;
                 transform: translateY(0);
-                transition: transform linear 150ms;
-                box-shadow:
-                    0 0 0 5px #383050,  /* dark grey */
-                    0 0 0 10px #68d0b8, /* minty blue */
-                    0 0 0 12px #f7e8a8, /* white */
-                    0 0 0 15px #3d3c55; /* black */
+                transition: transform linear 150ms, box-shadow 0.3s ease;
                 text-decoration: none;
                 font-family: sans-serif;
                 font-size: 1.2rem;
@@ -61,43 +58,14 @@ class GAUDVIBEButtons {
                 gap: 10px;
                 letter-spacing: 1px;
                 backdrop-filter: blur(2px);
+                box-shadow:
+                    0 0 0 5px #383050,  /* dark grey */
+                    0 0 0 12px #f7e8a8, /* white */
+                    0 0 0 15px #3d3c55; /* black */
             }
             
             .gaudvibe-button:hover {
                 transform: translateY(-0.2em);
-            }
-            
-            /* Style spécifique pour chaque type avec couleurs différentes */
-            .gaudvibe-button.document {
-                box-shadow:
-                    0 0 0 5px #383050,
-                    0 0 0 10px #68d0b8,
-                    0 0 0 12px #f7e8a8,
-                    0 0 0 15px #3d3c55;
-            }
-            
-            .gaudvibe-button.github {
-                box-shadow:
-                    0 0 0 5px #2c3e50,
-                    0 0 0 10px #34495e,
-                    0 0 0 12px #ecf0f1,
-                    0 0 0 15px #2c3e50;
-            }
-            
-            .gaudvibe-button.youtube {
-                box-shadow:
-                    0 0 0 5px #8b0000,
-                    0 0 0 10px #cc0000,
-                    0 0 0 12px #ff6b6b,
-                    0 0 0 15px #330000;
-            }
-            
-            .gaudvibe-button.instagram {
-                box-shadow:
-                    0 0 0 5px #833ab4,
-                    0 0 0 10px #fd1d1d,
-                    0 0 0 12px #fccc63,
-                    0 0 0 15px #4a1d6d;
             }
             
             /* Style de l'icône */
@@ -132,52 +100,6 @@ class GAUDVIBEButtons {
                 filter: drop-shadow(2px 2px 0 #3d3c55);
             }
             
-            /* Animation de slide pour le fond (optionnel) */
-            @keyframes slide {
-                from {
-                    background-position: 0 0, 30px 30px;
-                }
-                to {
-                    background-position: 0 0, -30px -30px;
-                }
-            }
-            
-            /* Style pour un effet de fond animé (optionnel) */
-            .gaudvibe-button::after {
-                content: '';
-                position: absolute;
-                top: 0;
-                left: 0;
-                right: 0;
-                bottom: 0;
-                background-image: 
-                    linear-gradient(
-                        45deg, 
-                        rgba(128, 216, 144, 0.1) 25%, 
-                        transparent 25%, 
-                        transparent 75%, 
-                        rgba(128, 216, 144, 0.1) 75%
-                    ),
-                    linear-gradient(
-                        45deg, 
-                        rgba(128, 216, 144, 0.1) 25%, 
-                        transparent 25%, 
-                        transparent 75%, 
-                        rgba(128, 216, 144, 0.1) 75%
-                    );
-                background-size: 20px 20px;
-                background-position: 0 0, 10px 10px;
-                opacity: 0;
-                transition: opacity 0.3s ease;
-                pointer-events: none;
-                border-radius: 1px;
-            }
-            
-            .gaudvibe-button:hover::after {
-                opacity: 1;
-                animation: slide 4s infinite linear;
-            }
-            
             /* Animation ripple */
             @keyframes ripple {
                 to {
@@ -197,7 +119,6 @@ class GAUDVIBEButtons {
                     font-size: 1rem;
                     box-shadow:
                         0 0 0 4px #383050,
-                        0 0 0 8px #68d0b8,
                         0 0 0 10px #f7e8a8,
                         0 0 0 12px #3d3c55;
                 }
@@ -236,13 +157,16 @@ class GAUDVIBEButtons {
         const container = document.createElement('div');
         container.className = 'gaudvibe-buttons-container';
         
-        this.buttons.forEach(button => {
+        this.buttons.forEach((button, index) => {
             const btn = document.createElement('a');
             btn.href = button.url;
             btn.className = `gaudvibe-button ${button.type}`;
             btn.target = button.url.startsWith('http') ? '_blank' : '_self';
             btn.rel = button.url.startsWith('http') ? 'noopener noreferrer' : '';
             btn.innerHTML = `<span class="icon">${button.icon}</span><span class="text">${button.text}</span>`;
+            
+            // Stocker l'index pour les couleurs
+            btn.dataset.index = index;
             
             btn.addEventListener('click', (e) => {
                 e.preventDefault();
@@ -254,6 +178,55 @@ class GAUDVIBEButtons {
         });
         
         document.body.appendChild(container);
+    }
+    
+    startColorSampling() {
+        const canvas = document.getElementById('shaderCanvas');
+        if (!canvas) return;
+        
+        const sampleColors = () => {
+            const gl = canvas.getContext('webgl');
+            if (!gl) return;
+            
+            const buttons = document.querySelectorAll('.gaudvibe-button');
+            if (buttons.length === 0) return;
+            
+            const width = canvas.width;
+            const height = canvas.height;
+            
+            // Positions différentes pour chaque bouton
+            const positions = [
+                {x: width * 0.2, y: height * 0.2},
+                {x: width * 0.8, y: height * 0.2},
+                {x: width * 0.2, y: height * 0.8},
+                {x: width * 0.8, y: height * 0.8}
+            ];
+            
+            const pixels = new Uint8Array(4);
+            
+            buttons.forEach((button, index) => {
+                const pos = positions[index % positions.length];
+                gl.readPixels(pos.x, pos.y, 1, 1, gl.RGBA, gl.UNSIGNED_BYTE, pixels);
+                
+                const r = pixels[0];
+                const g = pixels[1];
+                const b = pixels[2];
+                
+                // Mettre à jour le box-shadow avec la couleur du shader
+                const currentBoxShadow = button.style.boxShadow;
+                const newBoxShadow = `0 0 0 5px #383050, 0 0 0 10px rgb(${r}, ${g}, ${b}), 0 0 0 12px #f7e8a8, 0 0 0 15px #3d3c55`;
+                
+                if (currentBoxShadow !== newBoxShadow) {
+                    button.style.boxShadow = newBoxShadow;
+                }
+            });
+            
+            requestAnimationFrame(sampleColors);
+        };
+        
+        // Attendre que le canvas soit prêt
+        setTimeout(sampleColors, 1000);
+        requestAnimationFrame(sampleColors);
     }
     
     createRipple(event, button) {
