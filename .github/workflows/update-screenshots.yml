@@ -44,8 +44,8 @@ jobs:
               const page = await context.newPage();
               try {
                 await page.goto(link.url, { waitUntil: 'networkidle', timeout: 30000 });
-                await page.waitForTimeout(2000);
-                await page.screenshot({ path: `screenshots/${link.name}.png`, fullPage: false });
+                await page.waitForTimeout(3000);
+                await page.screenshot({ path: `screenshots/${link.name}.png`, fullPage: true });
                 console.log(`Screenshot saved: ${link.name}.png`);
               } catch (error) {
                 console.error(`Error taking screenshot of ${link.name}:`, error.message);
