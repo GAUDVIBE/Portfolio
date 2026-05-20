@@ -3,9 +3,9 @@ class GAUDVIBEButtons {
     constructor() {
         this.links = [
             { text: 'CV', url: 'https://raw.githubusercontent.com/GAUDVIBE/Portfolio/main/CV.pdf', type: 'pdf' },
-            { text: 'GitHub', url: 'https://github.com/GAUDVIBE', type: 'link' },
-            { text: 'YouTube', url: 'https://youtube.com/@antoineGAUDRY', type: 'link' },
-            { text: 'Instagram', url: 'https://www.instagram.com/antoine_gdy/', type: 'link' }
+            { text: 'GitHub', url: 'https://github.com/GAUDVIBE', type: 'link', screenshot: 'screenshots/github.png' },
+            { text: 'YouTube', url: 'https://youtube.com/@antoineGAUDRY', type: 'link', screenshot: 'screenshots/youtube.png' },
+            { text: 'Instagram', url: 'https://www.instagram.com/antoine_gdy/', type: 'link', screenshot: 'screenshots/instagram.png' }
         ];
         
         this.currentPreview = null;
@@ -417,28 +417,40 @@ class GAUDVIBEButtons {
                 window.open(link.url, '_blank');
             };
         } else {
-            const iframe = document.createElement('iframe');
-            iframe.src = link.url;
-            iframe.style.cssText = `
-                width: 100%;
-                height: 100%;
-                border: none;
-                background: white;
-            `;
-            
-            iframe.onerror = () => {
+            if (link.screenshot) {
+                const img = document.createElement('img');
+                img.src = link.screenshot;
+                img.alt = `${link.text} preview`;
+                img.style.cssText = `
+                    width: 100%;
+                    height: 100%;
+                    object-fit: contain;
+                    background: #1a1a1a;
+                `;
+                
+                img.onerror = () => {
+                    previewContent.innerHTML = `
+                        <div style="display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100%; gap: 20px;">
+                            <div style="font-size: 3rem; color: #e7e6b3; text-shadow: 3px 3px 0 #3d3c55;">📸</div>
+                            <div style="font-size: 1.3rem; color: #e7e6b3; text-align: center;">
+                                Screenshot en cours de génération...<br>
+                                <span style="font-size: 1rem;">Cliquez sur "Accéder" pour visiter le site</span>
+                            </div>
+                        </div>
+                    `;
+                };
+                
+                previewContent.appendChild(img);
+            } else {
                 previewContent.innerHTML = `
                     <div style="display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100%; gap: 20px;">
-                        <div style="font-size: 3rem; color: #e7e6b3; text-shadow: 3px 3px 0 #3d3c55;">⚠️</div>
+                        <div style="font-size: 3rem; color: #e7e6b3; text-shadow: 3px 3px 0 #3d3c55;">🔗</div>
                         <div style="font-size: 1.3rem; color: #e7e6b3; text-align: center;">
-                            Prévisualisation non disponible<br>
-                            <span style="font-size: 1rem;">Cliquez sur "Accéder" pour ouvrir le site</span>
+                            Cliquez sur "Accéder" pour visiter le site
                         </div>
                     </div>
                 `;
-            };
-            
-            previewContent.appendChild(iframe);
+            }
             
             accessButton.style.display = 'block';
             downloadButton.style.display = 'none';

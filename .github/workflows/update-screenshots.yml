@@ -1,0 +1,67 @@
+name: Update Screenshots
+
+on:
+  schedule:
+    - cron: '0 2 * * 0'
+  workflow_dispatch:
+
+jobs:
+  screenshot:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          
+      - name: Install Playwright
+        run: |
+          npm install -D @playwright/test
+          npx playwright install --with-deps chromium
+          
+      - name: Take screenshots
+        run: |
+          cat > take-screenshots.js << 'EOF'
+          const { chromium } = require('@playwright/test');
+
+          const links = [
+            { name: 'github', url: 'https://github.com/GAUDVIBE' },
+            { name: 'youtube', url: 'https://youtube.com/@antoineGAUDRY' },
+            { name: 'instagram', url: 'https://www.instagram.com/antoine_gdy/' }
+          ];
+
+          (async () => {
+            const browser = await chromium.launch();
+            const context = await browser.newContext({
+              viewport: { width: 1280, height: 720 }
+            });
+
+            for (const link of links) {
+              const page = await context.newPage();
+              try {
+                await page.goto(link.url, { waitUntil: 'networkidle', timeout: 30000 });
+                await page.waitForTimeout(2000);
+                await page.screenshot({ path: `screenshots/${link.name}.png`, fullPage: false });
+                console.log(`Screenshot saved: ${link.name}.png`);
+              } catch (error) {
+                console.error(`Error taking screenshot of ${link.name}:`, error.message);
+              }
+              await page.close();
+            }
+
+            await browser.close();
+          })();
+          EOF
+          node take-screenshots.js
+          
+      - name: Commit and push screenshots
+        run: |
+          git config --local user.email "github-actions[bot]@users.noreply.github.com"
+          git config --local user.name "github-actions[bot]"
+          git add screenshots/*.png
+          git diff --staged --quiet || git commit -m "Update screenshots [automated]"
+          git push
