@@ -2,12 +2,13 @@
 class GAUDVIBEButtons {
     constructor() {
         this.links = [
-            { text: 'CV', url: 'https://raw.githubusercontent.com/GAUDVIBE/Portfolio/main/CV.pdf' },
-            { text: 'GitHub', url: 'https://github.com/GAUDVIBE' },
-            { text: 'YouTube', url: 'https://youtube.com/@antoineGAUDRY' },
-            { text: 'Instagram', url: 'https://www.instagram.com/antoine_gdy/' }
+            { text: 'CV', url: 'https://raw.githubusercontent.com/GAUDVIBE/Portfolio/main/CV.pdf', type: 'pdf' },
+            { text: 'GitHub', url: 'https://github.com/GAUDVIBE', type: 'link' },
+            { text: 'YouTube', url: 'https://youtube.com/@antoineGAUDRY', type: 'link' },
+            { text: 'Instagram', url: 'https://www.instagram.com/antoine_gdy/', type: 'link' }
         ];
         
+        this.currentPreview = null;
         this.init();
     }
     
@@ -23,24 +24,80 @@ class GAUDVIBEButtons {
             body { 
                 font-family: 'Courier New', monospace; 
                 font-size: 1.2rem; 
-                padding: 2em; 
                 background: transparent; 
                 margin: 0;
                 min-height: 100vh;
-                display: flex;
-                align-items: center;
-                justify-content: center;
+                overflow: hidden;
             }
             
             main { 
-                max-width: 600px; 
                 width: 100%;
-                margin: auto; 
-                display: flex; 
-                flex-direction: column; 
-                gap: 30px; 
+                height: 100vh;
+                display: flex;
                 z-index: 1000;
                 position: relative;
+                padding: 2em;
+                gap: 2em;
+            }
+            
+            /* Bandeau gauche */
+            .sidebar {
+                width: 350px;
+                height: 100%;
+                display: flex;
+                flex-direction: column;
+                gap: 20px;
+            }
+            
+            /* Zone de prévisualisation centrale */
+            .preview-area {
+                flex: 1;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                position: relative;
+            }
+            
+            .preview-container {
+                background-color: #280828;
+                color: #e7e6b3;
+                padding: 30px;
+                border-radius: 1px;
+                box-shadow: 
+                    0 0 0 5px #383050,
+                    0 0 0 10px #68d0b8,
+                    0 0 0 12px #f7e8a8,
+                    0 0 0 15px #3d3c55;
+                width: 90%;
+                height: 80%;
+                display: none;
+                flex-direction: column;
+                gap: 20px;
+            }
+            
+            .preview-container.active {
+                display: flex;
+            }
+            
+            .preview-content {
+                flex: 1;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                overflow: hidden;
+            }
+            
+            .preview-content iframe {
+                width: 100%;
+                height: 100%;
+                border: none;
+                background: white;
+            }
+            
+            .preview-actions {
+                display: flex;
+                gap: 20px;
+                justify-content: center;
             }
             
             /* Style Earthbound box */
@@ -57,11 +114,6 @@ class GAUDVIBEButtons {
                     0 0 0 15px #3d3c55;
             }
             
-            /* Container texte - aligné à gauche */
-            .text-container { 
-                width: 100%; 
-            }
-            
             .text-container .main-text { 
                 font-size: 1.4rem; 
                 font-weight: bold; 
@@ -72,23 +124,10 @@ class GAUDVIBEButtons {
                 padding-left: 10px;
             }
             
-            /* Container boutons */
-            .buttons-container { 
-                width: 100%; 
-            }
-            
-            .buttons-container .box { 
-                padding: 30px 35px; 
-            }
-            
             .button-grid {
-                display: grid;
-                grid-template-columns: repeat(2, 1fr);
-                gap: 25px;
-                justify-items: center;
-                align-items: center;
-                min-width: 300px;
-                width: 100%;
+                display: flex;
+                flex-direction: column;
+                gap: 15px;
             }
             
             /* Style des boutons */
@@ -99,16 +138,20 @@ class GAUDVIBEButtons {
                 border: none;
                 color: #e7e6b3;
                 font-family: 'Courier New', monospace;
-                font-size: 1.4rem;
+                font-size: 1.3rem;
                 font-weight: bold;
-                padding: 12px 25px;
-                min-width: 120px;
-                text-align: center;
+                padding: 15px 25px;
+                text-align: left;
                 text-shadow: 2px 2px 0 #3d3c55;
                 transition: all 0.3s ease;
                 border-radius: 1px;
                 width: 100%;
                 -webkit-tap-highlight-color: transparent;
+            }
+            
+            .action-button {
+                min-width: 150px;
+                text-align: center;
             }
             
             /* Hover et Active (pour mobile) */
@@ -161,15 +204,19 @@ class GAUDVIBEButtons {
             
             /* Responsive - Version mobile */
             @media (max-width: 768px) {
-                body { 
-                    padding: 1em; 
-                    font-size: 1rem; 
-                    align-items: flex-start;
-                    padding-top: 2em;
+                main { 
+                    flex-direction: column;
+                    padding: 1em;
                 }
                 
-                main { 
-                    gap: 20px; 
+                .sidebar {
+                    width: 100%;
+                    height: auto;
+                }
+                
+                .preview-container {
+                    width: 100%;
+                    height: 60vh;
                 }
                 
                 .box { 
@@ -181,24 +228,27 @@ class GAUDVIBEButtons {
                         0 0 0 12px #3d3c55;
                 }
                 
-                .buttons-container .box { 
-                    padding: 25px 20px; 
-                }
-                
                 .button-grid { 
-                    gap: 15px; 
-                    min-width: auto; 
+                    gap: 12px;
                 }
                 
                 .box button { 
-                    font-size: 1.2rem; 
-                    padding: 10px 15px; 
-                    min-width: auto; 
+                    font-size: 1.1rem; 
+                    padding: 12px 15px;
                 }
                 
                 .text-container .main-text { 
                     font-size: 1.2rem; 
                     padding-left: 5px;
+                }
+                
+                .preview-actions {
+                    flex-direction: column;
+                    gap: 12px;
+                }
+                
+                .action-button {
+                    width: 100%;
                 }
                 
                 /* Ajustement flèche pour mobile avec animation */
@@ -218,13 +268,7 @@ class GAUDVIBEButtons {
             }
             
             @media (max-width: 600px) {
-                .button-grid { 
-                    grid-template-columns: 1fr; 
-                    gap: 12px; 
-                }
-                
                 .box button { 
-                    width: 100%; 
                     padding: 12px 20px;
                 }
                 
@@ -271,65 +315,118 @@ class GAUDVIBEButtons {
     }
     
     buildUI() {
-        // Créer le main
         const main = document.createElement('main');
         
-        // === CONTAINER TEXTE ===
-        const textContainer = document.createElement('div');
-        textContainer.className = 'text-container';
+        // === BANDEAU GAUCHE ===
+        const sidebar = document.createElement('div');
+        sidebar.className = 'sidebar';
         
+        // Container texte
         const textBox = document.createElement('section');
         textBox.className = 'box';
-        
         const textDiv = document.createElement('div');
         textDiv.className = 'main-text';
         textDiv.textContent = '• Que voulez-vous faire ?';
-        
         textBox.appendChild(textDiv);
-        textContainer.appendChild(textBox);
-        main.appendChild(textContainer);
+        sidebar.appendChild(textBox);
         
-        // === CONTAINER BOUTONS ===
-        const buttonsContainer = document.createElement('div');
-        buttonsContainer.className = 'buttons-container';
-        
+        // Container boutons
         const buttonsBox = document.createElement('section');
         buttonsBox.className = 'box';
-        
         const buttonGrid = document.createElement('div');
         buttonGrid.className = 'button-grid';
         
-        // Créer les boutons
         this.links.forEach(link => {
             const button = document.createElement('button');
             button.textContent = link.text;
             
-            // Gestionnaires tactiles
-            button.addEventListener('touchstart', (e) => {
-                button.classList.add('touch-active');
-            });
-            
-            button.addEventListener('touchend', (e) => {
-                button.classList.remove('touch-active');
-                this.rippleEffect(e, button);
-                setTimeout(() => window.open(link.url, '_blank'), 300);
-            });
-            
             button.addEventListener('click', (e) => {
                 e.preventDefault();
                 this.rippleEffect(e, button);
-                setTimeout(() => window.open(link.url, '_blank'), 300);
+                this.showPreview(link);
             });
             
             buttonGrid.appendChild(button);
         });
         
         buttonsBox.appendChild(buttonGrid);
-        buttonsContainer.appendChild(buttonsBox);
-        main.appendChild(buttonsContainer);
+        sidebar.appendChild(buttonsBox);
+        main.appendChild(sidebar);
         
-        // Ajouter au body
+        // === ZONE DE PRÉVISUALISATION ===
+        const previewArea = document.createElement('div');
+        previewArea.className = 'preview-area';
+        
+        const previewContainer = document.createElement('div');
+        previewContainer.className = 'preview-container';
+        previewContainer.id = 'previewContainer';
+        
+        const previewContent = document.createElement('div');
+        previewContent.className = 'preview-content';
+        previewContent.id = 'previewContent';
+        
+        const previewActions = document.createElement('div');
+        previewActions.className = 'preview-actions';
+        
+        const accessButton = document.createElement('button');
+        accessButton.className = 'box button action-button';
+        accessButton.id = 'accessButton';
+        accessButton.textContent = 'Accéder';
+        accessButton.style.cssText = 'padding: 15px 30px; font-size: 1.2rem;';
+        
+        const downloadButton = document.createElement('button');
+        downloadButton.className = 'box button action-button';
+        downloadButton.id = 'downloadButton';
+        downloadButton.textContent = 'Télécharger';
+        downloadButton.style.cssText = 'padding: 15px 30px; font-size: 1.2rem; display: none;';
+        
+        previewActions.appendChild(accessButton);
+        previewActions.appendChild(downloadButton);
+        
+        previewContainer.appendChild(previewContent);
+        previewContainer.appendChild(previewActions);
+        previewArea.appendChild(previewContainer);
+        main.appendChild(previewArea);
+        
         document.body.appendChild(main);
+    }
+    
+    showPreview(link) {
+        const previewContainer = document.getElementById('previewContainer');
+        const previewContent = document.getElementById('previewContent');
+        const accessButton = document.getElementById('accessButton');
+        const downloadButton = document.getElementById('downloadButton');
+        
+        previewContent.innerHTML = '';
+        
+        if (link.type === 'pdf') {
+            const iframe = document.createElement('iframe');
+            iframe.src = link.url;
+            previewContent.appendChild(iframe);
+            
+            accessButton.style.display = 'none';
+            downloadButton.style.display = 'block';
+            
+            downloadButton.onclick = () => {
+                const a = document.createElement('a');
+                a.href = link.url;
+                a.download = 'CV.pdf';
+                a.click();
+            };
+        } else {
+            const iframe = document.createElement('iframe');
+            iframe.src = link.url;
+            previewContent.appendChild(iframe);
+            
+            accessButton.style.display = 'block';
+            downloadButton.style.display = 'none';
+            
+            accessButton.onclick = () => {
+                window.open(link.url, '_blank');
+            };
+        }
+        
+        previewContainer.classList.add('active');
     }
     
     rippleEffect(event, button) {
