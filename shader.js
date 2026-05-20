@@ -116,7 +116,7 @@
             
             float finalAmplitude = C1 * amplitude;
             float finalFrequency = C2 * frequency;
-            float finalSpeed = C3 * speed * time * 60.0;
+            float finalSpeed = C3 * speed * time * 2.0;
             
             float offset = finalAmplitude * sin(finalFrequency * y + finalSpeed);
             
