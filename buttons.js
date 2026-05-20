@@ -322,15 +322,6 @@ class GAUDVIBEButtons {
         const sidebar = document.createElement('div');
         sidebar.className = 'sidebar';
         
-        // Container texte
-        const textBox = document.createElement('section');
-        textBox.className = 'box';
-        const textDiv = document.createElement('div');
-        textDiv.className = 'main-text';
-        textDiv.textContent = '• Que voulez-vous faire ?';
-        textBox.appendChild(textDiv);
-        sidebar.appendChild(textBox);
-        
         // Container boutons
         const buttonsBox = document.createElement('section');
         buttonsBox.className = 'box';
