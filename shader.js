@@ -119,9 +119,11 @@
             float finalSpeed = C3 * speed * time * 2.0;
             
             float offset = finalAmplitude * sin(finalFrequency * y + finalSpeed);
+            float offsetY = finalAmplitude * sin(finalFrequency * uv.x * 1024.0 + finalSpeed * 1.3);
             
             if (distType == 0) {
                 uv.x += offset;
+                uv.y += offsetY;
             } else if (distType == 1) {
                 float scanline = mod(y, 2.0);
                 if (scanline < 1.0) {
@@ -129,8 +131,10 @@
                 } else {
                     uv.x += offset;
                 }
+                uv.y += offsetY;
             } else {
                 uv.y += offset * 0.5;
+                uv.x += offsetY;
             }
             return uv;
         }
