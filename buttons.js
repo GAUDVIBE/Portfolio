@@ -402,11 +402,18 @@ class GAUDVIBEButtons {
             `;
             previewContent.appendChild(iframe);
             
-            accessButton.style.display = 'none';
+            accessButton.style.display = 'block';
             downloadButton.style.display = 'block';
             
-            downloadButton.onclick = () => {
+            accessButton.onclick = () => {
                 window.open(link.url, '_blank');
+            };
+            
+            downloadButton.onclick = () => {
+                const a = document.createElement('a');
+                a.href = link.url;
+                a.download = 'CV_Antoine_Gaudry.pdf';
+                a.click();
             };
         } else {
             if (link.screenshot) {
