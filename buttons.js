@@ -400,46 +400,15 @@ class GAUDVIBEButtons {
         previewContent.innerHTML = '';
         
         if (link.type === 'pdf') {
-            const messageDiv = document.createElement('div');
-            messageDiv.style.cssText = `
-                display: flex;
-                flex-direction: column;
-                align-items: center;
-                justify-content: center;
+            const iframe = document.createElement('iframe');
+            iframe.src = link.url;
+            iframe.style.cssText = `
+                width: 100%;
                 height: 100%;
-                gap: 20px;
+                border: none;
+                background: white;
             `;
-            
-            const icon = document.createElement('div');
-            icon.style.cssText = `
-                font-size: 4rem;
-                color: #e7e6b3;
-                text-shadow: 3px 3px 0 #3d3c55;
-            `;
-            icon.textContent = '📄';
-            
-            const text = document.createElement('div');
-            text.style.cssText = `
-                font-size: 1.5rem;
-                font-weight: bold;
-                color: #e7e6b3;
-                text-shadow: 2px 2px 0 #3d3c55;
-                text-align: center;
-            `;
-            text.textContent = 'Curriculum Vitae';
-            
-            const subtext = document.createElement('div');
-            subtext.style.cssText = `
-                font-size: 1.1rem;
-                color: #e7e6b3;
-                text-align: center;
-            `;
-            subtext.textContent = 'Cliquez sur "Télécharger" pour obtenir le PDF';
-            
-            messageDiv.appendChild(icon);
-            messageDiv.appendChild(text);
-            messageDiv.appendChild(subtext);
-            previewContent.appendChild(messageDiv);
+            previewContent.appendChild(iframe);
             
             accessButton.style.display = 'none';
             downloadButton.style.display = 'block';
@@ -448,52 +417,28 @@ class GAUDVIBEButtons {
                 window.open(link.url, '_blank');
             };
         } else {
-            const messageDiv = document.createElement('div');
-            messageDiv.style.cssText = `
-                display: flex;
-                flex-direction: column;
-                align-items: center;
-                justify-content: center;
+            const iframe = document.createElement('iframe');
+            iframe.src = link.url;
+            iframe.style.cssText = `
+                width: 100%;
                 height: 100%;
-                gap: 20px;
+                border: none;
+                background: white;
             `;
             
-            let icon = '🔗';
-            if (link.text === 'GitHub') icon = '💻';
-            else if (link.text === 'YouTube') icon = '🎥';
-            else if (link.text === 'Instagram') icon = '📸';
+            iframe.onerror = () => {
+                previewContent.innerHTML = `
+                    <div style="display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100%; gap: 20px;">
+                        <div style="font-size: 3rem; color: #e7e6b3; text-shadow: 3px 3px 0 #3d3c55;">⚠️</div>
+                        <div style="font-size: 1.3rem; color: #e7e6b3; text-align: center;">
+                            Prévisualisation non disponible<br>
+                            <span style="font-size: 1rem;">Cliquez sur "Accéder" pour ouvrir le site</span>
+                        </div>
+                    </div>
+                `;
+            };
             
-            const iconDiv = document.createElement('div');
-            iconDiv.style.cssText = `
-                font-size: 4rem;
-                color: #e7e6b3;
-                text-shadow: 3px 3px 0 #3d3c55;
-            `;
-            iconDiv.textContent = icon;
-            
-            const text = document.createElement('div');
-            text.style.cssText = `
-                font-size: 1.5rem;
-                font-weight: bold;
-                color: #e7e6b3;
-                text-shadow: 2px 2px 0 #3d3c55;
-                text-align: center;
-            `;
-            text.textContent = link.text;
-            
-            const subtext = document.createElement('div');
-            subtext.style.cssText = `
-                font-size: 1.1rem;
-                color: #e7e6b3;
-                text-align: center;
-                max-width: 80%;
-            `;
-            subtext.textContent = `Cliquez sur "Accéder" pour visiter mon profil ${link.text}`;
-            
-            messageDiv.appendChild(iconDiv);
-            messageDiv.appendChild(text);
-            messageDiv.appendChild(subtext);
-            previewContent.appendChild(messageDiv);
+            previewContent.appendChild(iframe);
             
             accessButton.style.display = 'block';
             downloadButton.style.display = 'none';
