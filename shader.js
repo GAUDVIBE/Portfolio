@@ -22,7 +22,7 @@
     if (!gl) {
         console.warn('WebGL not supported');
         if (loadingElement) loadingElement.remove();
-        document.body.style.backgroundColor = '#1a1a1a';
+        document.body.style.backgroundColor = '#000000';
         return;
     }
 
@@ -30,7 +30,7 @@
         shapeType: Math.floor(Math.random() * 6),
         colorSeed: Math.random() * 100,
         speed: 0.1 + Math.random() * 0.3,
-        density: 0.1 + Math.random() * 0.2,
+        density: 0.15 + Math.random() * 0.15,
         pattern: Math.floor(Math.random() * 3),
         distortionType: Math.floor(Math.random() * 3),
         amplitude: 100 + Math.random() * 300,
@@ -209,7 +209,7 @@
     
     if (!vertexShader || !fragmentShader) {
         if (loadingElement) loadingElement.remove();
-        document.body.style.backgroundColor = '#1a1a1a';
+        document.body.style.backgroundColor = '#000000';
         return;
     }
 
@@ -221,7 +221,7 @@
     if (!gl.getProgramParameter(program, gl.LINK_STATUS)) {
         console.error('Program error:', gl.getProgramInfoLog(program));
         if (loadingElement) loadingElement.remove();
-        document.body.style.backgroundColor = '#1a1a1a';
+        document.body.style.backgroundColor = '#000000';
         return;
     }
     
