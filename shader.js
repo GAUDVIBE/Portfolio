@@ -29,7 +29,7 @@
     const randomParams = {
         shapeType: Math.floor(Math.random() * 6),
         colorSeed: Math.random() * 100,
-        speed: 0.5 + Math.random() * 1.5,
+        speed: 0.1 + Math.random() * 0.3,
         density: 2 + Math.random() * 3,
         pattern: Math.floor(Math.random() * 3),
         distortionType: Math.floor(Math.random() * 3),
