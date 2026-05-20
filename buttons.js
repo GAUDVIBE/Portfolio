@@ -82,9 +82,10 @@ class GAUDVIBEButtons {
             .preview-content {
                 flex: 1;
                 display: flex;
-                align-items: center;
+                align-items: flex-start;
                 justify-content: center;
-                overflow: hidden;
+                overflow-y: auto;
+                overflow-x: hidden;
             }
             
             .preview-content iframe {
@@ -423,8 +424,8 @@ class GAUDVIBEButtons {
                 img.alt = `${link.text} preview`;
                 img.style.cssText = `
                     width: 100%;
-                    height: 100%;
-                    object-fit: contain;
+                    height: auto;
+                    display: block;
                     background: #1a1a1a;
                 `;
                 
