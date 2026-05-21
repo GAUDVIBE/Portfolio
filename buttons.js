@@ -230,6 +230,7 @@ class GAUDVIBEButtons {
                     order: 2;
                     width: 100%;
                     max-width: 500px;
+                    flex: none;
                 }
                 
                 .preview-container {
