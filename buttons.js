@@ -221,7 +221,7 @@ class GAUDVIBEButtons {
                 
                 .sidebar {
                     width: 100%;
-                    max-width: 300px;
+                    max-width: 220px;
                     height: auto;
                     order: 1;
                 }
@@ -240,21 +240,21 @@ class GAUDVIBEButtons {
                 }
                 
                 .box { 
-                    padding: 10px; 
+                    padding: 8px; 
                     box-shadow: 
                         0 0 0 2px #383050,
                         0 0 0 4px #68d0b8,
-                        0 0 0 6px #f7e8a8,
-                        0 0 0 8px #3d3c55;
+                        0 0 0 5px #f7e8a8,
+                        0 0 0 7px #3d3c55;
                 }
                 
                 .button-grid { 
-                    gap: 8px;
+                    gap: 6px;
                 }
                 
                 .box button { 
-                    font-size: 0.85rem; 
-                    padding: 15px 8px;
+                    font-size: 0.75rem; 
+                    padding: 12px 6px;
                     aspect-ratio: 1;
                     display: flex;
                     align-items: center;
