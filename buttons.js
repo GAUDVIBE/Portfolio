@@ -399,15 +399,17 @@ class GAUDVIBEButtons {
                 height: 100%;
                 border: none;
                 background: white;
+                cursor: pointer;
             `;
-            previewContent.appendChild(iframe);
             
-            accessButton.style.display = 'block';
-            downloadButton.style.display = 'block';
-            
-            accessButton.onclick = () => {
+            iframe.onclick = () => {
                 window.open(link.url, '_blank');
             };
+            
+            previewContent.appendChild(iframe);
+            
+            accessButton.style.display = 'none';
+            downloadButton.style.display = 'block';
             
             downloadButton.onclick = () => {
                 const a = document.createElement('a');
@@ -425,15 +427,20 @@ class GAUDVIBEButtons {
                     height: auto;
                     display: block;
                     background: #1a1a1a;
+                    cursor: pointer;
                 `;
+                
+                img.onclick = () => {
+                    window.open(link.url, '_blank');
+                };
                 
                 img.onerror = () => {
                     previewContent.innerHTML = `
-                        <div style="display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100%; gap: 20px;">
+                        <div style="display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100%; gap: 20px; cursor: pointer;" onclick="window.open('${link.url}', '_blank')">
                             <div style="font-size: 3rem; color: #e7e6b3; text-shadow: 3px 3px 0 #3d3c55;">📸</div>
                             <div style="font-size: 1.3rem; color: #e7e6b3; text-align: center;">
                                 Screenshot en cours de génération...<br>
-                                <span style="font-size: 1rem;">Cliquez sur "Accéder" pour visiter le site</span>
+                                <span style="font-size: 1rem;">Cliquez pour visiter le site</span>
                             </div>
                         </div>
                     `;
@@ -442,21 +449,17 @@ class GAUDVIBEButtons {
                 previewContent.appendChild(img);
             } else {
                 previewContent.innerHTML = `
-                    <div style="display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100%; gap: 20px;">
+                    <div style="display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100%; gap: 20px; cursor: pointer;" onclick="window.open('${link.url}', '_blank')">
                         <div style="font-size: 3rem; color: #e7e6b3; text-shadow: 3px 3px 0 #3d3c55;">🔗</div>
                         <div style="font-size: 1.3rem; color: #e7e6b3; text-align: center;">
-                            Cliquez sur "Accéder" pour visiter le site
+                            Cliquez pour visiter le site
                         </div>
                     </div>
                 `;
             }
             
-            accessButton.style.display = 'block';
+            accessButton.style.display = 'none';
             downloadButton.style.display = 'none';
-            
-            accessButton.onclick = () => {
-                window.open(link.url, '_blank');
-            };
         }
         
         previewContainer.classList.add('active');
