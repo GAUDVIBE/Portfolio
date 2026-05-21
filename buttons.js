@@ -409,14 +409,7 @@ class GAUDVIBEButtons {
             previewContent.appendChild(iframe);
             
             accessButton.style.display = 'none';
-            downloadButton.style.display = 'block';
-            
-            downloadButton.onclick = () => {
-                const a = document.createElement('a');
-                a.href = link.url;
-                a.download = 'CV_Antoine_Gaudry.pdf';
-                a.click();
-            };
+            downloadButton.style.display = 'none';
         } else {
             if (link.screenshot) {
                 const img = document.createElement('img');
