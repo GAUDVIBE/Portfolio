@@ -357,26 +357,7 @@ class GAUDVIBEButtons {
         previewContent.className = 'preview-content';
         previewContent.id = 'previewContent';
         
-        const previewActions = document.createElement('div');
-        previewActions.className = 'preview-actions';
-        
-        const accessButton = document.createElement('button');
-        accessButton.className = 'box button action-button';
-        accessButton.id = 'accessButton';
-        accessButton.textContent = 'Accéder';
-        accessButton.style.cssText = 'padding: 15px 30px; font-size: 1.2rem;';
-        
-        const downloadButton = document.createElement('button');
-        downloadButton.className = 'box button action-button';
-        downloadButton.id = 'downloadButton';
-        downloadButton.textContent = 'Télécharger';
-        downloadButton.style.cssText = 'padding: 15px 30px; font-size: 1.2rem; display: none;';
-        
-        previewActions.appendChild(accessButton);
-        previewActions.appendChild(downloadButton);
-        
         previewContainer.appendChild(previewContent);
-        previewContainer.appendChild(previewActions);
         previewArea.appendChild(previewContainer);
         main.appendChild(previewArea);
         
@@ -386,8 +367,6 @@ class GAUDVIBEButtons {
     showPreview(link) {
         const previewContainer = document.getElementById('previewContainer');
         const previewContent = document.getElementById('previewContent');
-        const accessButton = document.getElementById('accessButton');
-        const downloadButton = document.getElementById('downloadButton');
         
         previewContent.innerHTML = '';
         
@@ -407,9 +386,6 @@ class GAUDVIBEButtons {
             };
             
             previewContent.appendChild(iframe);
-            
-            accessButton.style.display = 'none';
-            downloadButton.style.display = 'none';
         } else {
             if (link.screenshot) {
                 const img = document.createElement('img');
@@ -450,9 +426,6 @@ class GAUDVIBEButtons {
                     </div>
                 `;
             }
-            
-            accessButton.style.display = 'none';
-            downloadButton.style.display = 'none';
         }
         
         previewContainer.classList.add('active');
