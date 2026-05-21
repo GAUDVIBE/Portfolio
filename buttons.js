@@ -207,13 +207,15 @@ class GAUDVIBEButtons {
             @media (max-width: 768px) {
                 body {
                     overflow-y: auto;
+                    overflow-x: hidden;
                 }
                 
                 main { 
                     flex-direction: column;
-                    padding: 1em;
+                    padding: 0.5em;
                     height: auto;
                     min-height: 100vh;
+                    gap: 1em;
                 }
                 
                 .sidebar {
@@ -227,12 +229,12 @@ class GAUDVIBEButtons {
                 }
                 
                 .box { 
-                    padding: 20px 25px; 
+                    padding: 15px 20px; 
                     box-shadow: 
-                        0 0 0 4px #383050,
-                        0 0 0 8px #68d0b8,
-                        0 0 0 10px #f7e8a8,
-                        0 0 0 12px #3d3c55;
+                        0 0 0 3px #383050,
+                        0 0 0 6px #68d0b8,
+                        0 0 0 8px #f7e8a8,
+                        0 0 0 10px #3d3c55;
                 }
                 
                 .button-grid { 
