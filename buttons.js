@@ -86,6 +86,7 @@ class GAUDVIBEButtons {
                 justify-content: center;
                 overflow-y: auto;
                 overflow-x: hidden;
+                width: 100%;
             }
             
             .preview-content iframe {
@@ -237,6 +238,15 @@ class GAUDVIBEButtons {
                     width: 100%;
                     height: auto;
                     max-height: 70vh;
+                }
+                
+                .preview-content {
+                    overflow-x: hidden !important;
+                }
+                
+                .preview-content iframe {
+                    transform: scale(0.9);
+                    transform-origin: top center;
                 }
                 
                 .box { 
