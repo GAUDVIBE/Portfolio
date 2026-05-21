@@ -222,6 +222,13 @@ class GAUDVIBEButtons {
                     width: 100%;
                     height: auto;
                     order: 1;
+                    display: flex;
+                    justify-content: center;
+                }
+                
+                .sidebar .box {
+                    max-width: 500px;
+                    width: 100%;
                 }
                 
                 .preview-area {
