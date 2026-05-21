@@ -221,11 +221,18 @@ class GAUDVIBEButtons {
                 .sidebar {
                     width: 100%;
                     height: auto;
+                    order: 1;
+                }
+                
+                .preview-area {
+                    order: 2;
+                    width: 100%;
                 }
                 
                 .preview-container {
                     width: 100%;
-                    height: 60vh;
+                    height: auto;
+                    max-height: 70vh;
                 }
                 
                 .box { 
