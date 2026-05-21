@@ -204,7 +204,7 @@ class GAUDVIBEButtons {
             }
             
             /* Responsive - Version mobile */
-            @media (max-width: 768px) {
+            @media (max-width: 1024px) {
                 body {
                     overflow-y: auto;
                     overflow-x: hidden;
