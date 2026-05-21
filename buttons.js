@@ -126,8 +126,8 @@ class GAUDVIBEButtons {
             }
             
             .button-grid {
-                display: flex;
-                flex-direction: column;
+                display: grid;
+                grid-template-columns: 1fr 1fr;
                 gap: 15px;
             }
             
@@ -142,7 +142,7 @@ class GAUDVIBEButtons {
                 font-size: 1.3rem;
                 font-weight: bold;
                 padding: 15px 25px;
-                text-align: left;
+                text-align: center;
                 text-shadow: 2px 2px 0 #3d3c55;
                 transition: all 0.3s ease;
                 border-radius: 1px;
@@ -240,7 +240,7 @@ class GAUDVIBEButtons {
                 }
                 
                 .box { 
-                    padding: 15px 20px; 
+                    padding: 12px 15px; 
                     box-shadow: 
                         0 0 0 3px #383050,
                         0 0 0 6px #68d0b8,
@@ -249,12 +249,16 @@ class GAUDVIBEButtons {
                 }
                 
                 .button-grid { 
-                    gap: 12px;
+                    gap: 10px;
                 }
                 
                 .box button { 
-                    font-size: 1.1rem; 
-                    padding: 12px 15px;
+                    font-size: 0.95rem; 
+                    padding: 20px 10px;
+                    aspect-ratio: 1;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
                 }
                 
                 .text-container .main-text { 
