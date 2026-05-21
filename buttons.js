@@ -205,9 +205,15 @@ class GAUDVIBEButtons {
             
             /* Responsive - Version mobile */
             @media (max-width: 768px) {
+                body {
+                    overflow-y: auto;
+                }
+                
                 main { 
                     flex-direction: column;
                     padding: 1em;
+                    height: auto;
+                    min-height: 100vh;
                 }
                 
                 .sidebar {
