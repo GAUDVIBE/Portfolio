@@ -246,6 +246,7 @@ class GAUDVIBEButtons {
                         0 0 0 3px #68d0b8,
                         0 0 0 4px #f7e8a8,
                         0 0 0 5px #3d3c55;
+                    overflow: hidden;
                 }
                 
                 .button-grid { 
@@ -280,10 +281,10 @@ class GAUDVIBEButtons {
                 /* Ajustement flèche pour mobile avec animation */
                 .box button:hover::before,
                 .box button:active::before { 
-                    left: -0.6em; 
-                    border-top: 0.5rem solid transparent;
-                    border-bottom: 0.5rem solid transparent;
-                    border-left: 0.5rem solid #e7e6b3;
+                    left: -0.4em; 
+                    border-top: 0.4rem solid transparent;
+                    border-bottom: 0.4rem solid transparent;
+                    border-left: 0.4rem solid #e7e6b3;
                 }
                 
                 @keyframes floatArrow {
