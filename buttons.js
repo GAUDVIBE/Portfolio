@@ -253,12 +253,13 @@ class GAUDVIBEButtons {
                 }
                 
                 .box button { 
-                    font-size: 0.7rem; 
-                    padding: 10px 5px;
+                    font-size: 0.65rem; 
+                    padding: 8px 4px;
                     aspect-ratio: 1;
                     display: flex;
                     align-items: center;
                     justify-content: center;
+                    word-break: break-word;
                 }
                 
                 .text-container .main-text { 
