@@ -216,24 +216,20 @@ class GAUDVIBEButtons {
                     height: auto;
                     min-height: 100vh;
                     gap: 1em;
+                    align-items: center;
                 }
                 
                 .sidebar {
                     width: 100%;
+                    max-width: 500px;
                     height: auto;
                     order: 1;
-                    display: flex;
-                    justify-content: center;
-                }
-                
-                .sidebar .box {
-                    max-width: 500px;
-                    width: 100%;
                 }
                 
                 .preview-area {
                     order: 2;
                     width: 100%;
+                    max-width: 500px;
                 }
                 
                 .preview-container {
