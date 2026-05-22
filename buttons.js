@@ -59,15 +59,13 @@ class GAUDVIBEButtons {
             }
             
             .preview-container {
-                background-color: #280828;
-                color: #e7e6b3;
+                background-color: rgba(0, 0, 0, 0.8);
+                color: #ffffff;
                 padding: 30px;
-                border-radius: 1px;
-                box-shadow: 
-                    0 0 0 5px #383050,
-                    0 0 0 10px #68d0b8,
-                    0 0 0 12px #f7e8a8,
-                    0 0 0 15px #3d3c55;
+                border-radius: 16px;
+                border: 1px solid rgba(255, 255, 255, 0.2);
+                backdrop-filter: blur(15px);
+                box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5);
                 width: 90%;
                 height: 80%;
                 display: none;
@@ -102,27 +100,25 @@ class GAUDVIBEButtons {
                 justify-content: center;
             }
             
-            /* Style Earthbound box */
+            /* Style box moderne noir transparent */
             .box {
-                background-color: #280828;
-                color: #e7e6b3;
+                background-color: rgba(0, 0, 0, 0.7);
+                color: #ffffff;
                 padding: 25px 30px;
-                border-radius: 1px;
+                border-radius: 12px;
                 width: 100%;
-                box-shadow: 
-                    0 0 0 5px #383050,
-                    0 0 0 10px #68d0b8,
-                    0 0 0 12px #f7e8a8,
-                    0 0 0 15px #3d3c55;
+                border: 1px solid rgba(255, 255, 255, 0.2);
+                backdrop-filter: blur(10px);
+                box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
             }
             
             .text-container .main-text { 
                 font-size: 1.4rem; 
                 font-weight: bold; 
                 text-align: left;
-                text-shadow: 2px 2px 0 #3d3c55; 
+                text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
                 font-family: 'Courier New', monospace;
-                color: #e7e6b3;
+                color: #ffffff;
                 padding-left: 10px;
             }
             
@@ -136,17 +132,17 @@ class GAUDVIBEButtons {
             .box button {
                 position: relative;
                 cursor: pointer;
-                background-color: #280828;
-                border: none;
-                color: #e7e6b3;
+                background-color: rgba(255, 255, 255, 0.1);
+                border: 1px solid rgba(255, 255, 255, 0.3);
+                color: #ffffff;
                 font-family: 'Courier New', monospace;
                 font-size: 1.3rem;
                 font-weight: bold;
                 padding: 15px 25px;
                 text-align: center;
-                text-shadow: 2px 2px 0 #3d3c55;
+                text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
                 transition: all 0.3s ease;
-                border-radius: 1px;
+                border-radius: 8px;
                 width: 100%;
                 -webkit-tap-highlight-color: transparent;
             }
@@ -159,47 +155,42 @@ class GAUDVIBEButtons {
             /* Hover et Active (pour mobile) */
             .box button:hover,
             .box button:active {
-                background-color: transparent;
-                color: #e7e6b3;
-                text-shadow: 2px 2px 0 #3d3c55;
+                background-color: rgba(255, 255, 255, 0.2);
+                color: #ffffff;
+                text-shadow: 0 2px 6px rgba(0, 0, 0, 0.7);
                 transform: translateY(-2px);
+                border-color: rgba(255, 255, 255, 0.5);
             }
             
             /* Flèche au hover et au clic (pour mobile) - avec animation */
             .box button:hover::before,
             .box button:active::before {
-                content: '';
+                content: '→';
                 position: absolute;
-                left: -0.8em;
+                left: 10px;
                 top: 50%;
                 transform: translateY(-50%);
-                width: 0;
-                height: 0;
-                border-top: 0.6rem solid transparent;
-                border-bottom: 0.6rem solid transparent;
-                border-left: 0.6rem solid #e7e6b3;
-                filter: drop-shadow(2px 2px 0 #3d3c55);
+                font-size: 1.2rem;
+                color: #ffffff;
+                filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.5));
                 z-index: 10;
-                animation: floatArrow 0.8s infinite ease-in-out;  /* Animation ajoutée */
+                animation: slideArrow 0.8s infinite ease-in-out;
             }
             
-            /* Animation de la flèche (haut et bas) */
-            @keyframes floatArrow {
-                0% {
-                    transform: translateY(-50%);
+            /* Animation de la flèche (gauche-droite) */
+            @keyframes slideArrow {
+                0%, 100% {
+                    transform: translate(0, -50%);
                 }
                 50% {
-                    transform: translateY(calc(-50% - 5px));  /* Monte de 5px */
-                }
-                100% {
-                    transform: translateY(-50%);
+                    transform: translate(5px, -50%);
                 }
             }
             
             /* Animation ripple */
             @keyframes ripple {
                 to {
-                    transform: scale(4);
+                    transform: scale(3);
                     opacity: 0;
                 }
             }
@@ -254,13 +245,11 @@ class GAUDVIBEButtons {
                 }
                 
                 .box { 
-                    padding: 6px; 
-                    box-shadow: 
-                        0 0 0 2px #383050,
-                        0 0 0 3px #68d0b8,
-                        0 0 0 4px #f7e8a8,
-                        0 0 0 5px #3d3c55;
-                    overflow: hidden;
+                    padding: 15px;
+                    border-radius: 10px;
+                    border: 1px solid rgba(255, 255, 255, 0.2);
+                    backdrop-filter: blur(10px);
+                    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.3);
                 }
                 
                 .button-grid { 
@@ -268,14 +257,15 @@ class GAUDVIBEButtons {
                 }
                 
                 .box button { 
-                    font-size: 0.65rem; 
-                    padding: 8px;
-                    min-height: 60px;
+                    font-size: 0.9rem; 
+                    padding: 12px 16px;
+                    min-height: 50px;
                     display: flex;
                     align-items: center;
                     justify-content: center;
                     word-break: break-word;
-                    line-height: 1.2;
+                    line-height: 1.3;
+                    border-radius: 8px;
                 }
                 
                 .text-container .main-text { 
@@ -295,16 +285,13 @@ class GAUDVIBEButtons {
                 /* Ajustement flèche pour mobile avec animation */
                 .box button:hover::before,
                 .box button:active::before { 
-                    left: -0.4em; 
-                    border-top: 0.4rem solid transparent;
-                    border-bottom: 0.4rem solid transparent;
-                    border-left: 0.4rem solid #e7e6b3;
+                    left: 8px;
+                    font-size: 1rem;
                 }
                 
-                @keyframes floatArrow {
-                    0% { transform: translateY(-50%); }
-                    50% { transform: translateY(calc(-50% - 3px)); }  /* 3px sur mobile */
-                    100% { transform: translateY(-50%); }
+                @keyframes slideArrow {
+                    0%, 100% { transform: translate(0, -50%); }
+                    50% { transform: translate(4px, -50%); }
                 }
             }
             
@@ -316,36 +303,32 @@ class GAUDVIBEButtons {
                 /* Flèche pour très petits écrans avec animation */
                 .box button:hover::before,
                 .box button:active::before { 
-                    left: -0.5em; 
-                    border-top: 0.4rem solid transparent;
-                    border-bottom: 0.4rem solid transparent;
-                    border-left: 0.4rem solid #e7e6b3;
+                    left: 6px;
+                    font-size: 0.9rem;
                 }
             }
             
             /* Pour les écrans tactiles */
             @media (hover: none) and (pointer: coarse) {
                 .box button:active {
-                    background-color: transparent;
-                    color: #e7e6b3;
-                    text-shadow: 2px 2px 0 #3d3c55;
+                    background-color: rgba(255, 255, 255, 0.2);
+                    color: #ffffff;
+                    text-shadow: 0 2px 6px rgba(0, 0, 0, 0.7);
                     transform: translateY(-2px);
+                    border-color: rgba(255, 255, 255, 0.5);
                 }
                 
                 .box button:active::before {
-                    content: '';
+                    content: '→';
                     position: absolute;
-                    left: -0.6em;
+                    left: 10px;
                     top: 50%;
                     transform: translateY(-50%);
-                    width: 0;
-                    height: 0;
-                    border-top: 0.5rem solid transparent;
-                    border-bottom: 0.5rem solid transparent;
-                    border-left: 0.5rem solid #e7e6b3;
-                    filter: drop-shadow(2px 2px 0 #3d3c55);
+                    font-size: 1.1rem;
+                    color: #ffffff;
+                    filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.5));
                     z-index: 10;
-                    animation: floatArrow 0.8s infinite ease-in-out;
+                    animation: slideArrow 0.8s infinite ease-in-out;
                 }
             }
         `;
@@ -485,7 +468,7 @@ class GAUDVIBEButtons {
             top: ${y}px;
             position: absolute;
             border-radius: 50%;
-            background-color: rgba(231, 230, 179, 0.3);
+            background-color: rgba(255, 255, 255, 0.3);
             transform: scale(0);
             animation: ripple 0.6s ease-out;
             pointer-events: none;
