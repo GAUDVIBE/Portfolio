@@ -44,9 +44,10 @@ class GAUDVIBEButtons {
             .sidebar {
                 width: 350px;
                 height: 100%;
-                display: flex;
-                flex-direction: column;
+                display: grid;
+                grid-template-columns: 1fr 1fr;
                 gap: 20px;
+                align-content: start;
             }
             
             /* Zone de prévisualisation centrale */
@@ -100,91 +101,58 @@ class GAUDVIBEButtons {
                 justify-content: center;
             }
             
-            /* Style box moderne noir transparent */
-            .box {
+            /* Style des boutons du menu */
+            .menu-button {
                 background-color: rgba(0, 0, 0, 0.7);
                 color: #ffffff;
                 padding: 25px 30px;
                 border-radius: 12px;
-                width: 100%;
                 border: 1px solid rgba(255, 255, 255, 0.2);
                 backdrop-filter: blur(10px);
                 box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
-            }
-            
-            .text-container .main-text { 
-                font-size: 1.4rem; 
-                font-weight: bold; 
-                text-align: left;
-                text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
-                font-family: 'Courier New', monospace;
-                color: #ffffff;
-                padding-left: 10px;
-            }
-            
-            .button-grid {
-                display: grid;
-                grid-template-columns: 1fr 1fr;
-                gap: 15px;
-            }
-            
-            /* Style des boutons */
-            .box button {
-                position: relative;
                 cursor: pointer;
-                background-color: rgba(255, 255, 255, 0.1);
-                border: 1px solid rgba(255, 255, 255, 0.3);
-                color: #ffffff;
                 font-family: 'Courier New', monospace;
                 font-size: 1.3rem;
                 font-weight: bold;
-                padding: 15px 25px;
                 text-align: center;
-                text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
                 transition: all 0.3s ease;
-                border-radius: 8px;
-                width: 100%;
+                position: relative;
+                overflow: hidden;
                 -webkit-tap-highlight-color: transparent;
+            }
+            
+            /* Hover avec effet de surbrillance */
+            .menu-button:hover,
+            .menu-button:active {
+                background-color: rgba(255, 255, 255, 0.25);
+                border-color: rgba(255, 255, 255, 0.6);
+                box-shadow: 0 0 30px rgba(255, 255, 255, 0.4), 0 8px 32px rgba(0, 0, 0, 0.5);
+                transform: translateY(-2px);
             }
             
             .action-button {
                 min-width: 150px;
                 text-align: center;
+                background-color: rgba(255, 255, 255, 0.1);
+                border: 1px solid rgba(255, 255, 255, 0.3);
+                color: #ffffff;
+                font-family: 'Courier New', monospace;
+                font-size: 1.1rem;
+                font-weight: bold;
+                padding: 15px 25px;
+                transition: all 0.3s ease;
+                border-radius: 8px;
+                cursor: pointer;
+                position: relative;
+                overflow: hidden;
             }
             
-            /* Hover et Active (pour mobile) */
-            .box button:hover,
-            .box button:active {
-                background-color: rgba(255, 255, 255, 0.2);
-                color: #ffffff;
-                text-shadow: 0 2px 6px rgba(0, 0, 0, 0.7);
+            .action-button:hover,
+            .action-button:active {
+                background-color: rgba(255, 255, 255, 0.25);
+                border-color: rgba(255, 255, 255, 0.6);
+                box-shadow: 0 0 30px rgba(255, 255, 255, 0.4), 0 8px 32px rgba(0, 0, 0, 0.5);
                 transform: translateY(-2px);
-                border-color: rgba(255, 255, 255, 0.5);
-            }
-            
-            /* Flèche au hover et au clic (pour mobile) - avec animation */
-            .box button:hover::before,
-            .box button:active::before {
-                content: '→';
-                position: absolute;
-                left: 10px;
-                top: 50%;
-                transform: translateY(-50%);
-                font-size: 1.2rem;
-                color: #ffffff;
-                filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.5));
-                z-index: 10;
-                animation: slideArrow 0.8s infinite ease-in-out;
-            }
-            
-            /* Animation de la flèche (gauche-droite) */
-            @keyframes slideArrow {
-                0%, 100% {
-                    transform: translate(0, -50%);
-                }
-                50% {
-                    transform: translate(5px, -50%);
-                }
             }
             
             /* Animation ripple */
@@ -244,19 +212,13 @@ class GAUDVIBEButtons {
                     height: 133% !important;
                 }
                 
-                .box { 
-                    padding: 15px;
-                    border-radius: 10px;
-                    border: 1px solid rgba(255, 255, 255, 0.2);
-                    backdrop-filter: blur(10px);
-                    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.3);
+                .sidebar {
+                    display: grid;
+                    grid-template-columns: 1fr 1fr;
+                    gap: 10px;
                 }
                 
-                .button-grid { 
-                    gap: 5px;
-                }
-                
-                .box button { 
+                .menu-button { 
                     font-size: 0.9rem; 
                     padding: 12px 16px;
                     min-height: 50px;
@@ -268,11 +230,6 @@ class GAUDVIBEButtons {
                     border-radius: 8px;
                 }
                 
-                .text-container .main-text { 
-                    font-size: 1.2rem; 
-                    padding-left: 5px;
-                }
-                
                 .preview-actions {
                     flex-direction: column;
                     gap: 12px;
@@ -281,54 +238,16 @@ class GAUDVIBEButtons {
                 .action-button {
                     width: 100%;
                 }
-                
-                /* Ajustement flèche pour mobile avec animation */
-                .box button:hover::before,
-                .box button:active::before { 
-                    left: 8px;
-                    font-size: 1rem;
-                }
-                
-                @keyframes slideArrow {
-                    0%, 100% { transform: translate(0, -50%); }
-                    50% { transform: translate(4px, -50%); }
-                }
-            }
-            
-            @media (max-width: 600px) {
-                .box button { 
-                    padding: 12px 20px;
-                }
-                
-                /* Flèche pour très petits écrans avec animation */
-                .box button:hover::before,
-                .box button:active::before { 
-                    left: 6px;
-                    font-size: 0.9rem;
-                }
             }
             
             /* Pour les écrans tactiles */
             @media (hover: none) and (pointer: coarse) {
-                .box button:active {
-                    background-color: rgba(255, 255, 255, 0.2);
-                    color: #ffffff;
-                    text-shadow: 0 2px 6px rgba(0, 0, 0, 0.7);
+                .menu-button:active,
+                .action-button:active {
+                    background-color: rgba(255, 255, 255, 0.25);
+                    border-color: rgba(255, 255, 255, 0.6);
+                    box-shadow: 0 0 30px rgba(255, 255, 255, 0.4), 0 8px 32px rgba(0, 0, 0, 0.5);
                     transform: translateY(-2px);
-                    border-color: rgba(255, 255, 255, 0.5);
-                }
-                
-                .box button:active::before {
-                    content: '→';
-                    position: absolute;
-                    left: 10px;
-                    top: 50%;
-                    transform: translateY(-50%);
-                    font-size: 1.1rem;
-                    color: #ffffff;
-                    filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.5));
-                    z-index: 10;
-                    animation: slideArrow 0.8s infinite ease-in-out;
                 }
             }
         `;
@@ -345,14 +264,9 @@ class GAUDVIBEButtons {
         const sidebar = document.createElement('div');
         sidebar.className = 'sidebar';
         
-        // Container boutons
-        const buttonsBox = document.createElement('section');
-        buttonsBox.className = 'box';
-        const buttonGrid = document.createElement('div');
-        buttonGrid.className = 'button-grid';
-        
         this.links.forEach(link => {
-            const button = document.createElement('button');
+            const button = document.createElement('div');
+            button.className = 'menu-button';
             button.textContent = link.text;
             
             button.addEventListener('click', (e) => {
@@ -361,11 +275,9 @@ class GAUDVIBEButtons {
                 this.showPreview(link);
             });
             
-            buttonGrid.appendChild(button);
+            sidebar.appendChild(button);
         });
         
-        buttonsBox.appendChild(buttonGrid);
-        sidebar.appendChild(buttonsBox);
         main.appendChild(sidebar);
         
         // === ZONE DE PRÉVISUALISATION ===
