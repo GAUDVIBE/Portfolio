@@ -310,6 +310,16 @@ class GAUDVIBEButtons {
             // Utiliser Google Docs Viewer pour mobile, embed pour desktop
             const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
             
+            const container = document.createElement('div');
+            container.style.cssText = `
+                width: 100%;
+                height: 100%;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                background: white;
+            `;
+            
             if (isMobile) {
                 const iframe = document.createElement('iframe');
                 iframe.src = `https://docs.google.com/viewer?url=${encodeURIComponent(window.location.origin + '/' + link.url)}&embedded=true`;
@@ -317,9 +327,8 @@ class GAUDVIBEButtons {
                     width: 100%;
                     height: 100%;
                     border: none;
-                    background: white;
                 `;
-                previewContent.appendChild(iframe);
+                container.appendChild(iframe);
             } else {
                 const embed = document.createElement('embed');
                 embed.src = link.url;
@@ -329,8 +338,10 @@ class GAUDVIBEButtons {
                     height: 100%;
                     border: none;
                 `;
-                previewContent.appendChild(embed);
+                container.appendChild(embed);
             }
+            
+            previewContent.appendChild(container);
         } else {
             if (link.screenshot) {
                 const img = document.createElement('img');
