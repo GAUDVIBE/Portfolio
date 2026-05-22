@@ -81,14 +81,15 @@ class GAUDVIBEButtons {
             .preview-content {
                 flex: 1;
                 display: flex;
-                align-items: flex-start;
+                align-items: center;
                 justify-content: center;
                 overflow-y: auto;
                 overflow-x: hidden;
                 width: 100%;
             }
             
-            .preview-content iframe {
+            .preview-content iframe,
+            .preview-content embed {
                 width: 100%;
                 height: 100%;
                 border: none;
