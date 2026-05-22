@@ -40,12 +40,12 @@ class GAUDVIBEButtons {
                 gap: 2em;
             }
             
-            /* Bandeau gauche */
+            /* Bandeau gauche - Desktop vertical */
             .sidebar {
-                width: 350px;
+                width: 200px;
                 height: 100%;
-                display: grid;
-                grid-template-columns: 1fr 1fr;
+                display: flex;
+                flex-direction: column;
                 gap: 20px;
                 align-content: start;
             }
@@ -106,20 +106,21 @@ class GAUDVIBEButtons {
             .menu-button {
                 background-color: rgba(0, 0, 0, 0.7);
                 color: #ffffff;
-                padding: 25px 30px;
+                padding: 20px;
                 border-radius: 12px;
                 border: 1px solid rgba(255, 255, 255, 0.2);
                 backdrop-filter: blur(10px);
                 box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
                 cursor: pointer;
                 font-family: 'Courier New', monospace;
-                font-size: 1.3rem;
+                font-size: 1.1rem;
                 font-weight: bold;
                 text-align: center;
                 transition: all 0.3s ease;
                 position: relative;
                 overflow: hidden;
                 -webkit-tap-highlight-color: transparent;
+                width: 100%;
             }
             
             /* Hover avec effet de surbrillance */
@@ -208,15 +209,17 @@ class GAUDVIBEButtons {
                 .preview-content iframe {
                     width: 100% !important;
                     max-width: 100% !important;
-                    transform: scale(0.75);
-                    transform-origin: top left;
-                    height: 133% !important;
+                }
+                
+                .preview-container {
+                    padding: 15px;
                 }
                 
                 .sidebar {
                     display: grid;
                     grid-template-columns: 1fr 1fr;
                     gap: 10px;
+                    flex-direction: row;
                 }
                 
                 .menu-button { 
