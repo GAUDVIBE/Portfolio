@@ -306,21 +306,16 @@ class GAUDVIBEButtons {
         previewContent.innerHTML = '';
         
         if (link.type === 'pdf') {
-            const iframe = document.createElement('iframe');
-            iframe.src = link.url;
-            iframe.style.cssText = `
+            const embed = document.createElement('embed');
+            embed.src = link.url;
+            embed.type = 'application/pdf';
+            embed.style.cssText = `
                 width: 100%;
                 height: 100%;
                 border: none;
-                background: white;
-                cursor: pointer;
             `;
             
-            iframe.onclick = () => {
-                window.open(link.url, '_blank');
-            };
-            
-            previewContent.appendChild(iframe);
+            previewContent.appendChild(embed);
         } else {
             if (link.screenshot) {
                 const img = document.createElement('img');
