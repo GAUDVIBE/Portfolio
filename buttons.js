@@ -193,21 +193,25 @@ class GAUDVIBEButtons {
                     width: 100%;
                     max-width: 500px;
                     flex: none;
+                    min-height: calc(100vh - 200px);
                 }
                 
                 .preview-container {
                     width: 100%;
-                    height: auto;
-                    max-height: 70vh;
+                    height: calc(100vh - 200px);
+                    max-height: none;
                 }
                 
                 .preview-content {
-                    overflow-x: hidden !important;
-                    overflow-y: auto !important;
+                    overflow: hidden !important;
+                    height: 100%;
                 }
                 
-                .preview-content iframe {
+                .preview-content iframe,
+                .preview-content embed,
+                .preview-content > div {
                     width: 100% !important;
+                    height: 100% !important;
                     max-width: 100% !important;
                 }
                 
@@ -325,7 +329,7 @@ class GAUDVIBEButtons {
             
             if (isMobile) {
                 const iframe = document.createElement('iframe');
-                iframe.src = `https://docs.google.com/viewer?url=${encodeURIComponent(window.location.origin + '/' + link.url)}&embedded=true`;
+                iframe.src = `https://docs.google.com/viewer?url=${encodeURIComponent(window.location.origin + '/' + link.url)}&embedded=true&toolbar=0`;
                 iframe.style.cssText = `
                     width: 100%;
                     height: 100%;
@@ -334,7 +338,7 @@ class GAUDVIBEButtons {
                 container.appendChild(iframe);
             } else {
                 const embed = document.createElement('embed');
-                embed.src = link.url;
+                embed.src = link.url + '#toolbar=0&navpanes=0&scrollbar=0';
                 embed.type = 'application/pdf';
                 embed.style.cssText = `
                     width: 100%;
