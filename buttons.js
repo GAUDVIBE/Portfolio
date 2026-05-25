@@ -329,7 +329,7 @@ class GAUDVIBEButtons {
             
             if (isMobile) {
                 const iframe = document.createElement('iframe');
-                iframe.src = `${link.url}#toolbar=0&navpanes=0&scrollbar=0&view=FitH`;
+                iframe.src = `${link.url}#toolbar=0&navpanes=0&scrollbar=0&view=Fit`;
                 iframe.style.cssText = `
                     width: 100%;
                     height: 100%;
