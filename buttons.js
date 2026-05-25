@@ -329,12 +329,14 @@ class GAUDVIBEButtons {
             
             if (isMobile) {
                 const iframe = document.createElement('iframe');
-                iframe.src = `https://docs.google.com/viewer?url=${encodeURIComponent(window.location.origin + '/' + link.url)}&embedded=true&toolbar=0`;
+                iframe.src = `${link.url}#toolbar=0&navpanes=0&scrollbar=0&view=FitH`;
                 iframe.style.cssText = `
                     width: 100%;
                     height: 100%;
                     border: none;
+                    overflow: hidden;
                 `;
+                container.style.overflow = 'hidden';
                 container.appendChild(iframe);
             } else {
                 const embed = document.createElement('embed');
