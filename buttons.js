@@ -328,16 +328,25 @@ class GAUDVIBEButtons {
             `;
             
             if (isMobile) {
-                const iframe = document.createElement('iframe');
-                iframe.src = `${link.url}#toolbar=0&navpanes=0&scrollbar=0`;
-                iframe.style.cssText = `
+                const wrapper = document.createElement('div');
+                wrapper.style.cssText = `
                     width: 100%;
                     height: 100%;
-                    border: none;
+                    position: relative;
                     overflow: hidden;
                 `;
-                container.style.overflow = 'hidden';
-                container.appendChild(iframe);
+                
+                const iframe = document.createElement('iframe');
+                iframe.src = `https://docs.google.com/viewer?url=${encodeURIComponent(window.location.origin + '/' + link.url)}&embedded=true`;
+                iframe.style.cssText = `
+                    width: 100%;
+                    height: calc(100% + 50px);
+                    border: none;
+                    margin-top: -50px;
+                `;
+                
+                wrapper.appendChild(iframe);
+                container.appendChild(wrapper);
             } else {
                 const embed = document.createElement('embed');
                 embed.src = link.url + '#toolbar=0&navpanes=0&scrollbar=0';
