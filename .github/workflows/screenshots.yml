@@ -31,6 +31,7 @@ jobs:
           const { chromium } = require('@playwright/test');
 
           const links = [
+            { name: 'muzikaloid', url: 'https://muzikaloid.com' },
             { name: 'github', url: 'https://github.com/GAUDVIBE' },
             { name: 'youtube', url: 'https://youtube.com/@antoineGAUDRY' },
             { name: 'instagram', url: 'https://www.instagram.com/antoine_gdy/' }

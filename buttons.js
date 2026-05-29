@@ -3,6 +3,7 @@ class GAUDVIBEButtons {
     constructor() {
         this.links = [
             { text: 'CV', url: 'CV.pdf', type: 'pdf' },
+            { text: 'muzikaloid.com', url: 'https://muzikaloid.com', type: 'link', screenshot: 'screenshots/muzikaloid.png' },
             { text: 'GitHub', url: 'https://github.com/GAUDVIBE', type: 'link', screenshot: 'screenshots/github.png' },
             { text: 'YouTube', url: 'https://youtube.com/@antoineGAUDRY', type: 'link', screenshot: 'screenshots/youtube.png' },
             { text: 'Instagram', url: 'https://www.instagram.com/antoine_gdy/', type: 'link', screenshot: 'screenshots/instagram.png' }
