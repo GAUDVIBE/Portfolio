@@ -173,13 +173,14 @@ class GAUDVIBEButtons {
                     overflow-x: hidden;
                 }
                 
-                main { 
+                main {
                     flex-direction: column;
                     padding: 0.5em;
                     height: auto;
                     min-height: 100vh;
                     gap: 1em;
                     align-items: center;
+                    justify-content: center;
                 }
                 
                 .sidebar {
@@ -194,7 +195,6 @@ class GAUDVIBEButtons {
                     width: 100%;
                     max-width: 500px;
                     flex: none;
-                    min-height: calc(100vh - 200px);
                 }
                 
                 .preview-container {
