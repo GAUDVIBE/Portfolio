@@ -36,7 +36,7 @@
         amplitude: 100 + Math.random() * 300,
         frequency: 200 + Math.random() * 600,
         distortionSpeed: 2 + Math.random() * 8,
-        lineWidth: 0.01 + Math.random() * 0.03,
+        lineWidth: 0.03 + Math.random() * 0.04,
         distortionAmount: 0.1 + Math.random() * 0.3,
         distortionScale: 3 + Math.random() * 5
     };
@@ -180,7 +180,7 @@
             vec3 dColor = vec3(0.0, 0.33, 0.67) + uRandomParams.y;
             vec3 col = palette(r, a, b, c, dColor);
             
-            col = mix(col, vec3(0.0), smoothstep(0.02, 0.03, abs(d)));
+            col = mix(col, vec3(0.0), smoothstep(${randomParams.lineWidth.toFixed(3)}, ${(randomParams.lineWidth + 0.015).toFixed(3)}, abs(d)));
             
             gl_FragColor = vec4(col, 1.0);
         }
