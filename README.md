@@ -13,8 +13,7 @@ Deployed on **Render** (static site) via GitOps from `main`.
 | Markup / styling | HTML5, CSS3 (Grid, media queries, backdrop-filter) |
 | Logic | Vanilla JS (ES6 class), no framework |
 | Background | Custom GLSL fragment shader on `<canvas>` via WebGL |
-| PDF preview (desktop) | Native browser `<embed>` with `#toolbar=0` |
-| PDF preview (mobile) | Pre-rendered PNG of page 1 (200 DPI), tap to open the real PDF |
+| PDF preview | Pre-rendered PNG of page 1 (200 DPI), click/tap to open the real PDF |
 | Hosting | Render — static publish from repo root |
 | CDN | Render edge, `Cache-Control: max-age=31536000` on `.js` |
 
@@ -123,8 +122,8 @@ Then add the corresponding URL to `screenshots.yml` so the weekly capture stays 
 
 ### PDF previews
 
-Both desktop and mobile branches live in `buttons.js` → `showPreview()`:
-- **Desktop:** `<embed src="...pdf#toolbar=0&navpanes=0&scrollbar=0">` — uses the browser's native PDF engine.
-- **Mobile:** `<img src="link.mobileImage">` inside a scrollable wrapper, tap opens the original PDF in a new tab.
+PDF previews use a single approach on desktop and mobile: `<img src="link.image">` inside a scrollable wrapper. Clicking the image opens the original PDF in a new tab.
 
-To add a new PDF link, give it `type: 'pdf'` and a `mobileImage` field pointing to a pre-rendered PNG.
+The native `<embed src="...pdf#toolbar=0">` approach was dropped because it rendered inconsistently (Google Docs Viewer on mobile cropped content and forced a noisy page/zoom toolbar; native PDF embed UI varied between browsers).
+
+To add a new PDF link, give it `type: 'pdf'` and an `image` field pointing to a pre-rendered PNG (use `cv-png.yml` as a template if you want auto-rendering on push).

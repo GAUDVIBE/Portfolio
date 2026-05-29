@@ -9,7 +9,7 @@ const ICONS = {
 class GAUDVIBEButtons {
     constructor() {
         this.links = [
-            { text: 'CV', url: 'CV.pdf', type: 'pdf', mobileImage: 'screenshots/cv.png' },
+            { text: 'CV', url: 'CV.pdf', type: 'pdf', image: 'screenshots/cv.png' },
             { label: 'Muzikaloid', url: 'https://muzikaloid.com', type: 'link', screenshot: 'screenshots/muzikaloid.png', icon: ICONS.muzikaloid },
             { label: 'GitHub', url: 'https://github.com/GAUDVIBE', type: 'link', screenshot: 'screenshots/github.png', icon: ICONS.github, iconColor: '#ffffff' },
             { label: 'YouTube', url: 'https://youtube.com/@antoineGAUDRY', type: 'link', screenshot: 'screenshots/youtube.png', icon: ICONS.youtube, iconColor: '#FF0000' },
@@ -355,52 +355,25 @@ class GAUDVIBEButtons {
         previewContent.innerHTML = '';
         
         if (link.type === 'pdf') {
-            // Utiliser Google Docs Viewer pour mobile, embed pour desktop
-            const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
-            
-            const container = document.createElement('div');
-            container.style.cssText = `
+            const wrapper = document.createElement('div');
+            wrapper.style.cssText = `
                 width: 100%;
                 height: 100%;
-                display: flex;
-                align-items: center;
-                justify-content: center;
+                overflow-y: auto;
+                overflow-x: hidden;
+                -webkit-overflow-scrolling: touch;
                 background: white;
+                cursor: pointer;
             `;
-            
-            if (isMobile) {
-                const wrapper = document.createElement('div');
-                wrapper.style.cssText = `
-                    width: 100%;
-                    height: 100%;
-                    overflow-y: auto;
-                    overflow-x: hidden;
-                    -webkit-overflow-scrolling: touch;
-                    background: white;
-                    cursor: pointer;
-                `;
 
-                const img = document.createElement('img');
-                img.src = link.mobileImage || link.url;
-                img.alt = link.text;
-                img.style.cssText = 'width: 100%; height: auto; display: block;';
-                img.addEventListener('click', () => window.open(link.url, '_blank'));
+            const img = document.createElement('img');
+            img.src = link.image || link.url;
+            img.alt = link.text;
+            img.style.cssText = 'width: 100%; height: auto; display: block;';
+            img.addEventListener('click', () => window.open(link.url, '_blank'));
 
-                wrapper.appendChild(img);
-                container.appendChild(wrapper);
-            } else {
-                const embed = document.createElement('embed');
-                embed.src = link.url + '#toolbar=0&navpanes=0&scrollbar=0';
-                embed.type = 'application/pdf';
-                embed.style.cssText = `
-                    width: 100%;
-                    height: 100%;
-                    border: none;
-                `;
-                container.appendChild(embed);
-            }
-            
-            previewContent.appendChild(container);
+            wrapper.appendChild(img);
+            previewContent.appendChild(wrapper);
         } else {
             if (link.screenshot) {
                 const img = document.createElement('img');
