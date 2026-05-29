@@ -2,7 +2,7 @@
 class GAUDVIBEButtons {
     constructor() {
         this.links = [
-            { text: 'CV', url: 'CV.pdf', type: 'pdf' },
+            { text: 'CV', url: 'CV.pdf', type: 'pdf', mobileImage: 'screenshots/cv.png' },
             { text: 'muzikaloid.com', url: 'https://muzikaloid.com', type: 'link', screenshot: 'screenshots/muzikaloid.png' },
             { text: 'GitHub', url: 'https://github.com/GAUDVIBE', type: 'link', screenshot: 'screenshots/github.png' },
             { text: 'YouTube', url: 'https://youtube.com/@antoineGAUDRY', type: 'link', screenshot: 'screenshots/youtube.png' },
@@ -333,22 +333,20 @@ class GAUDVIBEButtons {
                 wrapper.style.cssText = `
                     width: 100%;
                     height: 100%;
-                    position: relative;
-                    overflow: hidden;
+                    overflow-y: auto;
+                    overflow-x: hidden;
+                    -webkit-overflow-scrolling: touch;
+                    background: white;
+                    cursor: pointer;
                 `;
-                
-                const iframe = document.createElement('iframe');
-                iframe.src = `https://docs.google.com/viewer?url=${encodeURIComponent(window.location.origin + '/' + link.url)}&embedded=true`;
-                iframe.style.cssText = `
-                    width: 100%;
-                    height: calc(100% + 120px);
-                    border: none;
-                    position: absolute;
-                    top: 0;
-                    left: 0;
-                `;
-                
-                wrapper.appendChild(iframe);
+
+                const img = document.createElement('img');
+                img.src = link.mobileImage || link.url;
+                img.alt = link.text;
+                img.style.cssText = 'width: 100%; height: auto; display: block;';
+                img.addEventListener('click', () => window.open(link.url, '_blank'));
+
+                wrapper.appendChild(img);
                 container.appendChild(wrapper);
             } else {
                 const embed = document.createElement('embed');
