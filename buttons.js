@@ -341,10 +341,10 @@ class GAUDVIBEButtons {
                 iframe.src = `https://docs.google.com/viewer?url=${encodeURIComponent(window.location.origin + '/' + link.url)}&embedded=true`;
                 iframe.style.cssText = `
                     width: 100%;
-                    height: calc(100% + 80px);
+                    height: calc(100% + 120px);
                     border: none;
                     position: absolute;
-                    top: -80px;
+                    top: 0;
                     left: 0;
                 `;
                 
