@@ -125,13 +125,17 @@ class GAUDVIBEButtons {
             
             /* Programmation : bandeau centre dans le viewport (desktop +
                mobile, meme positionnement). Container translucide pour
-               lisibilite sur le shader. */
+               lisibilite sur le shader.
+               z-index 1001 > main (1000) pour passer au-dessus des
+               boutons visuellement. pointer-events: none pour laisser
+               les clics traverser vers les boutons en dessous. */
             .programmation {
                 position: fixed;
                 top: 50%;
                 left: 50%;
                 transform: translate(-50%, -50%);
-                z-index: 100;
+                z-index: 1001;
+                pointer-events: none;
                 color: #ffffff;
                 font-family: 'Courier New', monospace;
                 padding: 14px 20px;
