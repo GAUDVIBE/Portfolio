@@ -123,12 +123,17 @@ class GAUDVIBEButtons {
                 justify-content: center;
             }
             
-            /* Programmation : container translucide pour lisibilite sur shader */
+            /* Programmation : bandeau bas fixe (desktop), flux normal (mobile).
+               Container translucide pour lisibilite sur le shader. */
             .programmation {
+                position: fixed;
+                bottom: 16px;
+                left: 50%;
+                transform: translateX(-50%);
+                z-index: 100;
                 color: #ffffff;
                 font-family: 'Courier New', monospace;
-                padding: 14px 16px;
-                margin-top: 8px;
+                padding: 14px 20px;
                 line-height: 1.5;
                 background-color: rgba(0, 0, 0, 0.55);
                 border: 1px solid rgba(255, 255, 255, 0.15);
@@ -136,11 +141,15 @@ class GAUDVIBEButtons {
                 backdrop-filter: blur(10px);
                 -webkit-backdrop-filter: blur(10px);
                 box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+                max-width: calc(100vw - 32px);
+                overflow-x: auto;
+                -webkit-overflow-scrolling: touch;
             }
             .programmation-line {
                 font-size: 0.95rem;
                 font-weight: bold;
                 margin-bottom: 6px;
+                white-space: nowrap;
                 transition: opacity 0.4s ease, filter 0.4s ease;
             }
             .programmation-line:last-child { margin-bottom: 0; }
@@ -297,14 +306,19 @@ class GAUDVIBEButtons {
                     flex-direction: row;
                 }
 
-                /* Mobile: programmation prend toute la largeur de la sidebar */
+                /* Mobile: programmation suit le flux normal en bas du main,
+                   et reduit le font pour caser la plus longue ligne. */
                 .programmation {
-                    grid-column: 1 / -1;
-                    text-align: center;
+                    position: static;
+                    transform: none;
+                    max-width: 100%;
+                    width: calc(100% - 1em);
+                    margin: 0 auto 1em;
                     padding: 12px 14px;
+                    text-align: left;
                 }
                 .programmation-line {
-                    font-size: 0.9rem;
+                    font-size: 0.78rem;
                     margin-bottom: 5px;
                 }
                 
@@ -384,20 +398,6 @@ class GAUDVIBEButtons {
             sidebar.appendChild(button);
         });
 
-        // Programmation : une ligne par date, sans container ni header
-        if (this.programmation && this.programmation.length) {
-            const prog = document.createElement('div');
-            prog.className = 'programmation';
-            this.programmation.forEach(ev => {
-                const line = document.createElement('div');
-                line.className = 'programmation-line';
-                if (this.isPastDate(ev)) line.classList.add('past');
-                line.textContent = `${ev.date} — ${ev.venue} — ${ev.project}`;
-                prog.appendChild(line);
-            });
-            sidebar.appendChild(prog);
-        }
-
         main.appendChild(sidebar);
         
         // === ZONE DE PRÉVISUALISATION ===
@@ -417,6 +417,21 @@ class GAUDVIBEButtons {
         main.appendChild(previewArea);
         
         document.body.appendChild(main);
+
+        // Programmation : bandeau separe pour pouvoir respirer hors de la
+        // sidebar 200px desktop. Une date = une ligne (white-space: nowrap).
+        if (this.programmation && this.programmation.length) {
+            const prog = document.createElement('div');
+            prog.className = 'programmation';
+            this.programmation.forEach(ev => {
+                const line = document.createElement('div');
+                line.className = 'programmation-line';
+                if (this.isPastDate(ev)) line.classList.add('past');
+                line.textContent = `${ev.date} — ${ev.venue} — ${ev.project}`;
+                prog.appendChild(line);
+            });
+            document.body.appendChild(prog);
+        }
     }
     
     showPreview(link) {
