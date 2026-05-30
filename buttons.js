@@ -56,9 +56,9 @@ class GAUDVIBEButtons {
             main {
                 width: 100%;
                 height: 100vh;
-                display: flex;
-                flex-direction: column;
-                align-items: center;
+                display: grid;
+                grid-template-rows: auto 1fr auto;
+                justify-items: center;
                 z-index: 1000;
                 position: relative;
                 padding: 2em;
@@ -130,12 +130,9 @@ class GAUDVIBEButtons {
                 justify-content: center;
             }
             
-            /* Programmation : dernier enfant de main (flex column,
-               align-items: center). margin-top: auto absorbe tout
-               l'espace dispo et pousse la programmation au bas du
-               main, independamment du flex de la preview-area (qui
-               est flex:none sur mobile et flex:1 sur desktop).
-               Pas de fixed, pas de z-index, scrolle avec le reste. */
+            /* Programmation : 3e enfant de main (grid 3 rows: auto 1fr
+               auto). Grid garantit qu'elle est en row 3, donc en bas
+               du main, peu importe le contenu de la preview-area. */
             .programmation {
                 color: #ffffff;
                 font-family: 'Courier New', monospace;
@@ -149,8 +146,6 @@ class GAUDVIBEButtons {
                 box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
                 max-width: 100%;
                 overflow: hidden;
-                align-self: center;
-                margin-top: auto;
             }
             .programmation-line {
                 font-size: 0.95rem;
@@ -258,21 +253,17 @@ class GAUDVIBEButtons {
                     height: auto;
                     min-height: 100vh;
                     gap: 1em;
-                    justify-content: flex-start;
                 }
 
                 .sidebar {
                     width: 100%;
                     max-width: 180px;
                     height: auto;
-                    order: 1;
                 }
 
                 .preview-area {
-                    order: 2;
                     width: 100%;
                     max-width: 500px;
-                    flex: 1;
                 }
                 
                 .preview-container {
