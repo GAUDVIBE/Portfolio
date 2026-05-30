@@ -16,10 +16,17 @@ class GAUDVIBEButtons {
             { label: 'Instagram', url: 'https://www.instagram.com/antoine_gdy/', type: 'link', screenshot: 'screenshots/instagram.png', icon: ICONS.instagram, iconColor: '#E4405F' }
         ];
 
-        // Concerts a venir. Ajouter/retirer ici, ordre = ordre d'affichage.
+        // Concerts. Ordre du tableau = ordre d'affichage.
+        // Futures: year peut etre omis (resolu via l'annee courante,
+        // bump auto a l'annee suivante si la date est deja passee >30j).
+        // Passees: year obligatoire (sinon le parser les croit futures).
         this.programmation = [
-            { date: '1 juin',  venue: 'Conservatoire de Montreuil', project: 'Projet perso' },
-            { date: '7 juin',  venue: 'AERI Montreuil',             project: 'Instant Orchestra' }
+            { date: '1 juin',      venue: 'Conservatoire de Montreuil', project: 'Projet perso' },
+            { date: '7 juin',      venue: 'AERI Montreuil',             project: 'Instant Orchestra' },
+            { date: '1 décembre',  venue: 'Le Chinois Montreuil',       project: 'Instant Orchestra', year: 2025 },
+            { date: '28 octobre',  venue: 'Sunset Sunside',             project: 'Lila Mellark',      year: 2025 },
+            { date: '23 juin',     venue: 'Conservatoire de Montreuil', project: 'Instant Orchestra', year: 2025 },
+            { date: '22 juin',     venue: 'Parc des Bastions Genève',   project: 'Lila Mellark',      year: 2025 }
         ];
 
         this.currentPreview = null;
