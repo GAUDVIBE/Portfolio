@@ -131,10 +131,11 @@ class GAUDVIBEButtons {
             }
             
             /* Programmation : dernier enfant de main (flex column,
-               align-items: center). preview-area au-dessus a flex: 1
-               donc la programmation est naturellement poussee au bas
-               du main, centree horizontalement. Pas de fixed, pas de
-               z-index, scrolle avec le reste de la page. */
+               align-items: center). margin-top: auto absorbe tout
+               l'espace dispo et pousse la programmation au bas du
+               main, independamment du flex de la preview-area (qui
+               est flex:none sur mobile et flex:1 sur desktop).
+               Pas de fixed, pas de z-index, scrolle avec le reste. */
             .programmation {
                 color: #ffffff;
                 font-family: 'Courier New', monospace;
@@ -149,6 +150,7 @@ class GAUDVIBEButtons {
                 max-width: 100%;
                 overflow: hidden;
                 align-self: center;
+                margin-top: auto;
             }
             .programmation-line {
                 font-size: 0.95rem;
