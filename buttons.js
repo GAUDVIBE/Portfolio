@@ -123,13 +123,14 @@ class GAUDVIBEButtons {
                 justify-content: center;
             }
             
-            /* Programmation : bandeau bas fixe (desktop), flux normal (mobile).
-               Container translucide pour lisibilite sur le shader. */
+            /* Programmation : bandeau centre dans le viewport (desktop +
+               mobile, meme positionnement). Container translucide pour
+               lisibilite sur le shader. */
             .programmation {
                 position: fixed;
-                bottom: 16px;
+                top: 50%;
                 left: 50%;
-                transform: translateX(-50%);
+                transform: translate(-50%, -50%);
                 z-index: 100;
                 color: #ffffff;
                 font-family: 'Courier New', monospace;
@@ -305,19 +306,13 @@ class GAUDVIBEButtons {
                     flex-direction: row;
                 }
 
-                /* Mobile: programmation suit le flux normal en bas du main,
-                   et reduit le font pour caser la plus longue ligne. */
+                /* Mobile: garde le meme positionnement fixed-center que
+                   desktop. La largeur est driver par max-width: calc(100vw - 32px)
+                   herite, et le font est auto-ajuste par fitProgrammation(). */
                 .programmation {
-                    position: static;
-                    transform: none;
-                    max-width: 100%;
-                    width: calc(100% - 1em);
-                    margin: 0 auto 1em;
                     padding: 12px 14px;
-                    text-align: left;
                 }
                 .programmation-line {
-                    font-size: 0.78rem;
                     margin-bottom: 5px;
                 }
                 
