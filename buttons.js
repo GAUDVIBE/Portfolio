@@ -223,25 +223,31 @@ class GAUDVIBEButtons {
                 
                 .preview-container {
                     width: 100%;
-                    height: calc(100vh - 200px);
+                    height: auto;
                     max-height: none;
+                    padding: 15px;
                 }
-                
+
                 .preview-content {
                     overflow: hidden !important;
-                    height: 100%;
+                    height: auto;
                 }
-                
+
                 .preview-content iframe,
-                .preview-content embed,
-                .preview-content > div {
+                .preview-content embed {
                     width: 100% !important;
                     height: 100% !important;
                     max-width: 100% !important;
                 }
-                
-                .preview-container {
-                    padding: 15px;
+
+                /* Wrapper PDF mobile : hug la hauteur naturelle de l'image
+                   pour ne pas laisser de bande blanche sous le CV.
+                   Si l'image est plus haute que l'ecran, le body scrolle
+                   (overflow-y: auto deja defini en mobile l.196). */
+                .preview-content > div {
+                    width: 100% !important;
+                    height: auto !important;
+                    max-width: 100% !important;
                 }
                 
                 .sidebar {
