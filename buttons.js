@@ -51,22 +51,26 @@ class GAUDVIBEButtons {
                 overflow: hidden;
             }
             
-            main { 
+            main {
                 width: 100%;
                 height: 100vh;
                 display: flex;
+                flex-direction: column;
+                align-items: center;
                 z-index: 1000;
                 position: relative;
                 padding: 2em;
                 gap: 2em;
             }
-            
-            /* Bandeau gauche - Desktop vertical */
+
+            /* Sidebar : ligne horizontale d'icones en haut de page */
             .sidebar {
-                width: 200px;
-                height: 100%;
+                width: auto;
+                height: auto;
                 display: flex;
-                flex-direction: column;
+                flex-direction: row;
+                flex-wrap: wrap;
+                justify-content: center;
                 gap: 20px;
                 align-content: start;
             }
@@ -74,6 +78,7 @@ class GAUDVIBEButtons {
             /* Zone de prévisualisation centrale */
             .preview-area {
                 flex: 1;
+                width: 100%;
                 display: flex;
                 align-items: center;
                 justify-content: center;
@@ -123,16 +128,13 @@ class GAUDVIBEButtons {
                 justify-content: center;
             }
             
-            /* Programmation : centre vertical, decalee a droite de la
-               sidebar pour ne PAS recouvrir les boutons.
-               Desktop: sidebar 200px + 32px padding + 32px gap = 264px
-               occupes a gauche -> centre de la zone restante = 50vw + 116px.
-               Mobile: centre plein viewport (la sidebar est en haut,
-               la programmation tombe naturellement en-dessous). */
+            /* Programmation : centre plein viewport.
+               Sidebar maintenant en ligne horizontale en haut (y~0),
+               donc pas d'overlap avec la programmation a y=50%. */
             .programmation {
                 position: fixed;
                 top: 50%;
-                left: calc(50% + 116px);
+                left: 50%;
                 transform: translate(-50%, -50%);
                 z-index: 1001;
                 pointer-events: none;
@@ -146,7 +148,7 @@ class GAUDVIBEButtons {
                 backdrop-filter: blur(10px);
                 -webkit-backdrop-filter: blur(10px);
                 box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
-                max-width: calc(100vw - 264px - 32px);
+                max-width: calc(100vw - 32px);
                 overflow: hidden;
             }
             .programmation-line {
@@ -249,24 +251,22 @@ class GAUDVIBEButtons {
                     overflow-y: auto;
                     overflow-x: hidden;
                 }
-                
+
                 main {
-                    flex-direction: column;
                     padding: 0.5em;
                     height: auto;
                     min-height: 100vh;
                     gap: 1em;
-                    align-items: center;
                     justify-content: center;
                 }
-                
+
                 .sidebar {
                     width: 100%;
                     max-width: 180px;
                     height: auto;
                     order: 1;
                 }
-                
+
                 .preview-area {
                     order: 2;
                     width: 100%;
@@ -310,13 +310,8 @@ class GAUDVIBEButtons {
                     flex-direction: row;
                 }
 
-                /* Mobile: centre plein viewport. Les icones sont en haut
-                   de l'ecran (sidebar grid 2-col), la programmation
-                   centree y=50% tombe naturellement dans la zone vide
-                   en-dessous, pas d'overlap. */
+                /* Mobile: centre plein viewport, padding compact */
                 .programmation {
-                    left: 50%;
-                    max-width: calc(100vw - 32px);
                     padding: 12px 14px;
                 }
                 .programmation-line {
