@@ -135,6 +135,12 @@ class GAUDVIBEButtons {
                 font-size: 0.8rem;
                 margin-bottom: 4px;
                 text-shadow: 0 1px 4px rgba(0, 0, 0, 0.6);
+                transition: opacity 0.4s ease, filter 0.4s ease;
+            }
+            /* Dates passees : assombries + legerement fanees, jamais masquees */
+            .programmation-line.past {
+                opacity: 0.3;
+                filter: grayscale(0.4);
             }
 
             /* Style des boutons du menu */
@@ -385,6 +391,7 @@ class GAUDVIBEButtons {
             this.programmation.forEach(ev => {
                 const line = document.createElement('div');
                 line.className = 'programmation-line';
+                if (this.isPastDate(ev)) line.classList.add('past');
                 line.textContent = `${ev.date} — ${ev.venue} — ${ev.project}`;
                 prog.appendChild(line);
             });
@@ -483,6 +490,32 @@ class GAUDVIBEButtons {
         previewContainer.classList.add('active');
     }
     
+    // Parse "1 juin", "15 mars", "1 janvier" + year optionnel.
+    // Si year absent: prend l'annee courante, sauf si la date tombe >30j
+    // dans le passe (probablement l'annee suivante).
+    isPastDate(ev) {
+        const months = {
+            janvier: 0, fevrier: 1, 'février': 1, mars: 2, avril: 3, mai: 4,
+            juin: 5, juillet: 6, aout: 7, 'août': 7, septembre: 8,
+            octobre: 9, novembre: 10, decembre: 11, 'décembre': 11
+        };
+        const m = String(ev.date).toLowerCase().trim().match(/^(\d{1,2})\s+(\S+)/);
+        if (!m) return false;
+        const day = parseInt(m[1], 10);
+        const month = months[m[2]];
+        if (month === undefined) return false;
+
+        const now = new Date();
+        const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+        let year = ev.year ?? now.getFullYear();
+        let d = new Date(year, month, day);
+        // Annee absente + date deja >30j dans le passe => probablement l'an prochain
+        if (ev.year === undefined && (today - d) > 30 * 24 * 60 * 60 * 1000) {
+            d = new Date(year + 1, month, day);
+        }
+        return d < today;
+    }
+
     rippleEffect(event, button) {
         const rect = button.getBoundingClientRect();
         const size = Math.max(rect.width, rect.height);
