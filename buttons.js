@@ -258,7 +258,7 @@ class GAUDVIBEButtons {
                     height: auto;
                     min-height: 100vh;
                     gap: 1em;
-                    justify-content: center;
+                    justify-content: flex-start;
                 }
 
                 .sidebar {
@@ -272,7 +272,7 @@ class GAUDVIBEButtons {
                     order: 2;
                     width: 100%;
                     max-width: 500px;
-                    flex: none;
+                    flex: 1;
                 }
                 
                 .preview-container {
