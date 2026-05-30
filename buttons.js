@@ -56,33 +56,49 @@ class GAUDVIBEButtons {
                 overflow: hidden;
             }
             
+            /* Desktop par defaut: sidebar a GAUCHE en colonne,
+               content-area a droite (preview + programmation centrees
+               verticalement comme un groupe). */
             main {
                 width: 100%;
                 height: 100vh;
-                display: grid;
-                grid-template-rows: auto 1fr auto;
-                justify-items: center;
+                display: flex;
+                flex-direction: row;
+                gap: 2em;
                 z-index: 1000;
                 position: relative;
                 padding: 2em;
-                gap: 2em;
             }
 
-            /* Sidebar : ligne horizontale d'icones en haut de page */
             .sidebar {
-                width: auto;
-                height: auto;
+                width: 200px;
+                height: 100%;
                 display: flex;
-                flex-direction: row;
-                flex-wrap: wrap;
-                justify-content: center;
+                flex-direction: column;
+                justify-content: flex-start;
                 gap: 20px;
-                align-content: start;
+            }
+
+            /* Container qui empile preview-area + programmation et les
+               centre verticalement en groupe.
+               - Pas de preview => programmation seule, donc centree.
+               - Preview active => preview + programmation centrees en
+                 groupe avec preview au-dessus, programmation en-dessous. */
+            .content-area {
+                flex: 1;
+                min-width: 0;
+                min-height: 0;
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                justify-content: center;
+                gap: 1em;
             }
             
-            /* Zone de prévisualisation centrale */
+            /* Zone de prévisualisation : enfant du content-area, hug son
+               contenu (preview-container). Quand preview-container est
+               display: none, preview-area = 0 visible. */
             .preview-area {
-                flex: 1;
                 width: 100%;
                 display: flex;
                 align-items: center;
@@ -99,7 +115,8 @@ class GAUDVIBEButtons {
                 backdrop-filter: blur(15px);
                 box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5);
                 width: 90%;
-                height: 80%;
+                max-width: 800px;
+                max-height: 65vh;
                 display: none;
                 flex-direction: column;
                 gap: 20px;
@@ -133,9 +150,9 @@ class GAUDVIBEButtons {
                 justify-content: center;
             }
             
-            /* Programmation : 3e enfant de main (grid 3 rows: auto 1fr
-               auto). Grid garantit qu'elle est en row 3, donc en bas
-               du main, peu importe le contenu de la preview-area. */
+            /* Programmation : enfant du content-area, hug son contenu.
+               Centree verticalement avec preview-area via le
+               justify-content: center du content-area. */
             .programmation {
                 color: #ffffff;
                 font-family: 'Courier New', monospace;
@@ -252,22 +269,39 @@ class GAUDVIBEButtons {
                 }
 
                 main {
+                    flex-direction: column;
                     padding: 0.5em;
                     height: auto;
                     min-height: 100vh;
                     min-height: 100svh; /* iOS Safari: zone visible reelle */
                     gap: 1em;
+                    align-items: center;
                 }
 
                 .sidebar {
                     width: 100%;
                     max-width: 180px;
                     height: auto;
+                    flex-direction: row;
+                    flex-wrap: wrap;
+                }
+
+                /* Mobile: content-area prend l'espace restant en bas du
+                   main, avec preview-area en row 1 (1fr) et programmation
+                   en row 2 (auto, en bas). Reproduit le comportement
+                   "perfect" mobile validate par l'utilisateur. */
+                .content-area {
+                    flex: 1;
+                    width: 100%;
+                    max-width: 500px;
+                    display: grid;
+                    grid-template-rows: 1fr auto;
+                    gap: 1em;
+                    justify-content: stretch;
                 }
 
                 .preview-area {
                     width: 100%;
-                    max-width: 500px;
                 }
                 
                 .preview-container {
@@ -409,10 +443,14 @@ class GAUDVIBEButtons {
         
         previewContainer.appendChild(previewContent);
         previewArea.appendChild(previewContainer);
-        main.appendChild(previewArea);
 
-        // Programmation en bas du main, dans le flux normal => scrolle avec
-        // sidebar et preview-area, jamais de chevauchement possible.
+        // === CONTENT AREA : preview + programmation groupees ===
+        // Wrapper necessaire pour pouvoir centrer verticalement les deux
+        // comme un groupe sur desktop (flex column + justify-content: center).
+        const contentArea = document.createElement('div');
+        contentArea.className = 'content-area';
+        contentArea.appendChild(previewArea);
+
         if (this.programmation && this.programmation.length) {
             const prog = document.createElement('div');
             prog.className = 'programmation';
@@ -423,9 +461,10 @@ class GAUDVIBEButtons {
                 line.textContent = `${ev.date} — ${ev.venue} — ${ev.project}`;
                 prog.appendChild(line);
             });
-            main.appendChild(prog);
+            contentArea.appendChild(prog);
         }
 
+        main.appendChild(contentArea);
         document.body.appendChild(main);
 
         // Fit apres insertion dans le DOM (clientWidth necessite layout calcule)
