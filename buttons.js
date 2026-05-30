@@ -44,12 +44,13 @@ class GAUDVIBEButtons {
         const styles = `
             * { margin: 0; padding: 0; box-sizing: border-box; }
             
-            body { 
-                font-family: 'Courier New', monospace; 
-                font-size: 1.2rem; 
-                background: transparent; 
+            body {
+                font-family: 'Courier New', monospace;
+                font-size: 1.2rem;
+                background: transparent;
                 margin: 0;
                 min-height: 100vh;
+                min-height: 100svh; /* iOS Safari: zone visible address-bar incluse */
                 overflow: hidden;
             }
             
@@ -252,6 +253,7 @@ class GAUDVIBEButtons {
                     padding: 0.5em;
                     height: auto;
                     min-height: 100vh;
+                    min-height: 100svh; /* iOS Safari: zone visible reelle */
                     gap: 1em;
                 }
 
