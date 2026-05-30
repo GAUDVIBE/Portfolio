@@ -109,11 +109,11 @@ class GAUDVIBEButtons {
                 display: flex;
             }
             
+            /* Block + overflow-y: auto. L'image (img directe) prend
+               width: 100% height: auto, et preview-content scrolle
+               verticalement si l'image est plus haute que le container. */
             .preview-content {
                 flex: 1;
-                display: flex;
-                align-items: center;
-                justify-content: center;
                 overflow-y: auto;
                 overflow-x: hidden;
                 width: 100%;
@@ -289,10 +289,9 @@ class GAUDVIBEButtons {
                     max-width: 100% !important;
                 }
 
-                /* Wrapper PDF mobile : hug la hauteur naturelle de l'image
-                   pour ne pas laisser de bande blanche sous le CV.
-                   Si l'image est plus haute que l'ecran, le body scrolle
-                   (overflow-y: auto deja defini en mobile l.196). */
+                /* Wrapper supprime (image directe dans preview-content).
+                   On garde une regle defensive au cas ou un futur preview
+                   reintroduit un div interne. */
                 .preview-content > div {
                     width: 100% !important;
                     height: auto !important;
@@ -471,25 +470,15 @@ class GAUDVIBEButtons {
         previewContent.innerHTML = '';
         
         if (link.type === 'pdf') {
-            const wrapper = document.createElement('div');
-            wrapper.style.cssText = `
-                width: 100%;
-                height: 100%;
-                overflow-y: auto;
-                overflow-x: hidden;
-                -webkit-overflow-scrolling: touch;
-                background: white;
-                cursor: pointer;
-            `;
-
+            // Image directe dans preview-content (qui a deja overflow-y: auto
+            // desktop). Pas de wrapper => evite le piege flex-centering +
+            // height: 100% qui croppait le haut et bloquait le scroll PC.
             const img = document.createElement('img');
             img.src = link.image || link.url;
             img.alt = link.text;
-            img.style.cssText = 'width: 100%; height: auto; display: block;';
+            img.style.cssText = 'width: 100%; height: auto; display: block; background: white; cursor: pointer;';
             img.addEventListener('click', () => window.open(link.url, '_blank'));
-
-            wrapper.appendChild(img);
-            previewContent.appendChild(wrapper);
+            previewContent.appendChild(img);
         } else {
             if (link.screenshot) {
                 const img = document.createElement('img');
