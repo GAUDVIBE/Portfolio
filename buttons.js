@@ -12,7 +12,9 @@ class GAUDVIBEButtons {
         this.links = [
             // type 'pdf' / 'link' => preview au centre
             // type 'external'     => clic ouvre l'URL directement, pas de preview
-            { text: 'CV', url: 'CV.pdf', type: 'pdf', image: 'screenshots/cv.png' },
+            // CV retire le 2026-05-30 - en cours de refonte (cf option B
+            // discutee : recreation FPDF2 from-scratch). A reactiver une
+            // fois la nouvelle version uploadee.
             { label: 'Email', url: 'mailto:antoine.olivier.gaudry@gmail.com?subject=Contact via portfolio', type: 'external', icon: ICONS.email, iconColor: '#ffffff' },
             { label: 'Muzikaloid', url: 'https://muzikaloid.com', type: 'link', screenshot: 'screenshots/muzikaloid.png', icon: ICONS.muzikaloid },
             { label: 'GitHub', url: 'https://github.com/GAUDVIBE', type: 'external', icon: ICONS.github, iconColor: '#ffffff' },
