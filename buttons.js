@@ -125,23 +125,17 @@ class GAUDVIBEButtons {
             
             /* Programmation : texte transparent sans container, sous les icones */
             .programmation {
-                color: rgba(255, 255, 255, 0.65);
+                color: rgba(255, 255, 255, 0.75);
                 font-family: 'Courier New', monospace;
                 padding: 8px 4px;
                 margin-top: 4px;
                 line-height: 1.5;
             }
-            .programmation-header {
-                font-size: 0.7rem;
-                letter-spacing: 0.18em;
-                font-weight: bold;
-                margin-bottom: 8px;
-                color: rgba(255, 255, 255, 0.55);
-            }
             .programmation-line {
                 font-size: 0.8rem;
+                font-weight: bold;
                 margin-bottom: 4px;
-                text-shadow: 0 1px 4px rgba(0, 0, 0, 0.6);
+                text-shadow: 0 1px 4px rgba(0, 0, 0, 0.7);
                 transition: opacity 0.4s ease, filter 0.4s ease;
             }
             /* Dates passees : assombries + legerement fanees, jamais masquees */
@@ -303,10 +297,6 @@ class GAUDVIBEButtons {
                     text-align: center;
                     padding: 6px 4px 2px;
                 }
-                .programmation-header {
-                    font-size: 0.65rem;
-                    margin-bottom: 6px;
-                }
                 .programmation-line {
                     font-size: 0.75rem;
                 }
@@ -387,14 +377,10 @@ class GAUDVIBEButtons {
             sidebar.appendChild(button);
         });
 
-        // Programmation : texte simple sous les icones, sans container
+        // Programmation : une ligne par date, sans container ni header
         if (this.programmation && this.programmation.length) {
             const prog = document.createElement('div');
             prog.className = 'programmation';
-            const header = document.createElement('div');
-            header.className = 'programmation-header';
-            header.textContent = 'PROGRAMMATION';
-            prog.appendChild(header);
             this.programmation.forEach(ev => {
                 const line = document.createElement('div');
                 line.className = 'programmation-line';
