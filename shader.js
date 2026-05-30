@@ -18,13 +18,22 @@
     let loadingElement = document.querySelector('.loading');
     
     const gl = canvas.getContext('webgl');
-    
+
     if (!gl) {
         console.warn('WebGL not supported');
         if (loadingElement) loadingElement.remove();
         document.body.style.backgroundColor = '#000000';
         return;
     }
+
+    // Active fwidth/dFdx/dFdy en WebGL1 (universel sur mobile moderne, fallback
+    // silencieux sinon : le shader compile encore mais sans AA pixel-perfect).
+    gl.getExtension('OES_standard_derivatives');
+
+    // Sur petit ecran physique, les lignes en sous-pixel deviennent floues.
+    // On releve le plancher de lineWidth pour garder un contour visible.
+    const isSmallViewport = Math.min(window.innerWidth, window.innerHeight) < 768;
+    const minLineWidth = isSmallViewport ? 0.05 : 0.03;
 
     const randomParams = {
         shapeType: Math.floor(Math.random() * 6),
@@ -36,7 +45,7 @@
         amplitude: 100 + Math.random() * 300,
         frequency: 200 + Math.random() * 600,
         distortionSpeed: 2 + Math.random() * 8,
-        lineWidth: 0.03 + Math.random() * 0.04,
+        lineWidth: minLineWidth + Math.random() * 0.04,
         distortionAmount: 0.1 + Math.random() * 0.3,
         distortionScale: 3 + Math.random() * 5
     };
@@ -83,7 +92,9 @@
     `;
 
     // Fragment shader
-    const fragmentShaderSource = `
+    // `#extension` doit etre la 1ere ligne non-vide, pas d'indentation
+    // tolerable par tous les drivers WebGL1.
+    const fragmentShaderSource = `#extension GL_OES_standard_derivatives : enable
         precision highp float;
         
         uniform vec2 iResolution;
@@ -180,15 +191,26 @@
             vec3 dColor = vec3(0.0, 0.33, 0.67) + uRandomParams.y;
             vec3 col = palette(r, a, b, c, dColor);
             
-            col = mix(col, vec3(0.0), smoothstep(${randomParams.lineWidth.toFixed(3)}, ${(randomParams.lineWidth + 0.015).toFixed(3)}, abs(d)));
+            // Anti-aliasing screen-space: la transition s'adapte automatiquement
+            // a la densite de pixels (DPR mobile, zoom, taille viewport).
+            float ad = abs(d);
+            float aa = fwidth(ad);
+            col = mix(col, vec3(0.0), smoothstep(${randomParams.lineWidth.toFixed(3)}, ${randomParams.lineWidth.toFixed(3)} + aa, ad));
             
             gl_FragColor = vec4(col, 1.0);
         }
     `;
 
     function resizeCanvas() {
-        canvas.width = window.innerWidth;
-        canvas.height = window.innerHeight;
+        // Cap a 2 pour ne pas griller la batterie sur iPhone Pro Max (DPR=3)
+        // tout en restant net sur la majorite des mobiles (DPR=2).
+        const dpr = Math.min(window.devicePixelRatio || 1, 2);
+        const cssW = window.innerWidth;
+        const cssH = window.innerHeight;
+        canvas.width = Math.floor(cssW * dpr);
+        canvas.height = Math.floor(cssH * dpr);
+        canvas.style.width = cssW + 'px';
+        canvas.style.height = cssH + 'px';
         gl.viewport(0, 0, canvas.width, canvas.height);
     }
 
