@@ -15,7 +15,13 @@ class GAUDVIBEButtons {
             { label: 'YouTube', url: 'https://youtube.com/@antoineGAUDRY', type: 'link', screenshot: 'screenshots/youtube.png', icon: ICONS.youtube, iconColor: '#FF0000' },
             { label: 'Instagram', url: 'https://www.instagram.com/antoine_gdy/', type: 'link', screenshot: 'screenshots/instagram.png', icon: ICONS.instagram, iconColor: '#E4405F' }
         ];
-        
+
+        // Concerts a venir. Ajouter/retirer ici, ordre = ordre d'affichage.
+        this.programmation = [
+            { date: '1 juin',  venue: 'Conservatoire de Montreuil', project: 'Projet perso' },
+            { date: '7 juin',  venue: 'AERI Montreuil',             project: 'Instant Orchestra' }
+        ];
+
         this.currentPreview = null;
         this.init();
     }
@@ -110,6 +116,27 @@ class GAUDVIBEButtons {
                 justify-content: center;
             }
             
+            /* Programmation : texte transparent sans container, sous les icones */
+            .programmation {
+                color: rgba(255, 255, 255, 0.65);
+                font-family: 'Courier New', monospace;
+                padding: 8px 4px;
+                margin-top: 4px;
+                line-height: 1.5;
+            }
+            .programmation-header {
+                font-size: 0.7rem;
+                letter-spacing: 0.18em;
+                font-weight: bold;
+                margin-bottom: 8px;
+                color: rgba(255, 255, 255, 0.55);
+            }
+            .programmation-line {
+                font-size: 0.8rem;
+                margin-bottom: 4px;
+                text-shadow: 0 1px 4px rgba(0, 0, 0, 0.6);
+            }
+
             /* Style des boutons du menu */
             .menu-button {
                 background-color: rgba(0, 0, 0, 0.7);
@@ -256,6 +283,20 @@ class GAUDVIBEButtons {
                     gap: 10px;
                     flex-direction: row;
                 }
+
+                /* Mobile: programmation prend toute la largeur de la sidebar */
+                .programmation {
+                    grid-column: 1 / -1;
+                    text-align: center;
+                    padding: 6px 4px 2px;
+                }
+                .programmation-header {
+                    font-size: 0.65rem;
+                    margin-bottom: 6px;
+                }
+                .programmation-line {
+                    font-size: 0.75rem;
+                }
                 
                 .menu-button {
                     font-size: 0.9rem;
@@ -332,7 +373,24 @@ class GAUDVIBEButtons {
 
             sidebar.appendChild(button);
         });
-        
+
+        // Programmation : texte simple sous les icones, sans container
+        if (this.programmation && this.programmation.length) {
+            const prog = document.createElement('div');
+            prog.className = 'programmation';
+            const header = document.createElement('div');
+            header.className = 'programmation-header';
+            header.textContent = 'PROGRAMMATION';
+            prog.appendChild(header);
+            this.programmation.forEach(ev => {
+                const line = document.createElement('div');
+                line.className = 'programmation-line';
+                line.textContent = `${ev.date} — ${ev.venue} — ${ev.project}`;
+                prog.appendChild(line);
+            });
+            sidebar.appendChild(prog);
+        }
+
         main.appendChild(sidebar);
         
         // === ZONE DE PRÉVISUALISATION ===
