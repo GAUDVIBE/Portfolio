@@ -128,17 +128,15 @@ class GAUDVIBEButtons {
                 justify-content: center;
             }
             
-            /* Programmation : centre plein viewport.
-               Sidebar en haut (y~0), programmation y=50% : pas
-               d'overlap au repos. z-index 5 (>shader 0, <main 1000)
-               => quand l'utilisateur scrolle et que les icones
-               traversent visuellement la programmation, elles
+            /* Programmation : bandeau fixe en bas de viewport, centre
+               horizontalement. z-index 5 (>shader 0, <main 1000)
+               => si scroll et que les icones le traversent, elles
                passent DEVANT, jamais derriere. */
             .programmation {
                 position: fixed;
-                top: 50%;
+                bottom: 16px;
                 left: 50%;
-                transform: translate(-50%, -50%);
+                transform: translateX(-50%);
                 z-index: 5;
                 pointer-events: none;
                 color: #ffffff;
