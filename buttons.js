@@ -142,8 +142,7 @@ class GAUDVIBEButtons {
                 -webkit-backdrop-filter: blur(10px);
                 box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
                 max-width: calc(100vw - 32px);
-                overflow-x: auto;
-                -webkit-overflow-scrolling: touch;
+                overflow: hidden;
             }
             .programmation-line {
                 font-size: 0.95rem;
@@ -431,6 +430,36 @@ class GAUDVIBEButtons {
                 prog.appendChild(line);
             });
             document.body.appendChild(prog);
+            this.fitProgrammation();
+            window.addEventListener('resize', () => this.fitProgrammation());
+        }
+    }
+
+    // Auto-shrink: mesure la ligne la plus large, reduit le font de TOUTES les
+    // lignes pour qu'elle rentre dans le container. Pas de scroll horizontal,
+    // pas de wrap, font aussi gros que la place le permet.
+    fitProgrammation() {
+        const prog = document.querySelector('.programmation');
+        if (!prog) return;
+        const lines = prog.querySelectorAll('.programmation-line');
+        if (!lines.length) return;
+
+        // Reset pour repartir du font CSS de base (utile au resize).
+        lines.forEach(l => { l.style.fontSize = ''; });
+
+        const cs = getComputedStyle(prog);
+        const innerWidth = prog.clientWidth
+            - parseFloat(cs.paddingLeft)
+            - parseFloat(cs.paddingRight);
+
+        let maxLineWidth = 0;
+        lines.forEach(l => { maxLineWidth = Math.max(maxLineWidth, l.scrollWidth); });
+
+        if (maxLineWidth > innerWidth && maxLineWidth > 0) {
+            const baseSize = parseFloat(getComputedStyle(lines[0]).fontSize);
+            // Plancher 9px pour rester lisible
+            const newSize = Math.max(baseSize * (innerWidth / maxLineWidth), 9);
+            lines.forEach(l => { l.style.fontSize = `${newSize}px`; });
         }
     }
     
