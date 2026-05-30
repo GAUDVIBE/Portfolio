@@ -123,24 +123,30 @@ class GAUDVIBEButtons {
                 justify-content: center;
             }
             
-            /* Programmation : texte transparent sans container, sous les icones */
+            /* Programmation : container translucide pour lisibilite sur shader */
             .programmation {
-                color: rgba(255, 255, 255, 0.75);
+                color: #ffffff;
                 font-family: 'Courier New', monospace;
-                padding: 8px 4px;
-                margin-top: 4px;
+                padding: 14px 16px;
+                margin-top: 8px;
                 line-height: 1.5;
+                background-color: rgba(0, 0, 0, 0.55);
+                border: 1px solid rgba(255, 255, 255, 0.15);
+                border-radius: 12px;
+                backdrop-filter: blur(10px);
+                -webkit-backdrop-filter: blur(10px);
+                box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
             }
             .programmation-line {
-                font-size: 0.8rem;
+                font-size: 0.95rem;
                 font-weight: bold;
-                margin-bottom: 4px;
-                text-shadow: 0 1px 4px rgba(0, 0, 0, 0.7);
+                margin-bottom: 6px;
                 transition: opacity 0.4s ease, filter 0.4s ease;
             }
+            .programmation-line:last-child { margin-bottom: 0; }
             /* Dates passees : assombries + legerement fanees, jamais masquees */
             .programmation-line.past {
-                opacity: 0.3;
+                opacity: 0.35;
                 filter: grayscale(0.4);
             }
 
@@ -295,10 +301,11 @@ class GAUDVIBEButtons {
                 .programmation {
                     grid-column: 1 / -1;
                     text-align: center;
-                    padding: 6px 4px 2px;
+                    padding: 12px 14px;
                 }
                 .programmation-line {
-                    font-size: 0.75rem;
+                    font-size: 0.9rem;
+                    margin-bottom: 5px;
                 }
                 
                 .menu-button {
