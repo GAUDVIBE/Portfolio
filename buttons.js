@@ -9,11 +9,13 @@ const ICONS = {
 class GAUDVIBEButtons {
     constructor() {
         this.links = [
+            // type 'pdf' / 'link' => preview au centre
+            // type 'external'     => clic ouvre l'URL directement, pas de preview
             { text: 'CV', url: 'CV.pdf', type: 'pdf', image: 'screenshots/cv.png' },
             { label: 'Muzikaloid', url: 'https://muzikaloid.com', type: 'link', screenshot: 'screenshots/muzikaloid.png', icon: ICONS.muzikaloid },
-            { label: 'GitHub', url: 'https://github.com/GAUDVIBE', type: 'link', screenshot: 'screenshots/github.png', icon: ICONS.github, iconColor: '#ffffff' },
-            { label: 'YouTube', url: 'https://youtube.com/@antoineGAUDRY', type: 'link', screenshot: 'screenshots/youtube.png', icon: ICONS.youtube, iconColor: '#FF0000' },
-            { label: 'Instagram', url: 'https://www.instagram.com/antoine_gdy/', type: 'link', screenshot: 'screenshots/instagram.png', icon: ICONS.instagram, iconColor: '#E4405F' }
+            { label: 'GitHub', url: 'https://github.com/GAUDVIBE', type: 'external', icon: ICONS.github, iconColor: '#ffffff' },
+            { label: 'YouTube', url: 'https://youtube.com/@antoineGAUDRY', type: 'external', icon: ICONS.youtube, iconColor: '#FF0000' },
+            { label: 'Instagram', url: 'https://www.instagram.com/antoine_gdy/', type: 'external', icon: ICONS.instagram, iconColor: '#E4405F' }
         ];
 
         // Concerts. Ordre du tableau = ordre d'affichage.
@@ -128,17 +130,12 @@ class GAUDVIBEButtons {
                 justify-content: center;
             }
             
-            /* Programmation : bandeau fixe en bas de viewport, centre
-               horizontalement. z-index 5 (>shader 0, <main 1000)
-               => si scroll et que les icones le traversent, elles
-               passent DEVANT, jamais derriere. */
+            /* Programmation : dernier enfant de main (flex column,
+               align-items: center). preview-area au-dessus a flex: 1
+               donc la programmation est naturellement poussee au bas
+               du main, centree horizontalement. Pas de fixed, pas de
+               z-index, scrolle avec le reste de la page. */
             .programmation {
-                position: fixed;
-                bottom: 16px;
-                left: 50%;
-                transform: translateX(-50%);
-                z-index: 5;
-                pointer-events: none;
                 color: #ffffff;
                 font-family: 'Courier New', monospace;
                 padding: 14px 20px;
@@ -149,8 +146,9 @@ class GAUDVIBEButtons {
                 backdrop-filter: blur(10px);
                 -webkit-backdrop-filter: blur(10px);
                 box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
-                max-width: calc(100vw - 32px);
+                max-width: 100%;
                 overflow: hidden;
+                align-self: center;
             }
             .programmation-line {
                 font-size: 0.95rem;
@@ -389,7 +387,11 @@ class GAUDVIBEButtons {
             button.addEventListener('click', (e) => {
                 e.preventDefault();
                 this.rippleEffect(e, button);
-                this.showPreview(link);
+                if (link.type === 'external') {
+                    window.open(link.url, '_blank');
+                } else {
+                    this.showPreview(link);
+                }
             });
 
             sidebar.appendChild(button);
@@ -412,11 +414,9 @@ class GAUDVIBEButtons {
         previewContainer.appendChild(previewContent);
         previewArea.appendChild(previewContainer);
         main.appendChild(previewArea);
-        
-        document.body.appendChild(main);
 
-        // Programmation : bandeau separe pour pouvoir respirer hors de la
-        // sidebar 200px desktop. Une date = une ligne (white-space: nowrap).
+        // Programmation en bas du main, dans le flux normal => scrolle avec
+        // sidebar et preview-area, jamais de chevauchement possible.
         if (this.programmation && this.programmation.length) {
             const prog = document.createElement('div');
             prog.className = 'programmation';
@@ -427,7 +427,13 @@ class GAUDVIBEButtons {
                 line.textContent = `${ev.date} — ${ev.venue} — ${ev.project}`;
                 prog.appendChild(line);
             });
-            document.body.appendChild(prog);
+            main.appendChild(prog);
+        }
+
+        document.body.appendChild(main);
+
+        // Fit apres insertion dans le DOM (clientWidth necessite layout calcule)
+        if (this.programmation && this.programmation.length) {
             this.fitProgrammation();
             window.addEventListener('resize', () => this.fitProgrammation());
         }
