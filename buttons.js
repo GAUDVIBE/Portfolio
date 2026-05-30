@@ -129,14 +129,17 @@ class GAUDVIBEButtons {
             }
             
             /* Programmation : centre plein viewport.
-               Sidebar maintenant en ligne horizontale en haut (y~0),
-               donc pas d'overlap avec la programmation a y=50%. */
+               Sidebar en haut (y~0), programmation y=50% : pas
+               d'overlap au repos. z-index 5 (>shader 0, <main 1000)
+               => quand l'utilisateur scrolle et que les icones
+               traversent visuellement la programmation, elles
+               passent DEVANT, jamais derriere. */
             .programmation {
                 position: fixed;
                 top: 50%;
                 left: 50%;
                 transform: translate(-50%, -50%);
-                z-index: 1001;
+                z-index: 5;
                 pointer-events: none;
                 color: #ffffff;
                 font-family: 'Courier New', monospace;
