@@ -123,16 +123,16 @@ class GAUDVIBEButtons {
                 justify-content: center;
             }
             
-            /* Programmation : bandeau centre dans le viewport (desktop +
-               mobile, meme positionnement). Container translucide pour
-               lisibilite sur le shader.
-               z-index 1001 > main (1000) pour passer au-dessus des
-               boutons visuellement. pointer-events: none pour laisser
-               les clics traverser vers les boutons en dessous. */
+            /* Programmation : centre vertical, decalee a droite de la
+               sidebar pour ne PAS recouvrir les boutons.
+               Desktop: sidebar 200px + 32px padding + 32px gap = 264px
+               occupes a gauche -> centre de la zone restante = 50vw + 116px.
+               Mobile: centre plein viewport (la sidebar est en haut,
+               la programmation tombe naturellement en-dessous). */
             .programmation {
                 position: fixed;
                 top: 50%;
-                left: 50%;
+                left: calc(50% + 116px);
                 transform: translate(-50%, -50%);
                 z-index: 1001;
                 pointer-events: none;
@@ -146,7 +146,7 @@ class GAUDVIBEButtons {
                 backdrop-filter: blur(10px);
                 -webkit-backdrop-filter: blur(10px);
                 box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
-                max-width: calc(100vw - 32px);
+                max-width: calc(100vw - 264px - 32px);
                 overflow: hidden;
             }
             .programmation-line {
@@ -310,10 +310,13 @@ class GAUDVIBEButtons {
                     flex-direction: row;
                 }
 
-                /* Mobile: garde le meme positionnement fixed-center que
-                   desktop. La largeur est driver par max-width: calc(100vw - 32px)
-                   herite, et le font est auto-ajuste par fitProgrammation(). */
+                /* Mobile: centre plein viewport. Les icones sont en haut
+                   de l'ecran (sidebar grid 2-col), la programmation
+                   centree y=50% tombe naturellement dans la zone vide
+                   en-dessous, pas d'overlap. */
                 .programmation {
+                    left: 50%;
+                    max-width: calc(100vw - 32px);
                     padding: 12px 14px;
                 }
                 .programmation-line {
