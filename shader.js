@@ -50,16 +50,14 @@
         distortionScale: 3 + Math.random() * 5
     };
 
-    // Mobile: l'ecran etroit n'affiche que quelques colonnes du motif, ce qui
-    // transforme la meme texture en "grille minuscule" serree. On zoome le
-    // motif (moins de repetitions, formes plus grosses, distortion plus calme)
-    // pour retrouver sur mobile le ressenti "texture etalee" du desktop.
-    // Desktop (>=768px sur le plus petit cote) : strictement inchange.
-    // La "grille minuscule" vient surtout de la distortion (frequency), pas de
-    // la densite de base. On calme donc fortement frequency/amplitude, et on
-    // reduit density uniquement avec un plancher : sinon les seeds deja peu
-    // denses se vident (quelques cercles geants sur fond noir).
-    const featureScale = isSmallViewport ? 1.8 : 1.0;
+    // Le motif par defaut est trop fin/serre (effet "grille minuscule"),
+    // mobile comme desktop. On zoome le motif (moins de repetitions, formes
+    // plus grosses, distortion plus calme) pour un rendu "texture etalee".
+    // La finesse vient surtout de la distortion (frequency), pas de la densite
+    // de base : on calme donc fortement frequency/amplitude, et on reduit
+    // density uniquement avec un plancher, sinon les seeds deja peu denses se
+    // vident (quelques cercles geants sur fond noir).
+    const featureScale = 1.8;
     if (featureScale !== 1.0) {
         randomParams.density   = Math.max(randomParams.density / featureScale, 0.30);
         randomParams.frequency /= featureScale;            // distortion moins finement repliee
