@@ -17,6 +17,7 @@ class GAUDVIBEButtons {
             // fois la nouvelle version uploadee.
             { label: 'Email', url: 'mailto:antoine.olivier.gaudry@gmail.com?subject=Contact via portfolio', type: 'external', icon: ICONS.email, iconColor: '#ffffff' },
             { label: 'Muzikaloid', url: 'https://muzikaloid.com', type: 'link', screenshot: 'screenshots/muzikaloid.png', icon: ICONS.muzikaloid },
+            { label: 'Scyllarus', text: 'Scyllarus', url: 'https://scyllarus.fr', type: 'link', screenshot: 'screenshots/scyllarus.png' },
             { label: 'GitHub', url: 'https://github.com/GAUDVIBE', type: 'external', icon: ICONS.github, iconColor: '#ffffff' },
             { label: 'YouTube', url: 'https://youtube.com/@antoineGAUDRY', type: 'external', icon: ICONS.youtube, iconColor: '#FF0000' },
             { label: 'Instagram', url: 'https://www.instagram.com/antoine_gdy/', type: 'external', icon: ICONS.instagram, iconColor: '#E4405F' }
