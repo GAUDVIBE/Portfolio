@@ -50,19 +50,17 @@
         distortionScale: 3 + Math.random() * 5
     };
 
-    // Le motif par defaut est trop fin/serre (effet "grille minuscule"),
-    // mobile comme desktop. On zoome le motif (moins de repetitions, formes
-    // plus grosses, distortion plus calme) pour un rendu "texture etalee".
-    // La finesse vient surtout de la distortion (frequency), pas de la densite
-    // de base : on calme donc fortement frequency/amplitude, et on reduit
-    // density uniquement avec un plancher, sinon les seeds deja peu denses se
-    // vident (quelques cercles geants sur fond noir).
-    const featureScale = 1.8;
-    if (featureScale !== 1.0) {
-        randomParams.density   = Math.max(randomParams.density / featureScale, 0.30);
-        randomParams.frequency /= featureScale;            // distortion moins finement repliee
-        randomParams.amplitude /= Math.sqrt(featureScale); // warp un peu plus doux
-    }
+    // Reglage du look (desktop + mobile). Le motif brut est trop fin/serre.
+    // C'est la FREQUENCY de distortion qui fait basculer vers le rendu
+    // "fin/spiky" indesirable : haute => ripples fins + pics ; basse => warp
+    // large-echelle et fluide (look organique type metaballs, valide).
+    // - density : grosses cellules (taille validee), avec plancher anti-vide.
+    // - frequency : rabattue dans une plage basse [90-180] => toujours organique.
+    // - amplitude : warp ample, avec plancher pour eviter la "grille reguliere"
+    //   quand l'amplitude tiree est faible.
+    randomParams.density   = Math.max(randomParams.density / 1.8, 0.30);
+    randomParams.frequency = 90 + (randomParams.frequency - 200) / 600 * 90;
+    randomParams.amplitude = Math.max(randomParams.amplitude / 1.34, 160);
 
     // Generate random color
     const randomColor = () => {
