@@ -47,7 +47,14 @@
         distortionSpeed: 2 + Math.random() * 8,
         lineWidth: minLineWidth + Math.random() * 0.04,
         distortionAmount: 0.1 + Math.random() * 0.3,
-        distortionScale: 3 + Math.random() * 5
+        distortionScale: 3 + Math.random() * 5,
+        // Deformation locale "subtile" : redonne de la vie aux carres et
+        // lignes (cf design 2026-06-21). Amplitudes faibles + vitesses lentes.
+        sqWarpAmp: 0.03 + Math.random() * 0.03,   // warp intra-cellule des carres
+        sqWarpFreq: 5.0 + Math.random() * 3.0,
+        sqRotAmp: 0.06 + Math.random() * 0.10,    // rotation lente (radians)
+        lineWaveAmp: 0.10 + Math.random() * 0.08, // ondulation, fraction du spacing
+        lineWaveFreq: 2.0 + Math.random() * 2.0
     };
 
     // Reglage du look (desktop + mobile). Le motif brut est trop fin/serre.
@@ -58,7 +65,14 @@
     // - frequency : rabattue dans une plage basse [90-180] => toujours organique.
     // - amplitude : warp ample, avec plancher pour eviter la "grille reguliere"
     //   quand l'amplitude tiree est faible.
-    randomParams.density   = Math.max(randomParams.density / 1.8, 0.30);
+    // Les modes lignes (shapeType 2/3/4) ont besoin d'un plancher de density
+    // BEAUCOUP plus haut : sinon lineSpacing = 1/density devient enorme et on ne
+    // voit qu'une seule "grosse ligne". On garantit plusieurs lignes nettes a
+    // l'ecran. Les modes blob (cercle/carre) gardent leurs grosses cellules.
+    const isLineMode = randomParams.shapeType >= 2 && randomParams.shapeType <= 4;
+    randomParams.density = isLineMode
+        ? 1.6 + Math.random() * 1.4
+        : Math.max(randomParams.density / 1.8, 0.30);
     randomParams.frequency = 90 + (randomParams.frequency - 200) / 600 * 90;
     randomParams.amplitude = Math.max(randomParams.amplitude / 1.34, 160);
 
@@ -177,19 +191,29 @@
                 uv = fract(uv * ${randomParams.density.toFixed(1)}) - 0.5;
                 d = sdCircle(uv, 0.4);
             } else if (uRandomParams.x < 2.0) {
-                uv = fract(uv * ${randomParams.density.toFixed(1)}) - 0.5;
-                d = sdBox(uv, vec2(0.3, 0.3));
+                // Carre "vivant" : rotation lente + domain-warp doux a l'interieur
+                // de chaque cellule => les bords ondulent au lieu d'etre figes.
+                vec2 q = fract(uv * ${randomParams.density.toFixed(1)}) - 0.5;
+                float ang = ${randomParams.sqRotAmp.toFixed(3)} * sin(iTime * 0.3);
+                float ca = cos(ang), sa = sin(ang);
+                q = mat2(ca, -sa, sa, ca) * q;
+                q.x += ${randomParams.sqWarpAmp.toFixed(3)} * sin(q.y * ${randomParams.sqWarpFreq.toFixed(2)} + iTime * 0.4);
+                q.y += ${randomParams.sqWarpAmp.toFixed(3)} * sin(q.x * ${randomParams.sqWarpFreq.toFixed(2)} + iTime * 0.4);
+                d = sdBox(q, vec2(0.3, 0.3));
             } else if (uRandomParams.x < 3.0) {
                 float lineSpacing = 1.0 / ${randomParams.density.toFixed(1)};
-                d = abs(mod(uv.y - uv.x, lineSpacing) - lineSpacing * 0.5);
+                float wave = lineSpacing * ${randomParams.lineWaveAmp.toFixed(3)} * sin((uv.x + uv.y) * ${randomParams.lineWaveFreq.toFixed(2)} + iTime * 0.5);
+                d = abs(mod(uv.y - uv.x + wave, lineSpacing) - lineSpacing * 0.5);
                 uvForColor = fract(uv * ${randomParams.density.toFixed(1)}) - 0.5;
             } else if (uRandomParams.x < 4.0) {
                 float lineSpacing = 1.0 / ${randomParams.density.toFixed(1)};
-                d = abs(mod(uv.y, lineSpacing) - lineSpacing * 0.5);
+                float wave = lineSpacing * ${randomParams.lineWaveAmp.toFixed(3)} * sin(uv.x * ${randomParams.lineWaveFreq.toFixed(2)} + iTime * 0.5);
+                d = abs(mod(uv.y + wave, lineSpacing) - lineSpacing * 0.5);
                 uvForColor = fract(uv * ${randomParams.density.toFixed(1)}) - 0.5;
             } else if (uRandomParams.x < 5.0) {
                 float lineSpacing = 1.0 / ${randomParams.density.toFixed(1)};
-                d = abs(mod(uv.x, lineSpacing) - lineSpacing * 0.5);
+                float wave = lineSpacing * ${randomParams.lineWaveAmp.toFixed(3)} * sin(uv.y * ${randomParams.lineWaveFreq.toFixed(2)} + iTime * 0.5);
+                d = abs(mod(uv.x + wave, lineSpacing) - lineSpacing * 0.5);
                 uvForColor = fract(uv * ${randomParams.density.toFixed(1)}) - 0.5;
             } else {
                 uv = fract(uv * ${randomParams.density.toFixed(1)}) - 0.5;
