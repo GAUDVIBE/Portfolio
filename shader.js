@@ -44,7 +44,7 @@
         distortionType: Math.floor(Math.random() * 3),
         amplitude: 100 + Math.random() * 300,
         frequency: 200 + Math.random() * 600,
-        distortionSpeed: 2 + Math.random() * 8,
+        distortionSpeed: 1.5 + Math.random() * 3.5,
         lineWidth: minLineWidth + Math.random() * 0.04,
         distortionAmount: 0.1 + Math.random() * 0.3,
         distortionScale: 3 + Math.random() * 5,
