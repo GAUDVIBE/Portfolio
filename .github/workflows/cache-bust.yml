@@ -5,6 +5,7 @@ name: Cache-bust assets
 # Cloudflare) sans bump manuel, quelle que soit la source de l'edit (y compris
 # une modif faite via l'interface GitHub).
 on:
+  workflow_dispatch:
   push:
     branches: [main]
     paths:
