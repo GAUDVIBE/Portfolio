@@ -182,7 +182,7 @@ class GAUDVIBEButtons {
                 text-transform: uppercase;
                 letter-spacing: 0.18em;
                 text-align: center;
-                color: rgba(255, 255, 255, 0.7);
+                color: #ffffff;
                 margin-bottom: 12px;
                 padding-bottom: 9px;
                 border-bottom: 1px solid rgba(255, 255, 255, 0.15);
