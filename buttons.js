@@ -174,6 +174,20 @@ class GAUDVIBEButtons {
                 max-width: 100%;
                 overflow: hidden;
             }
+            /* Intitule du container : separe visuellement des lignes par un
+               filet. Exclu de l'auto-shrink (ne cible que .programmation-line). */
+            .programmation-title {
+                font-size: 0.8rem;
+                font-weight: bold;
+                text-transform: uppercase;
+                letter-spacing: 0.18em;
+                text-align: center;
+                color: rgba(255, 255, 255, 0.7);
+                margin-bottom: 12px;
+                padding-bottom: 9px;
+                border-bottom: 1px solid rgba(255, 255, 255, 0.15);
+                white-space: nowrap;
+            }
             .programmation-line {
                 font-size: 0.95rem;
                 font-weight: bold;
@@ -461,6 +475,10 @@ class GAUDVIBEButtons {
         if (this.programmation && this.programmation.length) {
             const prog = document.createElement('div');
             prog.className = 'programmation';
+            const title = document.createElement('div');
+            title.className = 'programmation-title';
+            title.textContent = 'Programmation';
+            prog.appendChild(title);
             this.programmation.forEach(ev => {
                 const line = document.createElement('div');
                 line.className = 'programmation-line';
