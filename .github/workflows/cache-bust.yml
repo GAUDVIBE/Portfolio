@@ -1,0 +1,44 @@
+name: Cache-bust assets
+
+# A chaque push qui touche un asset versionne, on tamponne ?v=<sha court> sur
+# les <script> de index.html et on recommit. Ca casse le cache (navigateur +
+# Cloudflare) sans bump manuel, quelle que soit la source de l'edit (y compris
+# une modif faite via l'interface GitHub).
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'shader.js'
+      - 'buttons.js'
+      - 'index.html'
+
+# Necessaire pour que le GITHUB_TOKEN puisse repousser le commit de stamp.
+permissions:
+  contents: write
+
+jobs:
+  stamp:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Stamp ?v= with commit sha
+        run: |
+          SHA=$(git rev-parse --short HEAD)
+          sed -i "s/?v=[A-Za-z0-9]*/?v=${SHA}/g" index.html
+          echo "Stamped ?v=${SHA}"
+          grep -o 'src="[^"]*\.js?v=[^"]*"' index.html || true
+
+      - name: Commit & push if changed
+        run: |
+          if git diff --quiet index.html; then
+            echo "index.html deja a jour, rien a faire."
+            exit 0
+          fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add index.html
+          # [skip ci] + les push via GITHUB_TOKEN ne re-declenchent pas les
+          # workflows : double garde anti-boucle.
+          git commit -m "Cache-bust index.html ?v=$(git rev-parse --short HEAD) [skip ci]"
+          git push

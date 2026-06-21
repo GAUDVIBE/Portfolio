@@ -23,10 +23,10 @@
 </head>
 <body>
     <canvas id="shaderCanvas"></canvas>
-    <!-- ?v=dev est un placeholder : Render le remplace par le SHA du commit au
-         build (cf buildCommand dans render.yaml) => cache-busting automatique,
-         plus besoin de bumper a la main quand on edite shader.js / buttons.js. -->
-    <script src="shader.js?v=dev"></script>
-    <script src="buttons.js?v=dev"></script>
+    <!-- Le ?v= est tamponne automatiquement (SHA du commit) par la GitHub Action
+         .github/workflows/cache-bust.yml a chaque push touchant un asset. Plus
+         besoin de bumper a la main quand on edite shader.js / buttons.js. -->
+    <script src="shader.js?v=init"></script>
+    <script src="buttons.js?v=init"></script>
 </body>
 </html>
