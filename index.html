@@ -23,7 +23,10 @@
 </head>
 <body>
     <canvas id="shaderCanvas"></canvas>
-    <script src="shader.js?v=9"></script>
-    <script src="buttons.js?v=38"></script>
+    <!-- ?v=dev est un placeholder : Render le remplace par le SHA du commit au
+         build (cf buildCommand dans render.yaml) => cache-busting automatique,
+         plus besoin de bumper a la main quand on edite shader.js / buttons.js. -->
+    <script src="shader.js?v=dev"></script>
+    <script src="buttons.js?v=dev"></script>
 </body>
 </html>

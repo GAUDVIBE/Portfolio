@@ -3,14 +3,27 @@ services:
     name: portfolio
     env: static
     staticPublishPath: .
-    buildCommand: ""
+    # Cache-busting automatique : tamponne ?v=<sha court> sur les <script> de
+    # index.html a chaque deploy. RENDER_GIT_COMMIT change a chaque commit, donc
+    # toute edition de shader.js / buttons.js casse le cache sans bump manuel.
+    buildCommand: 'sed -i "s/?v=[A-Za-z0-9]*/?v=$(echo ${RENDER_GIT_COMMIT:-dev} | cut -c1-8)/g" index.html'
     headers:
-      - path: /*
+      # index.html jamais mis en cache dur => le nouveau ?v= est toujours vu
+      # (revalidation legere, 304 si inchange).
+      - path: /
         name: Cache-Control
-        value: public, max-age=3600
+        value: no-cache
+      - path: /index.html
+        name: Cache-Control
+        value: no-cache
+      # JS versionnes par le sha du commit => cache long immutable.
       - path: /*.js
         name: Cache-Control
-        value: public, max-age=31536000
+        value: public, max-age=31536000, immutable
       - path: /*.pdf
         name: Cache-Control
         value: public, max-age=31536000
+      # Previews / images.
+      - path: /*.png
+        name: Cache-Control
+        value: public, max-age=3600
