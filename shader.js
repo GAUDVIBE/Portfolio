@@ -76,15 +76,28 @@
     // Combinaisons bannies apres revue de 40 tirages (2026-10-09) :
     // - distortionType 1 (scanlines alternees) => rendu entrelace/baveux,
     //   sauf sur les lignes horizontales ou il ne se voit pas ;
-    // - lignes verticales + distortionType 2 => moire serre.
+    // - lignes verticales + distortionType 2 => moire serre ;
+    // - carres + distortionType 2 => barres verticales qui "coulent".
     const allowedDistortions = randomParams.shapeType === 3 ? [0, 1, 2]
-        : randomParams.shapeType === 4 ? [0]
+        : (randomParams.shapeType === 4 || randomParams.shapeType === 1) ? [0]
         : [0, 2];
     if (!allowedDistortions.includes(randomParams.distortionType)) {
         randomParams.distortionType =
             allowedDistortions[Math.floor(Math.random() * allowedDistortions.length)];
     }
+    // Lignes horizontales en distortion 0/1 : elles deviennent des vagues
+    // verticales serrees ; un trait fin (< 0.04) ou une densite > 2.3 donne
+    // un rendu trop "fin".
+    if (randomParams.shapeType === 3 && randomParams.distortionType !== 2) {
+        randomParams.lineWidth = Math.max(randomParams.lineWidth, 0.045);
+        randomParams.density = Math.min(randomParams.density, 2.3);
+    }
     randomParams.frequency = 90 + (randomParams.frequency - 200) / 600 * 90;
+    // Meme cas (lignes horizontales en distortion 0/1) : c'est la frequence qui
+    // fixe le nombre de vagues sur la largeur => on la tasse vers [90-117].
+    if (randomParams.shapeType === 3 && randomParams.distortionType !== 2) {
+        randomParams.frequency = 90 + (randomParams.frequency - 90) * 0.3;
+    }
     randomParams.amplitude = Math.max(randomParams.amplitude / 1.34, 160);
 
     // Generate random color
