@@ -73,6 +73,17 @@
     randomParams.density = isLineMode
         ? 1.6 + Math.random() * 1.4
         : Math.max(randomParams.density / 1.8, 0.30);
+    // Combinaisons bannies apres revue de 40 tirages (2026-10-09) :
+    // - distortionType 1 (scanlines alternees) => rendu entrelace/baveux,
+    //   sauf sur les lignes horizontales ou il ne se voit pas ;
+    // - lignes verticales + distortionType 2 => moire serre.
+    const allowedDistortions = randomParams.shapeType === 3 ? [0, 1, 2]
+        : randomParams.shapeType === 4 ? [0]
+        : [0, 2];
+    if (!allowedDistortions.includes(randomParams.distortionType)) {
+        randomParams.distortionType =
+            allowedDistortions[Math.floor(Math.random() * allowedDistortions.length)];
+    }
     randomParams.frequency = 90 + (randomParams.frequency - 200) / 600 * 90;
     randomParams.amplitude = Math.max(randomParams.amplitude / 1.34, 160);
 
