@@ -176,6 +176,27 @@ class GAUDVIBEButtons {
                 max-width: 100%;
                 overflow: hidden;
             }
+            /* Liste des concerts : defile dans le container (le body est en
+               overflow: hidden), l'intitule reste fixe au-dessus. */
+            /* max-height posee en JS (fitProgrammation) = VISIBLE_LINES
+               lignes ; fondu bas tant qu'il reste des dates a faire defiler. */
+            .programmation-list {
+                overflow-y: auto;
+                overscroll-behavior: contain;
+                -webkit-overflow-scrolling: touch;
+                padding-right: 6px;
+                scrollbar-width: thin;
+                scrollbar-color: rgba(255, 255, 255, 0.3) transparent;
+            }
+            .programmation-list.has-more {
+                -webkit-mask-image: linear-gradient(to bottom, #000 75%, transparent);
+                mask-image: linear-gradient(to bottom, #000 75%, transparent);
+            }
+            .programmation-list::-webkit-scrollbar { width: 4px; }
+            .programmation-list::-webkit-scrollbar-thumb {
+                background: rgba(255, 255, 255, 0.3);
+                border-radius: 2px;
+            }
             /* Intitule du container : separe visuellement des lignes par un
                filet. Exclu de l'auto-shrink (ne cible que .programmation-line). */
             .programmation-title {
@@ -479,15 +500,21 @@ class GAUDVIBEButtons {
             prog.className = 'programmation';
             const title = document.createElement('div');
             title.className = 'programmation-title';
-            title.textContent = 'Programmation';
+            title.textContent = 'Mes concerts';
             prog.appendChild(title);
+            const list = document.createElement('div');
+            list.className = 'programmation-list';
             this.programmation.forEach(ev => {
                 const line = document.createElement('div');
                 line.className = 'programmation-line';
                 if (this.isPastDate(ev)) line.classList.add('past');
-                line.textContent = `${ev.date} — ${ev.venue} — ${ev.project}`;
-                prog.appendChild(line);
+                const d = this.eventDate(ev);
+                const when = d ? `${ev.date} ${d.getFullYear()}` : ev.date;
+                line.textContent = `${when} — ${ev.venue} — ${ev.project}`;
+                list.appendChild(line);
             });
+            prog.appendChild(list);
+            list.addEventListener('scroll', () => this.updateProgrammationFade(list), { passive: true });
             contentArea.appendChild(prog);
         }
 
@@ -505,7 +532,7 @@ class GAUDVIBEButtons {
     // lignes pour qu'elle rentre dans le container. Pas de scroll horizontal,
     // pas de wrap, font aussi gros que la place le permet.
     fitProgrammation() {
-        const prog = document.querySelector('.programmation');
+        const prog = document.querySelector('.programmation-list');
         if (!prog) return;
         const lines = prog.querySelectorAll('.programmation-line');
         if (!lines.length) return;
@@ -527,6 +554,22 @@ class GAUDVIBEButtons {
             const newSize = Math.max(baseSize * (innerWidth / maxLineWidth), 9);
             lines.forEach(l => { l.style.fontSize = `${newSize}px`; });
         }
+
+        // Hauteur = VISIBLE_LINES premieres lignes (mesuree apres le resize
+        // du font), le reste defile.
+        const VISIBLE_LINES = 5;
+        prog.style.maxHeight = '';
+        if (lines.length > VISIBLE_LINES) {
+            const top = lines[0].offsetTop;
+            const last = lines[VISIBLE_LINES - 1];
+            prog.style.maxHeight = `${last.offsetTop + last.offsetHeight - top}px`;
+        }
+        this.updateProgrammationFade(prog);
+    }
+
+    updateProgrammationFade(list) {
+        const more = list.scrollTop + list.clientHeight < list.scrollHeight - 2;
+        list.classList.toggle('has-more', more);
     }
     
     showPreview(link) {
@@ -594,16 +637,24 @@ class GAUDVIBEButtons {
     // Si year absent: prend l'annee courante, sauf si la date tombe >30j
     // dans le passe (probablement l'annee suivante).
     isPastDate(ev) {
+        const d = this.eventDate(ev);
+        if (!d) return false;
+        const now = new Date();
+        return d < new Date(now.getFullYear(), now.getMonth(), now.getDate());
+    }
+
+    // Date resolue d'un concert (annee deduite si absente), null si illisible.
+    eventDate(ev) {
         const months = {
             janvier: 0, fevrier: 1, 'février': 1, mars: 2, avril: 3, mai: 4,
             juin: 5, juillet: 6, aout: 7, 'août': 7, septembre: 8,
             octobre: 9, novembre: 10, decembre: 11, 'décembre': 11
         };
         const m = String(ev.date).toLowerCase().trim().match(/^(\d{1,2})\s+(\S+)/);
-        if (!m) return false;
+        if (!m) return null;
         const day = parseInt(m[1], 10);
         const month = months[m[2]];
-        if (month === undefined) return false;
+        if (month === undefined) return null;
 
         const now = new Date();
         const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
@@ -613,7 +664,7 @@ class GAUDVIBEButtons {
         if (ev.year === undefined && (today - d) > 30 * 24 * 60 * 60 * 1000) {
             d = new Date(year + 1, month, day);
         }
-        return d < today;
+        return d;
     }
 
     rippleEffect(event, button) {
