@@ -200,7 +200,7 @@ class GAUDVIBEButtons {
             /* Intitule du container : separe visuellement des lignes par un
                filet. Exclu de l'auto-shrink (ne cible que .programmation-line). */
             .programmation-title {
-                font-size: 0.8rem;
+                font-size: 1.15rem;
                 font-weight: bold;
                 text-transform: uppercase;
                 letter-spacing: 0.18em;
