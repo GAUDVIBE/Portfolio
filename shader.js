@@ -144,6 +144,14 @@
     // Fragment shader
     // `#extension` doit etre la 1ere ligne non-vide, pas d'indentation
     // tolerable par tous les drivers WebGL1.
+    // Rendu a 1 pixel canvas par pixel CSS (au lieu de DPR 2) : le motif est
+    // fait de degrades doux + bords anti-aliases par fwidth, la difference
+    // se voit a peine et la charge GPU est divisee par ~4 en surface.
+    // PIXEL_SCALE garde la distorsion (calee sur gl_FragCoord.y) identique a
+    // l'ancien rendu DPR-2 : meme frequence d'ondes et de scanlines en CSS px.
+    const RENDER_DPR = 1;
+    const PIXEL_SCALE = Math.min(window.devicePixelRatio || 1, 2) / RENDER_DPR;
+
     const fragmentShaderSource = `#extension GL_OES_standard_derivatives : enable
         precision highp float;
         
@@ -186,7 +194,8 @@
                 uv.x += offset;
                 uv.y += offsetY;
             } else if (distType == 1) {
-                float scanline = mod(y, 2.0);
+                // Alternance par pixel canvas reel (y est mis a l'echelle).
+                float scanline = mod(floor(y / ${PIXEL_SCALE.toFixed(2)}), 2.0);
                 if (scanline < 1.0) {
                     uv.x -= offset;
                 } else {
@@ -204,7 +213,7 @@
             vec2 uv = (gl_FragCoord.xy/iResolution - 0.5) * 2.0;
             uv.x *= iResolution.x / iResolution.y;
             
-            float pixelY = gl_FragCoord.y;
+            float pixelY = gl_FragCoord.y * ${PIXEL_SCALE.toFixed(2)};
             uv = earthboundDistort(uv, pixelY, iTime, ${randomParams.amplitude.toFixed(2)}, ${randomParams.frequency.toFixed(2)}, ${randomParams.distortionSpeed.toFixed(2)}, ${randomParams.distortionType});
             uv += iTime * 0.1 * uRandomParams.z;
             
@@ -262,9 +271,7 @@
     `;
 
     function resizeCanvas() {
-        // Cap a 2 pour ne pas griller la batterie sur iPhone Pro Max (DPR=3)
-        // tout en restant net sur la majorite des mobiles (DPR=2).
-        const dpr = Math.min(window.devicePixelRatio || 1, 2);
+        const dpr = RENDER_DPR;
         const cssW = window.innerWidth;
         const cssH = window.innerHeight;
         canvas.width = Math.floor(cssW * dpr);
@@ -326,16 +333,29 @@
     gl.uniform2f(resolutionLocation, canvas.width, canvas.height);
     gl.uniform3f(randomParamsLocation, randomParams.shapeType, randomParams.colorSeed, randomParams.speed);
 
-    function animate(currentTime) {
-        currentTime *= 0.001;
-        gl.uniform1f(timeLocation, currentTime);
+    // 30 i/s suffisent pour un mouvement aussi lent (moitie moins de GPU
+    // qu'a 60, et 4x moins sur les ecrans 120 Hz).
+    const FRAME_MS = 1000 / 30;
+    const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    let lastFrame = -Infinity;
+
+    function draw(ms) {
+        gl.uniform1f(timeLocation, ms * 0.001);
         gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4);
+    }
+
+    function animate(ms) {
         requestAnimationFrame(animate);
+        // Marge de 2 ms : un ecran 60 Hz livre ~16,7 ms, on garde 1 frame sur 2.
+        if (ms - lastFrame < FRAME_MS - 2) return;
+        lastFrame = ms;
+        draw(ms);
     }
     
     window.addEventListener('resize', function() {
         resizeCanvas();
         gl.uniform2f(resolutionLocation, canvas.width, canvas.height);
+        if (reducedMotion) draw(0);
     });
     
     if (loadingElement) {
@@ -343,5 +363,7 @@
         setTimeout(() => loadingElement.remove(), 500);
     }
     
-    requestAnimationFrame(animate);
+    // « Reduire les animations » : une seule image fixe, pas de boucle.
+    if (reducedMotion) draw(0);
+    else requestAnimationFrame(animate);
 })();
