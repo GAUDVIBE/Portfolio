@@ -31,7 +31,6 @@ class GAUDVIBEButtons {
         // bump auto a l'annee suivante si la date est deja passee >30j).
         // Passees: year obligatoire (sinon le parser les croit futures).
         this.programmation = [
-            { date: '17 decembre', venue: 'C.L.U.B',                    project: 'DFF Trio',          year: 2026 },
             { date: '8 novembre',  venue: 'AERI - Montreuil',           project: 'Instants Orchestra',year: 2026 },
             { date: '22 octobre',  venue: 'Peniche Antipode',           project: 'Lila Mellark',      year: 2026 },
             { date: '6 octobre',   venue: 'Bal Chaveaux',               project: 'Instants Crew',     year: 2026 },
